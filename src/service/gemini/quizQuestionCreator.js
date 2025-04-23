@@ -8,6 +8,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const dotenv = require('dotenv');
 const { generateContent } = require('@service/gemini/geminiClient');
+const logger = require('@utils/logger');
 
 // Load environment variables
 dotenv.config();
@@ -57,18 +58,63 @@ async function loadExistingQuestions(existingQuestionsPath) {
  *
  * @param {Object} questionFormat - The question format configuration
  * @param {string[]} existingQuestions - Array of existing questions to avoid duplicates
+ * @param {Object} [options] - Additional options for customizing the prompt
+ * @param {string} [options.topic] - The topic for which questions should be generated
+ * @param {string} [options.language] - The programming language for the questions
+ * @param {string} [options.position] - The target position level
+ * @param {number} [options.difficulty] - Difficulty level (1-6)
  * @returns {string} The constructed prompt
  */
-function constructPrompt(questionFormat, existingQuestions) {
+function constructPrompt(questionFormat, existingQuestions, options = {}) {
+  // Map numeric difficulty to text description
+  let difficultyText = 'various difficulty levels';
+  if (options.difficulty) {
+    const difficultyMap = {
+      1: 'Intern level (very basic concepts)',
+      2: 'Fresher level (fundamental concepts)',
+      3: 'Junior Developer level (basic practical concepts)',
+      4: 'Middle Developer level (intermediate concepts)',
+      5: 'Senior Developer level (advanced concepts)',
+      6: 'Master/Expert level (expert concepts and system design)',
+    };
+    difficultyText = difficultyMap[options.difficulty] || difficultyText;
+  }
+
+  // Build topic and language specific instructions
+  let topicInstruction = 'various software development topics';
+  if (options.topic) {
+    topicInstruction = `the topic of "${options.topic}"`;
+  }
+
+  let languageInstruction = '';
+  if (options.language) {
+    languageInstruction = `Focus on the "${options.language}" programming language. `;
+  }
+
+  let positionInstruction = '';
+  if (options.position) {
+    const positionMap = {
+      1: 'Intern',
+      2: 'Fresher',
+      3: 'Junior Developer',
+      4: 'Middle Developer',
+      5: 'Senior Developer',
+      6: 'Master/Expert Developer',
+    };
+    const positionText = positionMap[options.position] || 'Developer';
+    positionInstruction = `Target these questions for a "${positionText}" position. `;
+  }
+
   const prompt = `
-Generate 10 unique multiple-choice technical interview questions for software developers.
+Generate 10 unique multiple-choice technical interview questions for software developers on ${topicInstruction}.
+${languageInstruction}${positionInstruction}The questions should be at ${difficultyText}.
 
 IMPORTANT REQUIREMENTS:
 1. Follow EXACTLY this JSON format: ${JSON.stringify(questionFormat.schema)}
 2. Each question must have EXACTLY 4 options
 3. The correctAnswer must be an integer between 0-3 (index of the correct option)
 4. Include a detailed explanation for each correct answer
-5. Assign an appropriate difficulty level (easy, medium, or hard)
+5. Assign an appropriate difficulty level (easy, medium, or hard) based on the overall difficulty requested
 6. Categorize each question appropriately (e.g., Algorithms, JavaScript, System Design, etc.)
 7. DO NOT generate any of these existing questions:
 ${existingQuestions.map(q => `- ${q}`).join('\n')}
@@ -93,8 +139,25 @@ Generate 10 questions following this format exactly.
  */
 function validateGeneratedContent(content) {
   try {
+    // Check if the content is wrapped in a code block
+    let contentToProcess = content;
+    
+    // Remove markdown code block if present
+    if (content.includes('```json')) {
+      logger.info('Detected JSON code block in response, extracting JSON content');
+      const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/);
+      if (jsonMatch && jsonMatch[1]) {
+        contentToProcess = jsonMatch[1].trim();
+        logger.info('Successfully extracted JSON from code block');
+      } else {
+        logger.warn('Failed to extract JSON from code block, using original content');
+      }
+    }
+    
     // Try to parse the content as JSON
-    const parsedContent = JSON.parse(content);
+    logger.info('Parsing content as JSON');
+    const parsedContent = JSON.parse(contentToProcess);
+    logger.info('Successfully parsed JSON content');
 
     // Validate that it's an array
     if (!Array.isArray(parsedContent)) {
@@ -185,36 +248,118 @@ async function saveGeneratedQuestions(questions) {
  * @param {number} [options.temperature] - Controls randomness (defaults to env var GEMINI_TEMPERATURE)
  * @param {number} [options.maxOutputTokens] - Maximum tokens in response (defaults to env var GEMINI_MAX_OUTPUT_TOKENS)
  * @param {string} [options.model] - The model to use (defaults to env var GEMINI_MODEL)
+ * @param {string} [options.topic] - The topic for which questions should be generated
+ * @param {string} [options.language] - The programming language for the questions
+ * @param {string} [options.position] - The target position level
+ * @param {number} [options.difficulty] - Difficulty level (1-6)
  * @returns {Promise<{filePath: string, questions: Object[]}>} The path to the saved file and the generated questions
  * @throws {Error} If generation fails at any step
  */
 async function generateQuizQuestions(existingQuestionsPath, options = {}) {
   try {
+    logger.info('Starting quiz question generation process');
+    logger.info(
+      `Options: Topic=${options.topic}, Language=${options.language}, Position=${options.position}, Difficulty=${options.difficulty}`
+    );
+
     // Load question format and existing questions
+    logger.info('Loading question format and existing questions');
     const questionFormat = await loadQuestionFormat();
     const existingQuestions = await loadExistingQuestions(existingQuestionsPath);
+    logger.info(`Loaded ${existingQuestions.length} existing questions`);
 
-    // Construct the prompt
-    const prompt = constructPrompt(questionFormat, existingQuestions);
+    // Construct the prompt with all options
+    logger.info('Constructing prompt for Gemini AI');
+    const prompt = constructPrompt(questionFormat, existingQuestions, {
+      topic: options.topic,
+      language: options.language,
+      position: options.position,
+      difficulty: options.difficulty,
+    });
+    logger.info('Prompt constructed successfully');
 
     // Generate content using Gemini AI - all defaults come from environment variables
-    const generatedContent = await generateContent(prompt, {
-      temperature: options.temperature,
-      maxOutputTokens: options.maxOutputTokens,
-      model: options.model,
-    });
+    logger.info('Sending request to Gemini AI');
+    let generatedContent;
+    
+    // Create a unique request ID for tracking
+    const requestId = Date.now().toString();
+    
+    // Create metadata for the request
+    const metadata = {
+      timestamp: new Date().toISOString(),
+      requestId,
+      options: {
+        topic: options.topic,
+        language: options.language,
+        position: options.position,
+        difficulty: options.difficulty,
+        temperature: options.temperature,
+        maxOutputTokens: options.maxOutputTokens,
+        model: options.model
+      }
+    };
+    
+    // Log the prompt to individual files
+    await logger.logToFile('gemini-prompts.log', `REQUEST ID: ${requestId} - PROMPT:`, prompt);
+    
+    // Log to the combined conversation log file
+    await logger.logToFile('gemini-conversations.log', `REQUEST ID: ${requestId} - METADATA:`, metadata);
+    await logger.logToFile('gemini-conversations.log', `REQUEST ID: ${requestId} - PROMPT:`, prompt);
+    
+    try {
+      generatedContent = await generateContent(prompt, {
+        temperature: options.temperature,
+        maxOutputTokens: options.maxOutputTokens,
+        model: options.model,
+        maxRetries: 3,
+        retryDelay: 1000,
+      });
+      logger.info('Successfully received response from Gemini AI');
+      
+      // Log the response to individual files
+      await logger.logToFile('gemini-responses.log', `REQUEST ID: ${requestId} - RESPONSE:`, generatedContent);
+      
+      // Log to the combined conversation log file
+      await logger.logToFile('gemini-conversations.log', `REQUEST ID: ${requestId} - RESPONSE:`, generatedContent);
+    } catch (error) {
+      logger.error('Failed to generate content from Gemini AI:', error);
+      
+      // Log the error to individual files
+      await logger.logToFile('gemini-errors.log', `REQUEST ID: ${requestId} - ERROR:`, error.message);
+      
+      // Log to the combined conversation log file
+      await logger.logToFile('gemini-conversations.log', `REQUEST ID: ${requestId} - ERROR:`, error.message);
+      
+      throw new Error(`Failed to generate content from Gemini API: ${error.message}`);
+    }
 
     // Validate the generated content
-    const questions = validateGeneratedContent(generatedContent);
+    logger.info('Validating generated content');
+    let questions;
+    try {
+      questions = validateGeneratedContent(generatedContent);
+      logger.info(`Successfully validated ${questions.length} questions`);
+    } catch (error) {
+      logger.error('Content validation failed:', error);
+      // Log a portion of the content for debugging
+      logger.error('Content preview:', generatedContent.substring(0, 500));
+      throw new Error(
+        `Failed to validate generated content: ${error.message}. Content: ${generatedContent.substring(0, 200)}...`
+      );
+    }
 
     // Save the generated questions
+    logger.info('Saving generated questions');
     const filePath = await saveGeneratedQuestions(questions);
+    logger.info(`Questions saved to ${filePath}`);
 
     return {
       filePath,
       questions,
     };
   } catch (error) {
+    logger.error('Quiz question generation failed:', error);
     throw new Error(`Failed to generate quiz questions: ${error.message}`);
   }
 }

@@ -5,7 +5,10 @@ const express = require('express');
 const dotenv = require('dotenv');
 const { initializeDb } = require('@repository/baseRepository');
 const healthCheckRoutes = require('@routes/healthCheckRoutes');
+const questionRoutes = require('@routes/questionRoutes');
 const { swaggerDocs } = require('@config/swagger');
+const { ensureDirectoriesExist } = require('@utils/ensureDirectories');
+const logger = require('@utils/logger');
 
 // Load environment variables
 dotenv.config();
@@ -21,10 +24,15 @@ app.use(express.json());
 
 // Routes
 app.use('/api/health-check', healthCheckRoutes);
+app.use('/api/questions', questionRoutes);
 
 // Initialize MongoDB connection
 async function initializeApp() {
   try {
+    // Ensure required directories exist
+    await ensureDirectoriesExist();
+    logger.info('Required directories have been verified');
+
     // Connect to MongoDB
     await initializeDb(MONGODB_URI, DB_NAME);
 
@@ -33,12 +41,12 @@ async function initializeApp() {
 
     // Start the server
     const server = app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      logger.info(`Server running on port ${PORT}`);
     });
 
     return { app, server };
   } catch (error) {
-    console.error('Failed to initialize application:', error);
+    logger.error('Failed to initialize application:', error);
     process.exit(1);
   }
 }
