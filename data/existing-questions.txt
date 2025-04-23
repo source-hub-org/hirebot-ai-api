@@ -1,10 +1,21 @@
-What is the time complexity of a binary search algorithm?
-What is the difference between let, const, and var in JavaScript?
-Explain the concept of Big O notation in algorithm analysis.
-What is the difference between a stack and a queue data structure?
-What is a closure in JavaScript?
-Explain the concept of dependency injection.
-What is the difference between HTTP and HTTPS?
-What is the purpose of the 'this' keyword in JavaScript?
-Explain the concept of RESTful API design.
-What is the difference between synchronous and asynchronous programming?
+
+Which data structure follows the Last-In, First-Out (LIFO) principle?
+What is the primary use case for a Queue data structure?
+Which of the following is NOT a primitive data type in JavaScript?
+What is the time complexity of accessing an element in an array by its index?
+What is the main difference between an array and a linked list?
+Which of the following is a characteristic of a Hash Table?
+Which method is typically used to add an element to the end of an array in JavaScript?
+What data structure would be most appropriate for implementing an 'undo' feature in a text editor?
+What is the result of `[1, 2, 3].pop()` in JavaScript?
+Which data structure is best suited for representing hierarchical relationships, such as a file system?
+Which data structure is most suitable for implementing a priority queue?
+What is the purpose of a 'Set' data structure in JavaScript?
+Which of the following methods can be used to check if a key exists in a JavaScript Map?
+What is the time complexity of inserting an element at the beginning of a singly linked list?
+Which of the following is a characteristic of a 'First-In-First-Out' (FIFO) data structure?
+What is the primary benefit of using a Doubly Linked List over a Singly Linked List?
+In JavaScript, what is the purpose of the `Map` data structure?
+Which operation is typically associated with the 'push' method in the context of data structures?
+What is the purpose of a 'dequeue' operation?
+Which data structure is most suitable for implementing a simple call stack?

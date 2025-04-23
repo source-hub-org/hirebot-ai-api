@@ -239,7 +239,7 @@ describe('Gemini Client Tests', () => {
 
       // Call the function and expect it to throw
       await expect(generateContent('Test prompt')).rejects.toThrow(
-        'Failed to generate content: API request failed with status 400'
+        'Failed to generate content after 3 attempts: API request failed with status 400'
       );
     });
 
@@ -260,7 +260,7 @@ describe('Gemini Client Tests', () => {
 
       // Call the function and expect it to throw
       await expect(generateContent('Test prompt')).rejects.toThrow(
-        'Failed to generate content: Request to Gemini API failed: Network error'
+        'Failed to generate content after 3 attempts: Request to Gemini API failed: Network error'
       );
     });
 
@@ -291,7 +291,7 @@ describe('Gemini Client Tests', () => {
 
       // Call the function and expect it to throw
       await expect(generateContent('Test prompt')).rejects.toThrow(
-        'Failed to generate content: Unexpected response structure from Gemini API'
+        'Failed to generate content after 3 attempts: Unexpected response structure from Gemini API'
       );
     });
   });

@@ -343,6 +343,8 @@ describe('Quiz Question Creator Tests', () => {
         temperature: 0.8,
         maxOutputTokens: 3000,
         model: 'test-model',
+        maxRetries: 3,
+        retryDelay: 1000,
       });
     });
 
@@ -352,7 +354,7 @@ describe('Quiz Question Creator Tests', () => {
 
       // Call the function and expect it to throw
       await expect(generateQuizQuestions('/path/to/questions.txt')).rejects.toThrow(
-        'Failed to generate quiz questions: API error'
+        'Failed to generate quiz questions: Failed to generate content from Gemini API: API error'
       );
     });
   });
