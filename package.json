@@ -10,13 +10,32 @@
     "format": "prettier --write .",
     "test": "jest"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.js"
+    ],
+    "moduleNameMapper": {
+      "^@repository/(.*)$": "<rootDir>/src/repository/$1",
+      "^@routes/(.*)$": "<rootDir>/src/routes/$1",
+      "^@utils/(.*)$": "<rootDir>/src/utils/$1"
+    }
+  },
+  "_moduleAliases": {
+    "@repository": "src/repository",
+    "@routes": "src/routes",
+    "@utils": "src/utils"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "The backend service of Hirebot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js, using Express for RESTful APIs and MongoDB for data storage.",
   "dependencies": {
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "module-alias": "^2.2.3",
+    "mongodb": "^6.16.0",
+    "mongodb-memory-server": "^10.1.4"
   },
   "devDependencies": {
     "eslint": "^9.25.1",

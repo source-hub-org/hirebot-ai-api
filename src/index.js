@@ -1,5 +1,10 @@
+// Register module aliases
+require('module-alias/register');
+
 const express = require('express');
 const dotenv = require('dotenv');
+const { initializeDb } = require('@repository/baseRepository');
+const healthCheckRoutes = require('@routes/healthCheckRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -7,13 +12,37 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+const DB_NAME = process.env.DB_NAME || 'hirebot_db';
 
 // Middleware
 app.use(express.json());
 
-// Start the server
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Routes
+app.use('/api/health-check', healthCheckRoutes);
 
-module.exports = { app, server };
+// Initialize MongoDB connection
+async function initializeApp() {
+  try {
+    // Connect to MongoDB
+    await initializeDb(MONGODB_URI, DB_NAME);
+
+    // Start the server
+    const server = app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+    return { app, server };
+  } catch (error) {
+    console.error('Failed to initialize application:', error);
+    process.exit(1);
+  }
+}
+
+// If this file is run directly, initialize the app
+if (require.main === module) {
+  initializeApp();
+}
+
+// Export for testing
+module.exports = { app, initializeApp };
