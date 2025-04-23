@@ -1,0 +1,10 @@
+What is the time complexity of a binary search algorithm?
+What is the difference between let, const, and var in JavaScript?
+Explain the concept of Big O notation in algorithm analysis.
+What is the difference between a stack and a queue data structure?
+What is a closure in JavaScript?
+Explain the concept of dependency injection.
+What is the difference between HTTP and HTTPS?
+What is the purpose of the 'this' keyword in JavaScript?
+Explain the concept of RESTful API design.
+What is the difference between synchronous and asynchronous programming?
