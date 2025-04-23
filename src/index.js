@@ -5,6 +5,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const { initializeDb } = require('@repository/baseRepository');
 const healthCheckRoutes = require('@routes/healthCheckRoutes');
+const { swaggerDocs } = require('@config/swagger');
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,9 @@ async function initializeApp() {
   try {
     // Connect to MongoDB
     await initializeDb(MONGODB_URI, DB_NAME);
+
+    // Initialize Swagger documentation
+    swaggerDocs(app);
 
     // Start the server
     const server = app.listen(PORT, () => {

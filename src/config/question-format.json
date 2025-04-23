@@ -1,0 +1,54 @@
+{
+  "format": "json",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "description": "The multiple-choice question text"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Four possible answer options"
+        },
+        "correctAnswer": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Index of the correct answer (0-3)"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Explanation of why the correct answer is right"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard"],
+          "description": "Difficulty level of the question"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category or topic of the question"
+        }
+      },
+      "required": ["question", "options", "correctAnswer", "explanation", "difficulty", "category"]
+    }
+  },
+  "example": [
+    {
+      "question": "What is the time complexity of a binary search algorithm?",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+      "correctAnswer": 2,
+      "explanation": "Binary search has a time complexity of O(log n) because it divides the search interval in half with each comparison.",
+      "difficulty": "medium",
+      "category": "Algorithms"
+    }
+  ]
+}

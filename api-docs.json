@@ -1,0 +1,88 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "HireBot AI API Documentation",
+    "version": "1.0.0",
+    "description": "API documentation for HireBot AI, a service responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates.",
+    "contact": { "name": "HireBot AI Team" }
+  },
+  "servers": [{ "url": "http://localhost:3000", "description": "Development server" }],
+  "paths": {
+    "/api/health-check": {
+      "get": {
+        "summary": "Basic API health check",
+        "description": "Returns a simple status to confirm the API is running",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "API is running",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "API is running" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health-check/database": {
+      "get": {
+        "summary": "Check database connection status",
+        "description": "Returns the current status of the database connection",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "Database connection information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "isConnected": { "type": "boolean", "example": true },
+                        "serverAddress": {
+                          "type": "string",
+                          "example": "mongodb://localhost:27017"
+                        },
+                        "dbName": { "type": "string", "example": "hirebot_db" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "error" },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to check database connection"
+                    },
+                    "error": { "type": "string", "example": "Connection error" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": [{ "name": "Health", "description": "API health check endpoints" }]
+}
