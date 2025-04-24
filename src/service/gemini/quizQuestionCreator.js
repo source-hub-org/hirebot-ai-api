@@ -136,6 +136,22 @@ function validateGeneratedContent(content, strictMode = false) {
     // Log the original content for debugging (truncated)
     logger.info('Original content (first 200 chars):', content.substring(0, 200));
 
+    // Log the full content to a separate log file for detailed debugging
+    try {
+      // Use synchronous file writing for logging in this non-async function
+      const fs = require('fs');
+      const path = require('path');
+      const logDir = path.resolve(process.cwd(), 'logs');
+      const logPath = path.join(logDir, 'gemini-content-debug.log');
+      const timestamp = new Date().toISOString();
+      const logEntry = `[${timestamp}] FULL CONTENT:\n${content}\n\n`;
+
+      // Append to the log file
+      fs.appendFileSync(logPath, logEntry, 'utf8');
+    } catch (logError) {
+      logger.warn('Failed to log full content for debugging:', logError.message);
+    }
+
     // Step 1: Clean the response string to extract JSON
     let contentToProcess = content.trim();
     let originalContent = contentToProcess;
@@ -294,6 +310,56 @@ function validateGeneratedContent(content, strictMode = false) {
         // If it's a single question object, wrap it in an array (only in non-strict mode)
         logger.info('Found single question object, wrapping in array');
         parsedContent = [parsedContent];
+      } else if (
+        parsedContent &&
+        typeof parsedContent === 'object' &&
+        Array.isArray(parsedContent.items)
+      ) {
+        // Check if items is an array of objects with question property
+        if (
+          parsedContent.items.length > 0 &&
+          typeof parsedContent.items[0] === 'object' &&
+          parsedContent.items[0].question
+        ) {
+          // Handle case where the AI returns an object with both schema and items array
+          logger.info('Found items array property with questions in parsed content');
+          parsedContent = parsedContent.items;
+        }
+      } else if (
+        parsedContent &&
+        typeof parsedContent === 'object' &&
+        parsedContent.type === 'array' &&
+        typeof parsedContent.items === 'object'
+      ) {
+        // This is likely a schema definition
+        logger.info('Found schema definition, looking for actual questions');
+
+        // Look for an array property that might contain the actual questions
+        for (const key in parsedContent) {
+          if (
+            key !== 'type' &&
+            Array.isArray(parsedContent[key]) &&
+            parsedContent[key].length > 0 &&
+            typeof parsedContent[key][0] === 'object' &&
+            parsedContent[key][0].question
+          ) {
+            logger.info(`Found questions in property "${key}"`);
+            parsedContent = parsedContent[key];
+            break;
+          }
+        }
+
+        // Special case: if we have both a schema definition and an "items" array with actual questions
+        // This matches the pattern we're seeing in the logs
+        if (
+          Array.isArray(parsedContent.items) &&
+          parsedContent.items.length > 0 &&
+          typeof parsedContent.items[0] === 'object' &&
+          parsedContent.items[0].question
+        ) {
+          logger.info('Found questions in items array (special case)');
+          parsedContent = parsedContent.items;
+        }
       } else {
         throw new Error('Generated content is not an array or valid questions object');
       }
