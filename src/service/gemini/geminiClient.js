@@ -27,10 +27,12 @@ function validateApiKey() {
   if (!API_KEY) {
     throw new Error('GEMINI_API_KEY is not configured in environment variables');
   }
-  
+
   // Log the first few characters of the API key for debugging
-  logger.info(`Using Gemini API key: ${API_KEY.substring(0, 5)}...${API_KEY.substring(API_KEY.length - 5)}`);
-  
+  logger.info(
+    `Using Gemini API key: ${API_KEY.substring(0, 5)}...${API_KEY.substring(API_KEY.length - 5)}`
+  );
+
   // Check if the API key looks valid (basic format check)
   if (API_KEY.length < 20) {
     logger.warn('Gemini API key looks suspiciously short. Please verify it is correct.');
@@ -61,7 +63,7 @@ async function makeRequest(endpoint, data) {
 
     logger.info(`Making request to: ${url}`);
     logger.info(`Request data: ${JSON.stringify(data).substring(0, 200)}...`);
-    
+
     const req = https.request(url, options, res => {
       let responseData = '';
 
@@ -72,7 +74,7 @@ async function makeRequest(endpoint, data) {
       res.on('end', () => {
         logger.info(`Response status code: ${res.statusCode}`);
         logger.info(`Response headers: ${JSON.stringify(res.headers)}`);
-        
+
         try {
           // Check if we have a valid response before parsing
           if (!responseData || responseData.trim() === '') {
@@ -82,12 +84,14 @@ async function makeRequest(endpoint, data) {
           }
 
           logger.info(`Raw response (first 200 chars): ${responseData.substring(0, 200)}...`);
-          
+
           const parsedData = JSON.parse(responseData);
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve(parsedData);
           } else {
-            logger.error(`API request failed with status ${res.statusCode}: ${JSON.stringify(parsedData)}`);
+            logger.error(
+              `API request failed with status ${res.statusCode}: ${JSON.stringify(parsedData)}`
+            );
             reject(
               new Error(
                 `API request failed with status ${res.statusCode}: ${JSON.stringify(parsedData)}`

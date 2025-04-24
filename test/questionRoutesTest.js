@@ -40,19 +40,18 @@ describe('Question Routes', () => {
       expect(response.body.errors.length).toBeGreaterThan(0);
     });
 
-    it('should validate difficulty range', async () => {
+    it('should validate position value', async () => {
       const response = await request(app).post('/api/questions/generate').send({
         topic: 'JavaScript',
         language: 'JavaScript',
-        position: 3,
-        difficulty: 10, // Invalid: outside range 1-6
+        position: 'invalid_position', // Invalid: not in the allowed list
       });
 
       expect(response.status).toBe(400);
       expect(response.body).toBeInstanceOf(Object);
       expect(response.body.status).toBe('error');
       expect(response.body.errors).toContain(
-        'Difficulty is required and must be an integer between 1 and 6'
+        'Position must be one of: intern, fresher, junior, middle, senior, expert'
       );
     });
 
@@ -68,8 +67,7 @@ describe('Question Routes', () => {
         .send({
           topic: 'JavaScript Arrays',
           language: 'JavaScript',
-          position: 3,
-          difficulty: 3
+          position: 'junior'
         });
 
       expect(response.status).toBe(200);
@@ -92,7 +90,6 @@ describe('Question Routes', () => {
       expect(firstQuestion).toHaveProperty('language');
       expect(firstQuestion).toHaveProperty('position');
       expect(firstQuestion).toHaveProperty('positionLevel');
-      expect(firstQuestion).toHaveProperty('difficultyLevel');
       expect(firstQuestion).toHaveProperty('createdAt');
     });
     */

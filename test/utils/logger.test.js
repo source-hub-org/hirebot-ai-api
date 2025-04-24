@@ -16,6 +16,7 @@ describe('Logger Utility', () => {
     try {
       await fs.unlink(testLogPath);
     } catch (error) {
+      console.debug(`Error cleaning up ${testLogPath}:`, error);
       // Ignore if file doesn't exist
     }
   });
