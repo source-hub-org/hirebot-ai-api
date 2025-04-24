@@ -199,8 +199,6 @@ describe('fileOperations', () => {
   });
 
   describe('logContentToFile', () => {
-    let originalFs;
-
     beforeEach(() => {
       // Save the original fs module
       originalFs = jest.requireActual('fs');
