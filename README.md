@@ -1,3 +1,5 @@
+![HireBot AI API](./assets/project.png)
+
 # HireBot AI API
 
 The backend service of HireBot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js, using Express for RESTful APIs and MongoDB for data storage.
