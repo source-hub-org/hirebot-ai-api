@@ -178,4 +178,71 @@ describe('Question Search Service', () => {
     // Expect the service to throw the error
     await expect(searchQuestions(searchParams)).rejects.toThrow('Database connection error');
   });
+
+  it('should return full question data in full mode', async () => {
+    const searchParams = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      mode: 'full',
+    };
+
+    const result = await searchQuestions(searchParams);
+
+    // Verify that correctAnswer and explanation are included
+    expect(result.questions[0]).toHaveProperty('correctAnswer');
+    expect(result.questions[0]).toHaveProperty('explanation');
+    expect(result.questions[1]).toHaveProperty('correctAnswer');
+    expect(result.questions[1]).toHaveProperty('explanation');
+  });
+
+  it('should exclude correctAnswer and explanation in compact mode', async () => {
+    const searchParams = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      mode: 'compact',
+    };
+
+    const result = await searchQuestions(searchParams);
+
+    // Verify that correctAnswer and explanation are excluded
+    expect(result.questions[0]).not.toHaveProperty('correctAnswer');
+    expect(result.questions[0]).not.toHaveProperty('explanation');
+    expect(result.questions[1]).not.toHaveProperty('correctAnswer');
+    expect(result.questions[1]).not.toHaveProperty('explanation');
+
+    // Verify that other properties are still included
+    expect(result.questions[0]).toHaveProperty('question');
+    expect(result.questions[0]).toHaveProperty('options');
+    expect(result.questions[0]).toHaveProperty('difficulty');
+    expect(result.questions[0]).toHaveProperty('category');
+  });
+
+  it('should only include _id and question in minimalist mode', async () => {
+    const searchParams = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      mode: 'minimalist',
+    };
+
+    const result = await searchQuestions(searchParams);
+
+    // Verify that only _id and question are included
+    expect(result.questions[0]).toHaveProperty('_id');
+    expect(result.questions[0]).toHaveProperty('question');
+    expect(Object.keys(result.questions[0]).length).toBe(2);
+
+    expect(result.questions[1]).toHaveProperty('_id');
+    expect(result.questions[1]).toHaveProperty('question');
+    expect(Object.keys(result.questions[1]).length).toBe(2);
+
+    // Verify that other properties are excluded
+    expect(result.questions[0]).not.toHaveProperty('options');
+    expect(result.questions[0]).not.toHaveProperty('correctAnswer');
+    expect(result.questions[0]).not.toHaveProperty('explanation');
+    expect(result.questions[0]).not.toHaveProperty('difficulty');
+    expect(result.questions[0]).not.toHaveProperty('category');
+  });
 });

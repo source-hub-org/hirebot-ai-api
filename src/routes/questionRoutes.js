@@ -391,6 +391,15 @@ router.post('/generate', async (req, res) => {
  *           default: 20
  *         description: Number of questions per page (max 100)
  *         example: 20
+ *       - in: query
+ *         name: mode
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [compact, full, minimalist]
+ *           default: full
+ *         description: Response mode - 'full' includes all fields, 'compact' excludes correctAnswer and explanation, 'minimalist' only includes _id and question
+ *         example: full
  *     responses:
  *       200:
  *         description: Questions retrieved successfully

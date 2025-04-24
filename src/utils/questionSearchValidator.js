@@ -84,6 +84,19 @@ function validateSearchParams(query) {
     params.page_size = 20; // Default value
   }
 
+  // Optional mode parameter
+  if (params.mode !== undefined) {
+    const validModes = ['compact', 'full', 'minimalist'];
+    if (typeof params.mode !== 'string' || !validModes.includes(params.mode.toLowerCase())) {
+      errors.push(`mode must be one of: ${validModes.join(', ')}`);
+    } else {
+      // Normalize mode to lowercase
+      params.mode = params.mode.toLowerCase();
+    }
+  } else {
+    params.mode = 'full'; // Default value
+  }
+
   return { params, errors };
 }
 
