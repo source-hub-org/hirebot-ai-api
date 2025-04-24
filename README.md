@@ -1,4 +1,4 @@
-![HireBot AI API](./assets/project.png)
+![HireBot AI API](./assets/project.jpeg)
 
 # HireBot AI API
 
