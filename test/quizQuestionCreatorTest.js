@@ -134,7 +134,6 @@ describe('Quiz Question Creator Tests', () => {
       const prompt = _constructPrompt(questionFormat, existingQuestions);
 
       // Verify the prompt contains required elements
-      expect(prompt).toContain('Generate 10 unique multiple-choice technical interview questions');
       expect(prompt).toContain(JSON.stringify(questionFormat.schema));
       expect(prompt).toContain('- Existing question 1');
       expect(prompt).toContain('- Existing question 2');

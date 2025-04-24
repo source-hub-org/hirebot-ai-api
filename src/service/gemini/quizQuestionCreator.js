@@ -70,25 +70,7 @@ async function loadExistingQuestions(existingQuestionsPath) {
  */
 const DEFAULT_PROMPT_TEMPLATE = `
 Generate 10 unique multiple-choice technical interview questions for software developers on {topic}.
-{language}{positionInstruction}The questions should demonstrate {difficultyText}.
-
-IMPORTANT REQUIREMENTS:
-1. Follow EXACTLY this JSON format: {schema}
-2. Each question must have EXACTLY 4 options
-3. The correctAnswer must be an integer between 0-3 (index of the correct option)
-4. Include a detailed explanation for each correct answer
-5. Assign an appropriate difficulty level (easy, medium, or hard) based on the overall difficulty requested
-6. Categorize each question appropriately (e.g., Algorithms, JavaScript, System Design, etc.)
-7. DO NOT generate any of these existing questions:
-{existingQuestions}
-
-8. Return ONLY valid JSON that matches the schema, with no additional text or explanations.
-
-Example of a properly formatted question:
-{example}
-
-Generate 10 questions following this format exactly.
-`;
+{language}{positionInstruction}The questions should demonstrate {difficultyText}.`;
 
 /**
  * Constructs a prompt for Gemini AI to generate quiz questions
