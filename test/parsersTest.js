@@ -149,12 +149,8 @@ describe('Parsers Module Tests', () => {
       const content = {
         type: 'array',
         items: { type: 'object' },
-        data: [
-          { notAQuestion: 'Some value' }
-        ],
-        otherData: [
-          { alsoNotAQuestion: 'Another value' }
-        ]
+        data: [{ notAQuestion: 'Some value' }],
+        otherData: [{ alsoNotAQuestion: 'Another value' }],
       };
       const result = extractQuestionsFromSchema(content);
       expect(result).toBeNull();
@@ -164,7 +160,7 @@ describe('Parsers Module Tests', () => {
       const content = {
         type: 'array',
         items: { type: 'object' },
-        examples: []
+        examples: [],
       };
       const result = extractQuestionsFromSchema(content);
       expect(result).toBeNull();

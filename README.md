@@ -22,17 +22,20 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/yourusername/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Create a `.env` file in the root directory with the following variables:
+
    ```
    PORT=3000
    MONGODB_URI=mongodb://localhost:27017/hirebot
@@ -40,11 +43,13 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
    ```
 
 4. Start the server:
+
    ```bash
    npm start
    ```
 
    For development with auto-reload:
+
    ```bash
    npm run dev
    ```
@@ -90,6 +95,7 @@ The project follows a layered architecture:
 1. **Routes Layer** (`routes/`): Handles HTTP requests and responses, input validation, and routing to appropriate services.
 
 2. **Service Layer** (`service/`): Contains the business logic, including:
+
    - Gemini AI integration for generating questions
    - Quiz content validation and processing
    - Data transformation and preparation
@@ -163,16 +169,19 @@ The project includes comprehensive unit and integration tests using Jest.
 ### Running Tests
 
 Run all tests:
+
 ```bash
 npm test
 ```
 
 Run tests with coverage:
+
 ```bash
 npm run test:coverage
 ```
 
 Generate and open coverage report:
+
 ```bash
 npm run test:coverage:report
 ```
