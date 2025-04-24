@@ -19,3 +19,23 @@ In JavaScript, what is the purpose of the `Map` data structure?
 Which operation is typically associated with the 'push' method in the context of data structures?
 What is the purpose of a 'dequeue' operation?
 Which data structure is most suitable for implementing a simple call stack?
+Which data structure in JavaScript is best for storing key-value pairs where keys can be any data type, including objects?
+What is the primary difference between using `Array.forEach` and `Array.map` in JavaScript when iterating through an array?
+Which of the following methods is NOT a valid way to add an element to the beginning of an array in JavaScript?
+Which data structure would be most suitable for checking if an element exists in a collection with the fastest average time complexity?
+What is the purpose of the `WeakSet` data structure in JavaScript?
+Which of the following best describes the use case for a Trie (prefix tree) data structure?
+What is the time complexity of searching for a specific value in an unsorted array in JavaScript?
+How can you efficiently remove duplicate elements from an array in JavaScript while preserving the original order?
+Which of these data structures is immutable in JavaScript?
+What is the best approach for managing a large number of frequently accessed key-value pairs in a JavaScript application where memory usage is a significant concern?
+Which of the following data structures is the most efficient for searching a sorted array?
+Given an array `[1, 2, 2, 3, 4, 4, 5]`, which data structure would be most appropriate to efficiently determine the frequency of each unique number?
+Which method is used to remove the first element from an array in JavaScript and return that element?
+Which of the following operations has the best-case time complexity of O(1) when using a JavaScript array?
+You need to implement a system that processes tasks in the order they are received. Which data structure is most appropriate?
+What is the primary advantage of using a Set over an Array when you need to store a collection of unique values in JavaScript?
+Which of the following best describes the use case for a Stack data structure?
+You have an unsorted array of numbers in JavaScript. Which sorting algorithm would generally provide the best average-case performance?
+Which of the following methods is best suited for creating a shallow copy of an array in JavaScript?
+In JavaScript, what is the difference between `Array.sort()` and using a custom sorting function with `Array.sort()`?

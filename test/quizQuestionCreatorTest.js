@@ -155,7 +155,7 @@ describe('Quiz Question Creator Tests', () => {
         },
       ]);
 
-      const result = _validateGeneratedContent(validContent);
+      const result = _validateGeneratedContent(validContent, true); // Use strict mode for tests
 
       expect(result).toHaveLength(1);
       expect(result[0].question).toBe('What is the time complexity of a binary search algorithm?');
@@ -166,7 +166,8 @@ describe('Quiz Question Creator Tests', () => {
     test('should throw error for invalid JSON', () => {
       const invalidJson = '{ invalid json }';
 
-      expect(() => _validateGeneratedContent(invalidJson)).toThrow(
+      expect(() => _validateGeneratedContent(invalidJson, true)).toThrow(
+        // Use strict mode for tests
         'Invalid generated content: Expected property name or'
       );
     });
@@ -174,7 +175,8 @@ describe('Quiz Question Creator Tests', () => {
     test('should throw error when content is not an array', () => {
       const notArrayContent = JSON.stringify({ question: 'Not an array' });
 
-      expect(() => _validateGeneratedContent(notArrayContent)).toThrow(
+      expect(() => _validateGeneratedContent(notArrayContent, true)).toThrow(
+        // Use strict mode for tests
         'Invalid generated content: Generated content is not an array'
       );
     });
@@ -191,7 +193,8 @@ describe('Quiz Question Creator Tests', () => {
         },
       ]);
 
-      expect(() => _validateGeneratedContent(missingQuestion)).toThrow(
+      expect(() => _validateGeneratedContent(missingQuestion, true)).toThrow(
+        // Use strict mode for tests
         "Invalid generated content: Question 1 is missing the 'question' field"
       );
 
@@ -206,8 +209,9 @@ describe('Quiz Question Creator Tests', () => {
         },
       ]);
 
-      expect(() => _validateGeneratedContent(missingOptions)).toThrow(
-        'Invalid generated content: Question 1 must have exactly 4 options'
+      expect(() => _validateGeneratedContent(missingOptions, true)).toThrow(
+        // Use strict mode for tests
+        "Invalid generated content: Question 1 has invalid or missing 'options' array"
       );
 
       // Wrong number of options
@@ -222,7 +226,8 @@ describe('Quiz Question Creator Tests', () => {
         },
       ]);
 
-      expect(() => _validateGeneratedContent(wrongOptionsCount)).toThrow(
+      expect(() => _validateGeneratedContent(wrongOptionsCount, true)).toThrow(
+        // Use strict mode for tests
         'Invalid generated content: Question 1 must have exactly 4 options'
       );
 
@@ -238,7 +243,8 @@ describe('Quiz Question Creator Tests', () => {
         },
       ]);
 
-      expect(() => _validateGeneratedContent(invalidCorrectAnswer)).toThrow(
+      expect(() => _validateGeneratedContent(invalidCorrectAnswer, true)).toThrow(
+        // Use strict mode for tests
         "Invalid generated content: Question 1 has an invalid 'correctAnswer' (must be 0-3)"
       );
 
@@ -254,7 +260,8 @@ describe('Quiz Question Creator Tests', () => {
         },
       ]);
 
-      expect(() => _validateGeneratedContent(invalidDifficulty)).toThrow(
+      expect(() => _validateGeneratedContent(invalidDifficulty, true)).toThrow(
+        // Use strict mode for tests
         "Invalid generated content: Question 1 has an invalid 'difficulty' (must be easy, medium, or hard)"
       );
     });

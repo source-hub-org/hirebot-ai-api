@@ -15,7 +15,7 @@ async function ensureDirectoriesExist() {
   const directories = [
     path.resolve(process.cwd(), 'logs'),
     path.resolve(process.cwd(), 'data'),
-    path.resolve(process.cwd(), 'tmp')
+    path.resolve(process.cwd(), 'tmp'),
   ];
 
   for (const dir of directories) {
@@ -34,5 +34,5 @@ async function ensureDirectoriesExist() {
 }
 
 module.exports = {
-  ensureDirectoriesExist
+  ensureDirectoriesExist,
 };
