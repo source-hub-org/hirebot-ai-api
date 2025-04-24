@@ -14,6 +14,11 @@ const {
 const { constructPrompt } = require('./promptBuilder');
 const { validateGeneratedContent } = require('./contentValidator');
 
+// Re-export all modules for testing purposes
+const extractors = require('./extractors');
+const parsers = require('./parsers');
+const validators = require('./validators');
+
 // Load environment variables
 dotenv.config();
 
@@ -181,4 +186,8 @@ module.exports = {
   _constructPrompt: constructPrompt,
   _validateGeneratedContent: validateGeneratedContent,
   _saveGeneratedQuestions: saveGeneratedQuestions,
+  // Export the modules for advanced usage and testing
+  extractors,
+  parsers,
+  validators,
 };
