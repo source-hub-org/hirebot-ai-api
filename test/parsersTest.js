@@ -144,6 +144,31 @@ describe('Parsers Module Tests', () => {
       const result = extractQuestionsFromSchema(content);
       expect(result).toBeNull();
     });
+
+    test('should handle schema with non-question array properties', () => {
+      const content = {
+        type: 'array',
+        items: { type: 'object' },
+        data: [
+          { notAQuestion: 'Some value' }
+        ],
+        otherData: [
+          { alsoNotAQuestion: 'Another value' }
+        ]
+      };
+      const result = extractQuestionsFromSchema(content);
+      expect(result).toBeNull();
+    });
+
+    test('should handle schema with empty array properties', () => {
+      const content = {
+        type: 'array',
+        items: { type: 'object' },
+        examples: []
+      };
+      const result = extractQuestionsFromSchema(content);
+      expect(result).toBeNull();
+    });
   });
 
   describe('extractQuestionsArray', () => {

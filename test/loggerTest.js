@@ -4,7 +4,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const logger = require('../../src/utils/logger');
+const logger = require('../src/utils/logger');
 
 describe('Logger Utility', () => {
   const testLogFile = 'test-log.log';
