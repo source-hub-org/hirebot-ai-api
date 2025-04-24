@@ -23,6 +23,7 @@ describe('Question Search Validator', () => {
       sort_direction: 'desc',
       page: 1,
       page_size: 20,
+      mode: 'full',
     });
   });
 
@@ -62,6 +63,7 @@ describe('Question Search Validator', () => {
       sort_direction: 'asc',
       page: '2',
       page_size: '10',
+      mode: 'compact',
     };
 
     const result = validateSearchParams(query);
@@ -75,6 +77,7 @@ describe('Question Search Validator', () => {
       sort_direction: 'asc',
       page: 2,
       page_size: 10,
+      mode: 'compact',
     });
   });
 
@@ -186,5 +189,47 @@ describe('Question Search Validator', () => {
 
     expect(result.errors).toHaveLength(1);
     expect(result.errors).toContain('page_size must be a positive integer');
+  });
+
+  it('should validate and normalize mode to lowercase', () => {
+    const query = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      mode: 'COMPACT',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params.mode).toBe('compact');
+  });
+
+  it('should detect invalid mode value', () => {
+    const query = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      mode: 'invalid_mode',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors).toContain('mode must be one of: compact, full, minimalist');
+  });
+
+  it('should validate minimalist mode', () => {
+    const query = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      mode: 'minimalist',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params.mode).toBe('minimalist');
   });
 });

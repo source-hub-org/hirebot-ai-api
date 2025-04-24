@@ -18,11 +18,21 @@ const logger = require('@utils/logger');
  * @param {string} searchParams.sort_direction - Direction to sort (asc/desc)
  * @param {number} searchParams.page - Page number
  * @param {number} searchParams.page_size - Number of items per page
+ * @param {string} searchParams.mode - Response mode ('full' or 'compact')
  * @returns {Promise<Object>} Search results with pagination metadata
  */
 async function searchQuestions(searchParams) {
   try {
-    const { topic, language, position, sort_by, sort_direction, page, page_size } = searchParams;
+    const {
+      topic,
+      language,
+      position,
+      sort_by,
+      sort_direction,
+      page,
+      page_size,
+      mode = 'full', // Default to full mode if not specified
+    } = searchParams;
 
     // Build the MongoDB query
     const { filter, sortOptions, skip, limit } = buildMongoQuery(
@@ -49,8 +59,26 @@ async function searchQuestions(searchParams) {
     // Calculate pagination metadata
     const totalPages = Math.ceil(totalCount / limit);
 
+    // Process questions based on mode
+    let processedQuestions = questions;
+    if (mode === 'compact') {
+      // Remove correctAnswer and explanation fields in compact mode
+      processedQuestions = questions.map(question => {
+        const { correctAnswer, explanation, ...rest } = question;
+        return rest;
+      });
+    } else if (mode === 'minimalist') {
+      // Only include the question field in minimalist mode
+      processedQuestions = questions.map(question => {
+        return {
+          _id: question._id,
+          question: question.question,
+        };
+      });
+    }
+
     return {
-      questions,
+      questions: processedQuestions,
       pagination: {
         total: totalCount,
         page: parseInt(page),

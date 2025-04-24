@@ -339,5 +339,95 @@ describe('Question Search Routes', () => {
       expect(response.body.message).toBe('An error occurred while searching for questions.');
       expect(response.body.error).toBe('Database connection error');
     });
+
+    // Test for invalid mode value
+    it('should validate mode value', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        mode: 'invalid_mode', // Invalid: not in the allowed list
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toBeInstanceOf(Object);
+      expect(response.body.status).toBe('error');
+      expect(response.body.errors).toContain('mode must be one of: compact, full, minimalist');
+    });
+
+    // Test for full mode
+    it('should search questions successfully with full mode', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        mode: 'full',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          language: 'JavaScript',
+          position: 'junior',
+          mode: 'full',
+        })
+      );
+    });
+
+    // Test for compact mode
+    it('should search questions successfully with compact mode', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        mode: 'compact',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          language: 'JavaScript',
+          position: 'junior',
+          mode: 'compact',
+        })
+      );
+    });
+
+    // Test for minimalist mode
+    it('should search questions successfully with minimalist mode', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        mode: 'minimalist',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          language: 'JavaScript',
+          position: 'junior',
+          mode: 'minimalist',
+        })
+      );
+    });
   });
 });
