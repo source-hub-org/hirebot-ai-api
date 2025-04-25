@@ -16,7 +16,7 @@ const API_KEY = process.env.GEMINI_API_KEY;
 const DEFAULT_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 const BASE_URL =
   process.env.GEMINI_API_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
-const DEFAULT_MAX_TOKENS = parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || '4096', 10);
+const DEFAULT_MAX_TOKENS = parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || '8192', 10);
 const DEFAULT_TEMPERATURE = parseFloat(process.env.GEMINI_TEMPERATURE || '0.7');
 
 /**

@@ -1,5 +1,12 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const dotenv = require('dotenv');
+
+// Load environment variables
+dotenv.config();
+
+// Get port from environment variables or use default
+const PORT = process.env.PORT || 3000;
 
 // Swagger definition
 const swaggerOptions = {
@@ -16,7 +23,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: `http://localhost:${PORT}`,
         description: 'Development server',
       },
     ],
@@ -39,7 +46,7 @@ const swaggerDocs = app => {
     res.send(swaggerSpec);
   });
 
-  console.log(`Swagger docs available at http://localhost:3000/api-docs`);
+  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
 };
 
 module.exports = { swaggerDocs };
