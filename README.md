@@ -8,7 +8,8 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 
 - Generate technical interview questions using Google's Gemini AI
 - Store and retrieve questions from MongoDB
-- RESTful API for quiz management
+- Manage interview topics through commands and API
+- RESTful API for quiz and topic management
 - Comprehensive validation and error handling
 - Swagger API documentation
 - Extensive test coverage
@@ -74,6 +75,7 @@ Note: Keep your API key secure and never commit it to version control.
 ```
 hirebot-ai-api/
 ├── src/
+│   ├── commands/       # CLI commands
 │   ├── config/         # Configuration files
 │   ├── repository/     # Data access layer
 │   ├── routes/         # API routes
@@ -85,6 +87,9 @@ hirebot-ai-api/
 │   │           ├── validators.js    # Question validation utilities
 │   │           └── contentValidator.js # Main validation module
 │   └── utils/          # Utility functions
+│       ├── fileParser.js    # File reading utilities
+│       ├── logger.js        # Logging utilities
+│       └── topicValidator.js # Topic validation utilities
 ├── test/               # Test files
 ├── .env                # Environment variables (not in repo)
 └── package.json        # Project metadata and dependencies
@@ -94,17 +99,19 @@ hirebot-ai-api/
 
 The project follows a layered architecture:
 
-1. **Routes Layer** (`routes/`): Handles HTTP requests and responses, input validation, and routing to appropriate services.
+1. **Commands Layer** (`commands/`): Handles CLI commands for administrative tasks like initializing topics.
 
-2. **Service Layer** (`service/`): Contains the business logic, including:
+2. **Routes Layer** (`routes/`): Handles HTTP requests and responses, input validation, and routing to appropriate services.
+
+3. **Service Layer** (`service/`): Contains the business logic, including:
 
    - Gemini AI integration for generating questions
    - Quiz content validation and processing
    - Data transformation and preparation
 
-3. **Repository Layer** (`repository/`): Manages data access and persistence with MongoDB.
+4. **Repository Layer** (`repository/`): Manages data access and persistence with MongoDB.
 
-4. **Utility Layer** (`utils/`): Provides common utilities like logging and directory management.
+5. **Utility Layer** (`utils/`): Provides common utilities like logging, file parsing, and validation.
 
 ### Quiz Generation Module
 
@@ -114,6 +121,41 @@ The quiz generation module is organized into specialized components:
 - **parsers.js**: Parses and validates JSON structure for question data
 - **validators.js**: Validates and normalizes question content (options, answers, etc.)
 - **contentValidator.js**: Orchestrates the validation process using the specialized modules
+
+## Commands
+
+The project includes CLI commands for administrative tasks:
+
+### Topic Management
+
+Initialize topics from a JSON file:
+
+```bash
+npm run command app:init-topics ./path/to/topics.json
+```
+
+The JSON file should have the following structure:
+
+```json
+{
+  "topics": [
+    {
+      "title": "Topic Title",
+      "difficulty": 1,
+      "popularity": "low",
+      "suitable_level": "intern",
+      "description": "Topic description"
+    },
+    {
+      "title": "Another Topic",
+      "difficulty": 2,
+      "popularity": "high",
+      "suitable_level": "junior",
+      "description": "Another topic description"
+    }
+  ]
+}
+```
 
 ## API Documentation
 
@@ -126,6 +168,17 @@ Once the server is running, you can access the Swagger UI at:
 ```
 http://localhost:3000/api-docs
 ```
+
+### Available Endpoints
+
+#### Questions API
+
+- `POST /api/questions/generate` - Generate new questions
+- `GET /api/questions/search` - Search for questions
+
+#### Topics API
+
+- `GET /api/topics` - Get all available topics
 
 ### Adding Documentation to Endpoints
 
