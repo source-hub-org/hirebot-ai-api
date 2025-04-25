@@ -11,10 +11,13 @@ let mongoServer;
 let server;
 let candidateId;
 
+// Generate unique email for tests to avoid conflicts
+const uniqueEmail = `test_${Date.now()}@example.com`;
+
 // Sample valid candidate data
 const validCandidate = {
   full_name: 'Test Candidate',
-  email: 'test@example.com',
+  email: uniqueEmail,
   phone_number: '+1234567890',
   interview_level: 'junior',
   skills: ['JavaScript', 'React'],
@@ -79,9 +82,15 @@ describe('POST /api/candidates', () => {
   });
 
   test('should reject duplicate email', async () => {
+    // Create a duplicate candidate with the same email
+    const duplicateCandidate = {
+      ...validCandidate,
+      full_name: 'Duplicate Candidate',
+    };
+
     const response = await request(app)
       .post('/api/candidates')
-      .send(validCandidate) // Same email as before
+      .send(duplicateCandidate) // Same email as before
       .expect(409);
 
     expect(response.body.success).toBe(false);
