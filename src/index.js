@@ -5,6 +5,7 @@ const healthCheckRoutes = require('./routes/healthCheckRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const topicRoutes = require('./routes/topicRoutes');
 const candidateRoutes = require('./routes/candidateRoutes');
+const submissionRoutes = require('./routes/submissionRoutes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
 const logger = require('./utils/logger');
@@ -26,6 +27,7 @@ app.use('/api/health-check', healthCheckRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/candidates', candidateRoutes);
+app.use('/api/submissions', submissionRoutes);
 
 // Initialize MongoDB connection
 async function initializeApp() {
