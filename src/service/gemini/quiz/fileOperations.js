@@ -26,15 +26,14 @@ async function loadQuestionFormat() {
 }
 
 /**
- * Reads existing questions from a file to avoid duplicates
+ * Loads existing questions from the database to avoid duplicates
  *
- * @param {string} existingQuestionsPath - Path to the file containing existing questions
+ * @param {Object} options - Search options for loading questions
  * @returns {Promise<string[]>} Array of existing questions
- * @throws {Error} If the file cannot be read
+ * @throws {Error} If the questions cannot be loaded
  */
-async function loadExistingQuestions(existingQuestionsPath, options = {}) {
+async function loadExistingQuestions(_, options = {}) {
   try {
-    // Check if file exists, if not return empty array
     try {
       const result = await searchQuestions({
         ...options,
@@ -44,7 +43,7 @@ async function loadExistingQuestions(existingQuestionsPath, options = {}) {
         page_size: 1000,
         mode: 'minimalist',
       });
-      return result?.questions?.map(q => q.question);
+      return result?.questions?.map(q => q.question) || [];
     } catch (error) {
       return [];
     }

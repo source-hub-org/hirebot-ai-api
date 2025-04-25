@@ -39,6 +39,11 @@ jest.mock('@utils/logger', () => ({
   error: jest.fn(),
 }));
 
+// Mock questionSearchService
+jest.mock('../src/service/questionSearchService', () => ({
+  searchQuestions: jest.fn(),
+}));
+
 describe('fileOperations', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -78,33 +83,67 @@ describe('fileOperations', () => {
   });
 
   describe('loadExistingQuestions', () => {
-    it('should load existing questions successfully', async () => {
-      fs.access.mockResolvedValue(undefined);
-      fs.readFile.mockResolvedValue('question1\nquestion2\n\nquestion3');
+    // Import the mocked searchQuestions function
+    const { searchQuestions } = require('../src/service/questionSearchService');
 
-      const result = await loadExistingQuestions('path/to/questions');
+    it('should load existing questions successfully from database', async () => {
+      // Mock the searchQuestions function to return sample questions
+      const mockQuestions = [
+        { _id: '1', question: 'question1' },
+        { _id: '2', question: 'question2' },
+        { _id: '3', question: 'question3' },
+      ];
 
-      expect(fs.access).toHaveBeenCalledWith('path/to/questions');
-      expect(fs.readFile).toHaveBeenCalledWith('path/to/questions', 'utf8');
+      searchQuestions.mockResolvedValue({
+        questions: mockQuestions,
+        pagination: {
+          total: 3,
+          page: 1,
+          page_size: 1000,
+          total_pages: 1,
+        },
+      });
+
+      const options = { topic: 'JavaScript', language: 'JavaScript', position: 'junior' };
+      const result = await loadExistingQuestions('path/to/questions', options);
+
+      expect(searchQuestions).toHaveBeenCalledWith({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        sort_by: 'createdAt',
+        sort_direction: 'asc',
+        page: 1,
+        page_size: 1000,
+        mode: 'minimalist',
+      });
       expect(result).toEqual(['question1', 'question2', 'question3']);
     });
 
-    it('should return empty array when file does not exist', async () => {
-      fs.access.mockRejectedValue(new Error('File not found'));
+    it('should return empty array when search fails', async () => {
+      searchQuestions.mockRejectedValue(new Error('Database error'));
 
-      const result = await loadExistingQuestions('path/to/questions');
+      const options = { topic: 'JavaScript', language: 'JavaScript', position: 'junior' };
+      const result = await loadExistingQuestions('path/to/questions', options);
 
       expect(result).toEqual([]);
-      expect(fs.readFile).not.toHaveBeenCalled();
     });
 
-    it('should throw an error when file exists but cannot be read', async () => {
-      fs.access.mockResolvedValue(undefined);
-      fs.readFile.mockRejectedValue(new Error('Permission denied'));
+    it('should return empty array when no questions are found', async () => {
+      searchQuestions.mockResolvedValue({
+        questions: [],
+        pagination: {
+          total: 0,
+          page: 1,
+          page_size: 1000,
+          total_pages: 0,
+        },
+      });
 
-      await expect(loadExistingQuestions('path/to/questions')).rejects.toThrow(
-        'Failed to load existing questions: Permission denied'
-      );
+      const options = { topic: 'JavaScript', language: 'JavaScript', position: 'junior' };
+      const result = await loadExistingQuestions('path/to/questions', options);
+
+      expect(result).toEqual([]);
     });
   });
 

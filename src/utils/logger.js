@@ -36,7 +36,10 @@ function formatLogMessage(level, message, data) {
  * @param {Object} [data] - Optional data to log
  */
 function info(message, data) {
-  console.log(formatLogMessage(LogLevel.INFO, message, data));
+  // Only log in non-test environments
+  if (process.env.NODE_ENV !== 'test') {
+    console.log(formatLogMessage(LogLevel.INFO, message, data));
+  }
 }
 
 /**
@@ -45,7 +48,10 @@ function info(message, data) {
  * @param {Object} [data] - Optional data to log
  */
 function warn(message, data) {
-  console.warn(formatLogMessage(LogLevel.WARN, message, data));
+  // Only log in non-test environments
+  if (process.env.NODE_ENV !== 'test') {
+    console.warn(formatLogMessage(LogLevel.WARN, message, data));
+  }
 }
 
 /**
@@ -54,7 +60,10 @@ function warn(message, data) {
  * @param {Error|Object} [error] - Optional error to log
  */
 function error(message, error) {
-  console.error(formatLogMessage(LogLevel.ERROR, message, error));
+  // Only log in non-test environments
+  if (process.env.NODE_ENV !== 'test') {
+    console.error(formatLogMessage(LogLevel.ERROR, message, error));
+  }
 }
 
 /**
@@ -76,6 +85,11 @@ function debug(message, data) {
  * @returns {Promise<void>}
  */
 async function logToFile(filename, message, data) {
+  // Skip file operations during tests
+  if (process.env.NODE_ENV === 'test') {
+    return;
+  }
+
   try {
     const logDir = path.resolve(process.cwd(), 'logs');
 
@@ -94,7 +108,10 @@ async function logToFile(filename, message, data) {
     // Append to the log file
     await fs.appendFile(logPath, logEntry, 'utf8');
   } catch (err) {
-    console.error(`Failed to write to log file ${filename}:`, err);
+    // Only log errors in non-test environments
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(`Failed to write to log file ${filename}:`, err);
+    }
   }
 }
 

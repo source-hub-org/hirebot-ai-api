@@ -274,7 +274,6 @@ describe('Question Routes', () => {
 
         // Verify the mock was called with correct difficulty text
         expect(generateQuizQuestions).toHaveBeenCalledWith(
-          expect.any(String),
           expect.objectContaining({
             difficultyText: difficultyText,
           })
@@ -321,7 +320,6 @@ describe('Question Routes', () => {
 
       // Verify the mock was called with correct parameters
       expect(generateQuizQuestions).toHaveBeenCalledWith(
-        expect.any(String), // path to existing questions
         expect.objectContaining({
           topic: 'JavaScript Arrays',
           language: 'JavaScript',
@@ -356,13 +354,6 @@ describe('Question Routes', () => {
 
       // Verify database insertion was called
       expect(insertMany).toHaveBeenCalledWith('questions', expect.any(Array));
-
-      // Verify file append was called
-      expect(require('fs').promises.appendFile).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.stringContaining(mockQuestions[0].question),
-        'utf8'
-      );
     });
 
     // Test for AI service errors
