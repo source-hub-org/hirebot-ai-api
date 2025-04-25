@@ -5,6 +5,7 @@
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const { generateQuizQuestions } = require('../service/gemini/quizQuestionCreator');
 const { insertMany } = require('../repository/baseRepository');
 const { validateSearchParams } = require('../utils/questionSearchValidator');
@@ -176,10 +177,7 @@ router.post('/generate', async (req, res) => {
       });
     }
 
-    // 2. Path to existing questions file
-    const existingQuestionsPath = path.resolve(process.cwd(), 'data/existing-questions.txt');
-
-    // 3. Define difficultyText and positionInstruction based on position
+    // 2. Define difficultyText and positionInstruction based on position
     const positionLowerCase = position.toLowerCase();
 
     // Map position to difficultyText and positionInstruction
@@ -223,7 +221,7 @@ router.post('/generate', async (req, res) => {
     }
 
     // 4. Call the AI question generation service with the provided parameters
-    const { questions } = await generateQuizQuestions(existingQuestionsPath, {
+    const { questions } = await generateQuizQuestions({
       topic,
       language,
       position: positionLowerCase,
@@ -252,7 +250,7 @@ router.post('/generate', async (req, res) => {
     // 6. Store the questions in MongoDB
     const result = await insertMany('questions', questionsWithMetadata);
 
-    // 8. Respond to the client
+    // 7. Respond to the client
     return res.status(200).json({
       status: 'success',
       message: 'Questions generated and saved.',

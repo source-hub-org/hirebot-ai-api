@@ -7,6 +7,19 @@ const path = require('path');
 const logger = require('../src/utils/logger');
 
 describe('Logger Utility', () => {
+  // Save original environment
+  const originalEnv = process.env.NODE_ENV;
+
+  beforeEach(() => {
+    // Set NODE_ENV to something other than 'test' for these tests
+    process.env.NODE_ENV = 'development';
+  });
+
+  afterEach(() => {
+    // Restore original environment
+    process.env.NODE_ENV = originalEnv;
+  });
+
   const testLogFile = 'test-log.log';
   const logDir = path.resolve(process.cwd(), 'logs');
   const testLogPath = path.join(logDir, testLogFile);
@@ -24,6 +37,8 @@ describe('Logger Utility', () => {
   test('logToFile should write to a log file', async () => {
     const testMessage = 'Test log message';
     const testData = { key: 'value', number: 123 };
+
+    // Ensure the logs directory exists
 
     await logger.logToFile(testLogFile, testMessage, testData);
 
@@ -70,5 +85,34 @@ describe('Logger Utility', () => {
     // Restore original functions
     fs.appendFile = originalAppendFile;
     consoleErrorSpy.mockRestore();
+  });
+
+  test('logger functions should not log in test environment', () => {
+    // Set NODE_ENV to test
+    process.env.NODE_ENV = 'test';
+
+    // Spy on console methods
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation();
+
+    // Call logger methods
+    logger.info('Test info');
+    logger.warn('Test warn');
+    logger.error('Test error');
+    logger.debug('Test debug');
+
+    // Verify console methods were not called
+    expect(consoleLogSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(consoleDebugSpy).not.toHaveBeenCalled();
+
+    // Restore console methods
+    consoleLogSpy.mockRestore();
+    consoleWarnSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+    consoleDebugSpy.mockRestore();
   });
 });

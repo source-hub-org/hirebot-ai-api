@@ -25,7 +25,6 @@ dotenv.config();
 /**
  * Generates quiz questions using Gemini AI
  *
- * @param {string} existingQuestionsPath - Path to the file containing existing questions
  * @param {Object} options - Additional options for generation
  * @param {number} [options.temperature] - Controls randomness (defaults to env var GEMINI_TEMPERATURE)
  * @param {number} [options.maxOutputTokens] - Maximum tokens in response (defaults to env var GEMINI_MAX_OUTPUT_TOKENS)
@@ -35,20 +34,23 @@ dotenv.config();
  * @param {string} [options.position] - The target position level
  * @param {string} [options.difficultyText] - Description of the difficulty level
  * @param {string} [options.positionInstruction] - Instruction related to the position
- * @returns {Promise<{filePath: string, questions: Object[]}>} The path to the saved file and the generated questions
+ * @returns {Promise<{questions: Object[]}>} The generated questions
  * @throws {Error} If generation fails at any step
  */
-async function generateQuizQuestions(existingQuestionsPath, options = {}) {
+async function generateQuizQuestions(options = {}) {
   try {
     logger.info('Starting quiz question generation process');
     logger.info(
       `Options: Topic=${options.topic}, Language=${options.language}, Position=${options.position}, DifficultyText=${options.difficultyText}, PositionInstruction=${options.positionInstruction}`
     );
 
-    // Load question format and existing questions
-    logger.info('Loading question format and existing questions');
+    // Load question format
+    logger.info('Loading question format');
     const questionFormat = await loadQuestionFormat();
-    const existingQuestions = await loadExistingQuestions(existingQuestionsPath, options);
+
+    // Get existing questions from database if needed
+    logger.info('Loading existing questions from database');
+    const existingQuestions = await loadExistingQuestions(null, options);
     logger.info(`Loaded ${existingQuestions.length} existing questions`);
 
     // Construct the prompt with all options
