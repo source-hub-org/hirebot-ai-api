@@ -10,7 +10,8 @@
     "format": "prettier --write .",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:coverage:report": "jest --coverage && open-cli coverage/index.html"
+    "test:coverage:report": "jest --coverage && open-cli coverage/index.html",
+    "command": "node src/cli.js"
   },
   "keywords": [],
   "author": "",
