@@ -7,6 +7,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const logger = require('../../../utils/logger');
+const { searchQuestions } = require('../../questionSearchService');
 
 /**
  * Reads and parses the question format JSON file
@@ -31,18 +32,22 @@ async function loadQuestionFormat() {
  * @returns {Promise<string[]>} Array of existing questions
  * @throws {Error} If the file cannot be read
  */
-async function loadExistingQuestions(existingQuestionsPath) {
+async function loadExistingQuestions(existingQuestionsPath, options = {}) {
   try {
     // Check if file exists, if not return empty array
     try {
-      await fs.access(existingQuestionsPath);
+      const result = await searchQuestions({
+        ...options,
+        sort_by: 'createdAt',
+        sort_direction: 'asc',
+        page: 1,
+        page_size: 1000,
+        mode: 'minimalist',
+      });
+      return result?.questions?.map(q => q.question);
     } catch (error) {
       return [];
     }
-
-    const questionsData = await fs.readFile(existingQuestionsPath, 'utf8');
-    // Split by lines and filter out empty lines
-    return questionsData.split('\n').filter(line => line.trim().length > 0);
   } catch (error) {
     throw new Error(`Failed to load existing questions: ${error.message}`);
   }

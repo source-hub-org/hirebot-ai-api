@@ -48,7 +48,7 @@ async function generateQuizQuestions(existingQuestionsPath, options = {}) {
     // Load question format and existing questions
     logger.info('Loading question format and existing questions');
     const questionFormat = await loadQuestionFormat();
-    const existingQuestions = await loadExistingQuestions(existingQuestionsPath);
+    const existingQuestions = await loadExistingQuestions(existingQuestionsPath, options);
     logger.info(`Loaded ${existingQuestions.length} existing questions`);
 
     // Construct the prompt with all options
@@ -81,12 +81,12 @@ async function generateQuizQuestions(existingQuestionsPath, options = {}) {
     }
 
     // Save the generated questions
-    logger.info('Saving generated questions');
-    const filePath = await saveGeneratedQuestions(questions);
-    logger.info(`Questions saved to ${filePath}`);
+    // logger.info('Saving generated questions');
+    // const filePath = await saveGeneratedQuestions(questions);
+    // logger.info(`Questions saved to ${filePath}`);
 
     return {
-      filePath,
+      //filePath,
       questions,
     };
   } catch (error) {

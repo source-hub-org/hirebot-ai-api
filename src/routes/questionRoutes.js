@@ -252,16 +252,6 @@ router.post('/generate', async (req, res) => {
     // 6. Store the questions in MongoDB
     const result = await insertMany('questions', questionsWithMetadata);
 
-    // 7. Append the new questions to the existing questions file to avoid duplicates in future
-    try {
-      const fs = require('fs').promises;
-      const newQuestionTexts = questions.map(q => q.question);
-      await fs.appendFile(existingQuestionsPath, '\n' + newQuestionTexts.join('\n'), 'utf8');
-    } catch (appendError) {
-      logger.warn('Failed to update existing questions file:', appendError);
-      // Continue execution even if this fails
-    }
-
     // 8. Respond to the client
     return res.status(200).json({
       status: 'success',
