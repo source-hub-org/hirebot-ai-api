@@ -45,6 +45,7 @@ async function initializeApp() {
 
     return { app, server };
   } catch (error) {
+    console.debug(error);
     logger.error('Failed to initialize application:', error);
     process.exit(1);
   }
