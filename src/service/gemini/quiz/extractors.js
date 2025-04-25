@@ -3,7 +3,7 @@
  * This module handles extracting content from various formats.
  */
 
-const logger = require('@utils/logger');
+const logger = require('../../../utils/logger');
 
 /**
  * Extracts content from a code block with a specific language

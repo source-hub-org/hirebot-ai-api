@@ -3,9 +3,9 @@
  * @module service/questionSearchService
  */
 
-const { findMany, getCollection } = require('@repository/baseRepository');
-const { buildMongoQuery } = require('@utils/questionSearchQueryBuilder');
-const logger = require('@utils/logger');
+const { findMany, getCollection } = require('../repository/baseRepository');
+const { buildMongoQuery } = require('../utils/questionSearchQueryBuilder');
+const logger = require('../utils/logger');
 
 /**
  * Search for questions based on provided criteria

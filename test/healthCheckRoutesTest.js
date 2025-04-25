@@ -3,15 +3,12 @@
  * @module test/healthCheckRoutesTest
  */
 
-// Register module aliases for tests
-require('module-alias/register');
-
 const request = require('supertest');
 const express = require('express');
-const { getConnectionInfo } = require('@repository/baseRepository');
+const { getConnectionInfo } = require('../src/repository/baseRepository');
 
 // Mock the baseRepository module
-jest.mock('@repository/baseRepository');
+jest.mock('../src/repository/baseRepository');
 
 // Create an Express app for testing
 const app = express();

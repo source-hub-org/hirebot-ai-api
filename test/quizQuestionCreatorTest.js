@@ -3,9 +3,6 @@
  * @module test/quizQuestionCreatorTest
  */
 
-// Register module aliases for tests
-require('module-alias/register');
-
 const fs = require('fs').promises;
 const path = require('path');
 const os = require('os');
@@ -18,15 +15,15 @@ const {
   _constructPrompt,
   _validateGeneratedContent,
   _saveGeneratedQuestions,
-} = require('@service/gemini/quizQuestionCreator');
+} = require('../src/service/gemini/quizQuestionCreator');
 
 // Mock the geminiClient module
-jest.mock('@service/gemini/geminiClient', () => ({
+jest.mock('../src/service/gemini/geminiClient', () => ({
   generateContent: jest.fn(),
 }));
 
 // Import the mocked module
-const { generateContent } = require('@service/gemini/geminiClient');
+const { generateContent } = require('../src/service/gemini/geminiClient');
 
 describe('Quiz Question Creator Tests', () => {
   // Save original environment variables

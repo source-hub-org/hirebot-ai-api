@@ -6,7 +6,7 @@
 
 const https = require('https');
 const dotenv = require('dotenv');
-const logger = require('@utils/logger');
+const logger = require('../../utils/logger');
 
 // Load environment variables
 dotenv.config();

@@ -20,7 +20,7 @@ GEMINI_TMP_DIR=/tmp
 
 ```javascript
 const path = require('path');
-const { generateQuizQuestions } = require('@service/gemini/quizQuestionCreator');
+const { generateQuizQuestions } = require('./quizQuestionCreator');
 
 async function generateQuestions() {
   try {

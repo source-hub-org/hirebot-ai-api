@@ -4,8 +4,8 @@
  */
 
 const dotenv = require('dotenv');
-const { generateContent } = require('@service/gemini/geminiClient');
-const logger = require('@utils/logger');
+const { generateContent } = require('../geminiClient');
+const logger = require('../../../utils/logger');
 const {
   loadQuestionFormat,
   loadExistingQuestions,
