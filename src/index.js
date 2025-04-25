@@ -51,10 +51,5 @@ async function initializeApp() {
   }
 }
 
-// If this file is run directly, initialize the app
-if (require.main === module) {
-  initializeApp();
-}
-
 // Export for testing
 module.exports = { app, initializeApp };
