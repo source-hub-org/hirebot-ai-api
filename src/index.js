@@ -1,14 +1,11 @@
-// Register module aliases
-require('module-alias/register');
-
 const express = require('express');
 const dotenv = require('dotenv');
-const { initializeDb } = require('@repository/baseRepository');
-const healthCheckRoutes = require('@routes/healthCheckRoutes');
-const questionRoutes = require('@routes/questionRoutes');
-const { swaggerDocs } = require('@config/swagger');
-const { ensureDirectoriesExist } = require('@utils/ensureDirectories');
-const logger = require('@utils/logger');
+const { initializeDb } = require('./repository/baseRepository');
+const healthCheckRoutes = require('./routes/healthCheckRoutes');
+const questionRoutes = require('./routes/questionRoutes');
+const { swaggerDocs } = require('./config/swagger');
+const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
+const logger = require('./utils/logger');
 
 // Load environment variables
 dotenv.config();

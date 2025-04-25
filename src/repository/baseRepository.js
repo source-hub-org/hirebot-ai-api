@@ -4,7 +4,7 @@
  */
 
 const { MongoClient } = require('mongodb');
-const logger = require('@utils/logger');
+const logger = require('../utils/logger');
 
 /**
  * MongoDB client instance

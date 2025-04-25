@@ -3,7 +3,7 @@
  * This module handles validating question structure.
  */
 
-const logger = require('@utils/logger');
+const logger = require('../../../utils/logger');
 
 /**
  * Validates that a question has the required 'question' field

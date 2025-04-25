@@ -5,11 +5,11 @@
 
 const express = require('express');
 const path = require('path');
-const { generateQuizQuestions } = require('@service/gemini/quizQuestionCreator');
-const { insertMany } = require('@repository/baseRepository');
-const { validateSearchParams } = require('@utils/questionSearchValidator');
-const { searchQuestions } = require('@service/questionSearchService');
-const logger = require('@utils/logger');
+const { generateQuizQuestions } = require('../service/gemini/quizQuestionCreator');
+const { insertMany } = require('../repository/baseRepository');
+const { validateSearchParams } = require('../utils/questionSearchValidator');
+const { searchQuestions } = require('../service/questionSearchService');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 

@@ -4,7 +4,7 @@
  */
 
 const express = require('express');
-const { getConnectionInfo } = require('@repository/baseRepository');
+const { getConnectionInfo } = require('../repository/baseRepository');
 
 const router = express.Router();
 

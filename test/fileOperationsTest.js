@@ -229,7 +229,7 @@ describe('fileOperations', () => {
 
     it('should handle errors when logging fails', () => {
       const mockContent = 'Test content to log';
-      const logger = require('@utils/logger');
+      const logger = require('../src/utils/logger');
 
       // Make appendFileSync throw an error
       const fs = require('fs');

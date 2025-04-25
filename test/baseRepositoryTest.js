@@ -3,9 +3,6 @@
  * @module test/automation-test
  */
 
-// Register module aliases for tests
-require('module-alias/register');
-
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const {
   initializeDb,
@@ -19,7 +16,7 @@ const {
   updateMany,
   deleteOne,
   deleteMany,
-} = require('@repository/baseRepository');
+} = require('../src/repository/baseRepository');
 
 // Test collection name
 const TEST_COLLECTION = 'test_collection';

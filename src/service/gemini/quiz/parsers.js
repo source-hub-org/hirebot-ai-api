@@ -3,7 +3,7 @@
  * This module handles parsing JSON content.
  */
 
-const logger = require('@utils/logger');
+const logger = require('../../../utils/logger');
 const { findJsonByBracketMatching } = require('./extractors');
 
 /**

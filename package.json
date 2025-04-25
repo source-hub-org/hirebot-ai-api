@@ -39,13 +39,6 @@
       "html"
     ]
   },
-  "_moduleAliases": {
-    "@repository": "src/repository",
-    "@routes": "src/routes",
-    "@utils": "src/utils",
-    "@service": "src/service",
-    "@config": "src/config"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -53,7 +46,6 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "module-alias": "^2.2.3",
     "mongodb": "^6.16.0",
     "mongodb-memory-server": "^10.1.4",
     "swagger-jsdoc": "^6.2.8",
