@@ -9,10 +9,11 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 - Generate technical interview questions using Google's Gemini AI
 - Store and retrieve questions from MongoDB
 - Manage interview topics through commands and API
-- RESTful API for quiz and topic management
+- RESTful API for quiz, topic, candidate, and submission management
 - Comprehensive validation and error handling
 - Swagger API documentation
 - Extensive test coverage
+- Pagination support for listing resources
 
 ## Getting Started
 
@@ -77,20 +78,42 @@ hirebot-ai-api/
 ├── src/
 │   ├── commands/       # CLI commands
 │   ├── config/         # Configuration files
+│   ├── models/         # Data models
+│   │   ├── candidateModel.js  # Candidate schema and validation
+│   │   └── submissionModel.js # Submission schema and validation
 │   ├── repository/     # Data access layer
+│   │   ├── baseRepository.js      # Base repository with common operations
+│   │   ├── candidateRepository.js # Candidate data operations
+│   │   ├── submissionRepository.js # Submission data operations
+│   │   └── topicRepository.js     # Topic data operations
 │   ├── routes/         # API routes
+│   │   ├── candidateRoutes.js     # Candidate API endpoints
+│   │   ├── healthCheckRoutes.js   # Health check endpoint
+│   │   ├── questionRoutes.js      # Question generation endpoints
+│   │   ├── submissionRoutes.js    # Submission API endpoints
+│   │   └── topicRoutes.js         # Topic API endpoints
 │   ├── service/        # Business logic
-│   │   └── gemini/     # Gemini AI integration
-│   │       └── quiz/   # Quiz generation modules
-│   │           ├── extractors.js    # JSON extraction utilities
-│   │           ├── parsers.js       # JSON parsing utilities
-│   │           ├── validators.js    # Question validation utilities
-│   │           └── contentValidator.js # Main validation module
+│   │   ├── gemini/     # Gemini AI integration
+│   │   │   └── quiz/   # Quiz generation modules
+│   │   │       ├── extractors.js       # JSON extraction utilities
+│   │   │       ├── parsers.js          # JSON parsing utilities
+│   │   │       ├── validators.js       # Question validation utilities
+│   │   │       └── contentValidator.js # Main validation module
+│   │   └── questionSearchService.js # Question search service
 │   └── utils/          # Utility functions
-│       ├── fileParser.js    # File reading utilities
-│       ├── logger.js        # Logging utilities
-│       └── topicValidator.js # Topic validation utilities
+│       ├── candidateValidator.js   # Candidate validation utilities
+│       ├── fileParser.js           # File reading utilities
+│       ├── logger.js               # Logging utilities
+│       ├── paginationUtils.js      # Pagination utilities
+│       ├── questionSearchQueryBuilder.js # Search query builder
+│       ├── questionSearchValidator.js    # Search validation
+│       ├── submissionEnricher.js   # Submission data enrichment
+│       ├── submissionValidator.js  # Submission validation utilities
+│       └── topicValidator.js       # Topic validation utilities
 ├── test/               # Test files
+├── docker/             # Docker configuration
+│   └── mongodb/        # MongoDB Docker setup
+├── data/               # Sample data files
 ├── .env                # Environment variables (not in repo)
 └── package.json        # Project metadata and dependencies
 ```
@@ -99,19 +122,21 @@ hirebot-ai-api/
 
 The project follows a layered architecture:
 
-1. **Commands Layer** (`commands/`): Handles CLI commands for administrative tasks like initializing topics.
+1. **Models Layer** (`models/`): Defines data schemas, validation rules, and default values for database collections.
 
-2. **Routes Layer** (`routes/`): Handles HTTP requests and responses, input validation, and routing to appropriate services.
+2. **Commands Layer** (`commands/`): Handles CLI commands for administrative tasks like initializing topics.
 
-3. **Service Layer** (`service/`): Contains the business logic, including:
+3. **Routes Layer** (`routes/`): Handles HTTP requests and responses, input validation, and routing to appropriate services.
 
+4. **Service Layer** (`service/`): Contains the business logic, including:
    - Gemini AI integration for generating questions
    - Quiz content validation and processing
    - Data transformation and preparation
+   - Search functionality
 
-4. **Repository Layer** (`repository/`): Manages data access and persistence with MongoDB.
+5. **Repository Layer** (`repository/`): Manages data access and persistence with MongoDB.
 
-5. **Utility Layer** (`utils/`): Provides common utilities like logging, file parsing, and validation.
+6. **Utility Layer** (`utils/`): Provides common utilities like logging, file parsing, validation, and pagination.
 
 ### Quiz Generation Module
 
@@ -180,6 +205,24 @@ http://localhost:3000/api-docs
 
 - `GET /api/topics` - Get all available topics
 
+#### Candidates API
+
+- `GET /api/candidates` - Get all candidates with pagination
+- `GET /api/candidates/{id}` - Get a candidate by ID
+- `POST /api/candidates` - Create a new candidate
+- `PUT /api/candidates/{id}` - Update a candidate
+- `DELETE /api/candidates/{id}` - Delete a candidate
+
+#### Submissions API
+
+- `POST /api/submissions` - Create a new submission
+- `GET /api/submissions/{id}` - Get a submission by ID
+- `GET /api/submissions/candidate/{candidateId}` - Get submissions by candidate ID
+
+#### Health Check API
+
+- `GET /api/health` - Check API health status
+
 ### Adding Documentation to Endpoints
 
 To document an endpoint, add JSDoc comments with Swagger annotations above the route handler. For example:
@@ -216,6 +259,23 @@ router.get('/resource', (req, res) => {
 ```
 
 For more information on Swagger annotations, refer to the [swagger-jsdoc documentation](https://github.com/Surnet/swagger-jsdoc/blob/master/docs/GETTING-STARTED.md).
+
+## Data Models
+
+### Candidate Model
+
+The candidate model defines the structure for storing candidate information:
+
+- Required fields: `full_name`, `email`, `phone_number`, `interview_level`
+- Optional fields include personal information, education, experience, skills, and interview details
+
+### Submission Model
+
+The submission model defines the structure for storing candidate quiz submissions:
+
+- Required fields: `candidate_id`
+- Contains arrays of answers to questions, essay responses, and review information
+- Each answer includes the question ID, selected option, and skip status
 
 ## Testing
 
