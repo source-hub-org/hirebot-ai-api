@@ -29,7 +29,7 @@ const swaggerOptions = {
     ],
   },
   // Path to the API docs
-  apis: ['./src/routes/*.js'], // Path to the API docs
+  apis: ['./src/routes/**/*.js'], // Path to the API docs
 };
 
 // Initialize swagger-jsdoc
