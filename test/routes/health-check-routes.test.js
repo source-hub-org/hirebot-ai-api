@@ -1,6 +1,6 @@
 /**
- * Automated tests for healthCheckRoutes.js
- * @module test/healthCheckRoutesTest
+ * Automated tests for health check routes
+ * @module test/health-check-routes.test
  */
 
 const request = require('supertest');
@@ -12,7 +12,7 @@ jest.mock('../../src/repository/baseRepository');
 
 // Create an Express app for testing
 const app = express();
-const healthCheckRoutes = require('../../src/routes/healthCheckRoutes');
+const healthCheckRoutes = require('../../src/routes/health-check');
 app.use('/api/health-check', healthCheckRoutes);
 
 describe('Health Check Routes Tests', () => {
