@@ -129,6 +129,7 @@ The project follows a layered architecture:
 3. **Routes Layer** (`routes/`): Handles HTTP requests and responses, input validation, and routing to appropriate services.
 
 4. **Service Layer** (`service/`): Contains the business logic, including:
+
    - Gemini AI integration for generating questions
    - Quiz content validation and processing
    - Data transformation and preparation
