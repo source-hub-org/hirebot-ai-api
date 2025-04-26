@@ -21,9 +21,15 @@ const DEFAULT_TEMPERATURE = parseFloat(process.env.GEMINI_TEMPERATURE || '0.7');
 
 /**
  * Validates that the API key is available
- * @throws {Error} If API key is not configured
+ * @throws {Error} If API key is not configured and not in CI environment
  */
 function validateApiKey() {
+  // Skip validation if running in CI environment with a dummy key
+  if (process.env.CI === 'true' && API_KEY === 'dummy-key-for-ci') {
+    logger.info('Running in CI environment with dummy API key - skipping validation');
+    return;
+  }
+
   if (!API_KEY) {
     throw new Error('GEMINI_API_KEY is not configured in environment variables');
   }
@@ -49,6 +55,24 @@ function validateApiKey() {
  */
 async function makeRequest(endpoint, data) {
   validateApiKey();
+
+  // Return mock response if running in CI environment with dummy key
+  if (process.env.CI === 'true' && API_KEY === 'dummy-key-for-ci') {
+    logger.info('Running in CI environment with dummy API key - returning mock response');
+    return {
+      candidates: [
+        {
+          content: {
+            parts: [
+              {
+                text: 'This is a mock response for CI environment',
+              },
+            ],
+          },
+        },
+      ],
+    };
+  }
 
   return new Promise((resolve, reject) => {
     const url = `${BASE_URL}${endpoint}?key=${API_KEY}`;
