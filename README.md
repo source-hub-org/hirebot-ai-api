@@ -2,12 +2,13 @@
 
 # HireBot AI API
 
-The backend service of HireBot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js, using Express for RESTful APIs and MongoDB for data storage.
+The backend service of HireBot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js, using Express for RESTful APIs, MongoDB for data storage, and Redis for job queue management.
 
 ## Features
 
 - Generate technical interview questions using Google's Gemini AI
 - Store and retrieve questions from MongoDB
+- Asynchronous question generation with Redis-based job queue
 - Manage interview topics through commands and API
 - RESTful API for quiz, topic, candidate, and submission management
 - Comprehensive validation and error handling
@@ -21,6 +22,7 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 
 - Node.js (v16 or higher)
 - MongoDB (local or Atlas)
+- Redis (for job queue management)
 - Google Gemini API key (see [Getting a Gemini API Key](#getting-a-gemini-api-key))
 
 ### Installation
@@ -38,15 +40,43 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
    npm install
    ```
 
-3. Create a `.env` file in the root directory with the following variables:
+3. Create a `.env` file in the root directory based on the `.env.example` file:
 
    ```
    PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/hirebot
-   GEMINI_API_KEY=your_gemini_api_key
+   MONGODB_URI=mongodb://localhost:27017
+   DB_NAME=hirebot_db
+   JWT_SECRET=secret
+   
+   # Redis Configuration
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+   REDIS_PASSWORD=
+   JOB_POLLING_INTERVAL=5000
+   
+   # Gemini AI Configuration
+   GEMINI_API_KEY=your_api_key_here
+   GEMINI_MODEL=gemini-2.0-flash
+   GEMINI_API_BASE_URL=https://generativelanguage.googleapis.com/v1beta
+   GEMINI_MAX_OUTPUT_TOKENS=8192
+   GEMINI_TEMPERATURE=0.7
+   GEMINI_TMP_DIR=/tmp
+   PAGE_SIZE_EXISTING_QUESTIONS=1000
    ```
 
-4. Start the server:
+4. Start MongoDB and Redis using Docker (optional):
+
+   ```bash
+   # Start MongoDB
+   cd docker/mongodb
+   docker-compose up -d
+   
+   # Start Redis
+   cd ../redis
+   docker-compose up -d
+   ```
+
+5. Start the server:
 
    ```bash
    npm start
@@ -77,76 +107,147 @@ Note: Keep your API key secure and never commit it to version control.
 hirebot-ai-api/
 ├── src/
 │   ├── commands/       # CLI commands
+│   │   ├── index.js
+│   │   └── topicCommands.js       # Topic management commands
 │   ├── config/         # Configuration files
+│   │   ├── question-format.json   # Question format schema
+│   │   └── swagger.js             # Swagger configuration
+│   ├── controllers/    # Request handlers
+│   │   ├── candidates/            # Candidate controllers
+│   │   ├── health-check/          # Health check controllers
+│   │   ├── questions/             # Question controllers
+│   │   ├── submissions/           # Submission controllers
+│   │   └── topics/                # Topic controllers
 │   ├── models/         # Data models
-│   │   ├── candidateModel.js  # Candidate schema and validation
-│   │   └── submissionModel.js # Submission schema and validation
+│   │   ├── candidateModel.js      # Candidate schema and validation
+│   │   ├── jobModel.js            # Job queue schema
+│   │   └── submissionModel.js     # Submission schema and validation
 │   ├── repository/     # Data access layer
 │   │   ├── baseRepository.js      # Base repository with common operations
 │   │   ├── candidateRepository.js # Candidate data operations
+│   │   ├── jobRepository.js       # Job queue operations
 │   │   ├── submissionRepository.js # Submission data operations
 │   │   └── topicRepository.js     # Topic data operations
 │   ├── routes/         # API routes
-│   │   ├── candidateRoutes.js     # Candidate API endpoints
-│   │   ├── healthCheckRoutes.js   # Health check endpoint
-│   │   ├── questionRoutes.js      # Question generation endpoints
-│   │   ├── submissionRoutes.js    # Submission API endpoints
-│   │   └── topicRoutes.js         # Topic API endpoints
+│   │   ├── candidates/            # Candidate API endpoints
+│   │   ├── health-check/          # Health check endpoints
+│   │   ├── questions/             # Question generation endpoints
+│   │   ├── submissions/           # Submission API endpoints
+│   │   ├── topics/                # Topic API endpoints
+│   │   └── index.js               # Route registration
 │   ├── service/        # Business logic
-│   │   ├── gemini/     # Gemini AI integration
-│   │   │   └── quiz/   # Quiz generation modules
+│   │   ├── gemini/                # Gemini AI integration
+│   │   │   ├── geminiClient.js    # Gemini API client
+│   │   │   ├── quizQuestionCreator.js # Quiz creation orchestrator
+│   │   │   └── quiz/              # Quiz generation modules
+│   │   │       ├── contentValidator.js # Main validation module
 │   │   │       ├── extractors.js       # JSON extraction utilities
+│   │   │       ├── fileOperations.js   # File handling utilities
 │   │   │       ├── parsers.js          # JSON parsing utilities
-│   │   │       ├── validators.js       # Question validation utilities
-│   │   │       └── contentValidator.js # Main validation module
-│   │   └── questionSearchService.js # Question search service
+│   │   │       ├── promptBuilder.js    # AI prompt construction
+│   │   │       └── validators.js       # Question validation utilities
+│   │   ├── jobProcessorService.js      # Background job processor
+│   │   ├── questionGenerationService.js # Question generation service
+│   │   ├── questionRequestService.js   # Async question request service
+│   │   ├── questionSearchService.js    # Question search service
+│   │   └── redisService.js             # Redis queue service
 │   └── utils/          # Utility functions
-│       ├── candidateValidator.js   # Candidate validation utilities
-│       ├── fileParser.js           # File reading utilities
-│       ├── logger.js               # Logging utilities
-│       ├── paginationUtils.js      # Pagination utilities
+│       ├── candidateValidator.js       # Candidate validation utilities
+│       ├── ensureDirectories.js        # Directory creation utilities
+│       ├── errorResponseHandler.js     # Error handling utilities
+│       ├── fileParser.js               # File reading utilities
+│       ├── generateRequestValidator.js # Request validation
+│       ├── logger.js                   # Logging utilities
+│       ├── paginationUtils.js          # Pagination utilities
+│       ├── positionUtils.js            # Position-related utilities
 │       ├── questionSearchQueryBuilder.js # Search query builder
 │       ├── questionSearchValidator.js    # Search validation
-│       ├── submissionEnricher.js   # Submission data enrichment
-│       ├── submissionValidator.js  # Submission validation utilities
-│       └── topicValidator.js       # Topic validation utilities
+│       ├── redisQueueHelper.js         # Redis queue utilities
+│       ├── submissionEnricher.js       # Submission data enrichment
+│       ├── submissionValidator.js      # Submission validation utilities
+│       └── topicValidator.js           # Topic validation utilities
 ├── test/               # Test files
+│   ├── candidates/     # Candidate tests
+│   ├── files/          # File operation tests
+│   ├── gemini/         # Gemini integration tests
+│   ├── general/        # General utility tests
+│   ├── questions/      # Question generation tests
+│   ├── repositories/   # Repository tests
+│   ├── routes/         # API route tests
+│   ├── service/        # Service tests
+│   ├── submissions/    # Submission tests
+│   ├── topics/         # Topic tests
+│   ├── utils/          # Utility tests
+│   └── validators/     # Validation tests
 ├── docker/             # Docker configuration
-│   └── mongodb/        # MongoDB Docker setup
+│   ├── mongodb/        # MongoDB Docker setup
+│   └── redis/          # Redis Docker setup
 ├── data/               # Sample data files
-├── .env                # Environment variables (not in repo)
+│   ├── sample-candidate.json # Sample candidate data
+│   └── sample-topics.json    # Sample topics data
+├── .env.example        # Example environment variables
+├── .github/workflows/  # CI/CD configuration
+├── assets/             # Project assets
+├── jest.config.js      # Jest test configuration
 └── package.json        # Project metadata and dependencies
 ```
 
 ## Architecture
 
-The project follows a layered architecture:
+The project follows a layered architecture with MVC pattern:
 
 1. **Models Layer** (`models/`): Defines data schemas, validation rules, and default values for database collections.
 
-2. **Commands Layer** (`commands/`): Handles CLI commands for administrative tasks like initializing topics.
+2. **Controllers Layer** (`controllers/`): Handles the application logic, processes requests from routes, and prepares responses.
 
-3. **Routes Layer** (`routes/`): Handles HTTP requests and responses, input validation, and routing to appropriate services.
+3. **Routes Layer** (`routes/`): Defines API endpoints, handles HTTP requests and responses, and routes to appropriate controllers.
 
-4. **Service Layer** (`service/`): Contains the business logic, including:
+4. **Service Layer** (`service/`): Contains the core business logic, including:
 
    - Gemini AI integration for generating questions
    - Quiz content validation and processing
+   - Asynchronous job processing with Redis
    - Data transformation and preparation
    - Search functionality
 
-5. **Repository Layer** (`repository/`): Manages data access and persistence with MongoDB.
+5. **Repository Layer** (`repository/`): Manages data access and persistence with MongoDB, providing an abstraction over database operations.
 
 6. **Utility Layer** (`utils/`): Provides common utilities like logging, file parsing, validation, and pagination.
+
+7. **Commands Layer** (`commands/`): Handles CLI commands for administrative tasks like initializing topics.
+
+### Asynchronous Processing Architecture
+
+The application implements an asynchronous processing architecture for question generation:
+
+1. **Request Handling**:
+   - Client requests question generation via API
+   - Request is validated and a job is created
+   - Job is added to Redis queue
+   - Client receives a job ID for status tracking
+
+2. **Job Processing**:
+   - Background service polls Redis queue for pending jobs
+   - Jobs are processed asynchronously by the job processor service
+   - Results are stored in MongoDB
+   - Job status is updated in Redis
+
+3. **Result Retrieval**:
+   - Client can check job status using the job ID
+   - When job is complete, client can retrieve the generated questions
 
 ### Quiz Generation Module
 
 The quiz generation module is organized into specialized components:
 
+- **geminiClient.js**: Handles communication with Google's Gemini AI API
+- **quizQuestionCreator.js**: Orchestrates the question generation process
+- **promptBuilder.js**: Constructs AI prompts based on topic and requirements
 - **extractors.js**: Extracts JSON content from various formats (code blocks, raw text)
 - **parsers.js**: Parses and validates JSON structure for question data
 - **validators.js**: Validates and normalizes question content (options, answers, etc.)
 - **contentValidator.js**: Orchestrates the validation process using the specialized modules
+- **fileOperations.js**: Handles temporary file operations for large responses
 
 ## Commands
 
@@ -199,7 +300,8 @@ http://localhost:3000/api-docs
 
 #### Questions API
 
-- `POST /api/questions/generate` - Generate new questions
+- `POST /api/questions/generate` - Generate new questions synchronously
+- `POST /api/questions/request` - Request asynchronous question generation
 - `GET /api/questions/search` - Search for questions
 
 #### Topics API
@@ -222,7 +324,8 @@ http://localhost:3000/api-docs
 
 #### Health Check API
 
-- `GET /api/health` - Check API health status
+- `GET /api/health` - Check basic API health status
+- `GET /api/health/database` - Check database connection status
 
 ### Adding Documentation to Endpoints
 
