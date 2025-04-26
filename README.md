@@ -157,7 +157,7 @@ The project includes CLI commands for administrative tasks:
 Initialize topics from a JSON file:
 
 ```bash
-npm run command app:init-topics ./path/to/topics.json
+npm run command app:init-topics ./tmp/topics.json
 ```
 
 The JSON file should have the following structure:

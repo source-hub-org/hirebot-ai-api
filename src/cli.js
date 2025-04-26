@@ -22,7 +22,7 @@ const DB_NAME = process.env.DB_NAME || 'hirebot_db';
  */
 async function main() {
   try {
-    // Get command and arguments from command line
+    // Get command and arguments from the command line
     const [, , commandName, ...args] = process.argv;
 
     if (!commandName) {
