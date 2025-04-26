@@ -19,6 +19,7 @@ const logger = require('../utils/logger');
  * @param {number} searchParams.page - Page number
  * @param {number} searchParams.page_size - Number of items per page
  * @param {string} searchParams.mode - Response mode ('full', 'compact', or 'minimalist')
+ * @param {string[]} searchParams.ignore_question_ids - Array of question IDs to exclude from results
  * @returns {Promise<Object>} Search results with pagination metadata
  */
 async function searchQuestions(searchParams) {
@@ -32,6 +33,7 @@ async function searchQuestions(searchParams) {
       page,
       page_size,
       mode = 'full', // Default to full mode if not specified
+      ignore_question_ids = [], // Default to empty array if not specified
     } = searchParams;
 
     // Build the MongoDB query
@@ -44,6 +46,32 @@ async function searchQuestions(searchParams) {
       page,
       page_size
     );
+
+    // Add filter to exclude questions with IDs in ignore_question_ids
+    if (ignore_question_ids.length > 0) {
+      try {
+        const { ObjectId } = require('mongodb');
+        // Convert string IDs to ObjectId and filter out any invalid IDs
+        const validObjectIds = ignore_question_ids
+          .filter(id => id && id.length === 24) // Basic validation for MongoDB ObjectId
+          .map(id => {
+            try {
+              return new ObjectId(id);
+            } catch (err) {
+              // Skip invalid IDs
+              return null;
+            }
+          })
+          .filter(id => id !== null);
+
+        if (validObjectIds.length > 0) {
+          filter._id = { $nin: validObjectIds };
+        }
+      } catch (error) {
+        logger.warn('Error processing ignore_question_ids:', error);
+        // Continue without this filter if there's an error
+      }
+    }
 
     // Get collection for operations
     const collection = getCollection('questions');

@@ -18,6 +18,7 @@ const router = express.Router();
  *       This endpoint allows you to filter questions based on multiple criteria and
  *       returns paginated results that can be sorted by different fields.
  *       Supports random sorting with 'sort_by=random' (default if not specified).
+ *       You can exclude specific questions by providing their IDs in the 'ignore_question_ids' parameter.
  *     tags: [Questions]
  *     parameters:
  *       - in: query
@@ -88,6 +89,13 @@ const router = express.Router();
  *           default: full
  *         description: Response mode - 'full' includes all fields, 'compact' excludes correctAnswer and explanation, 'minimalist' only includes _id and question
  *         example: full
+ *       - in: query
+ *         name: ignore_question_ids
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Comma-separated list of question IDs to exclude from the results
+ *         example: 5f9d88b3e5daad3f349c2e2d,5f9d88b3e5daad3f349c2e2e
  *     responses:
  *       200:
  *         description: Questions retrieved successfully

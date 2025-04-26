@@ -53,7 +53,9 @@ const formatErrorResponse = error => {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @returns {Object} Response with questions or error
- * @description Supports random sorting with 'sort_by=random' query parameter (default)
+ * @description
+ * - Supports random sorting with 'sort_by=random' query parameter (default)
+ * - Supports excluding specific questions with 'ignore_question_ids' parameter (comma-separated list of IDs)
  */
 const searchQuestionsController = async (req, res) => {
   try {

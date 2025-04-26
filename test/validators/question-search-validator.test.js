@@ -24,6 +24,7 @@ describe('Question Search Validator', () => {
       page: 1,
       page_size: 20,
       mode: 'full',
+      ignore_question_ids: [],
     });
   });
 
@@ -78,6 +79,7 @@ describe('Question Search Validator', () => {
       page: 2,
       page_size: 10,
       mode: 'compact',
+      ignore_question_ids: [],
     });
   });
 
@@ -247,5 +249,50 @@ describe('Question Search Validator', () => {
 
     expect(result.errors).toHaveLength(0);
     expect(result.params.sort_by).toBe('random');
+  });
+
+  it('should validate and process ignore_question_ids parameter', () => {
+    const query = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      ignore_question_ids: '5f9d88b3e5daad3f349c2e2d,5f9d88b3e5daad3f349c2e2e',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params.ignore_question_ids).toEqual([
+      '5f9d88b3e5daad3f349c2e2d',
+      '5f9d88b3e5daad3f349c2e2e',
+    ]);
+  });
+
+  it('should handle empty ignore_question_ids parameter', () => {
+    const query = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      ignore_question_ids: '',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params.ignore_question_ids).toEqual([]);
+  });
+
+  it('should validate ignore_question_ids type', () => {
+    const query = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      ignore_question_ids: 123, // Not a string
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors).toContain('ignore_question_ids must be a string of comma-separated IDs');
   });
 });

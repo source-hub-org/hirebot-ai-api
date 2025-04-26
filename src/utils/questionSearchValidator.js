@@ -97,6 +97,21 @@ function validateSearchParams(query) {
     params.mode = 'full'; // Default value
   }
 
+  // Optional ignore_question_ids parameter
+  if (params.ignore_question_ids !== undefined) {
+    if (typeof params.ignore_question_ids !== 'string') {
+      errors.push('ignore_question_ids must be a string of comma-separated IDs');
+    } else {
+      // Process the string to get an array of IDs
+      params.ignore_question_ids =
+        params.ignore_question_ids.trim() === ''
+          ? []
+          : params.ignore_question_ids.split(',').map(id => id.trim());
+    }
+  } else {
+    params.ignore_question_ids = []; // Default value is an empty array
+  }
+
   return { params, errors };
 }
 

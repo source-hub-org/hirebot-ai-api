@@ -9,50 +9,6 @@
   "servers": [{ "url": "http://localhost:3000", "description": "Development server" }],
   "paths": {
     "/api/candidates": {
-      "get": {
-        "summary": "Get all candidates with pagination",
-        "tags": ["Candidates"],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "schema": { "type": "integer", "minimum": 1, "default": 1 },
-            "description": "Page number"
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 },
-            "description": "Number of candidates per page"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Paginated list of candidates",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "type": "array", "items": { "type": "object" } },
-                    "pagination": {
-                      "type": "object",
-                      "properties": {
-                        "total": { "type": "integer", "example": 50 },
-                        "page": { "type": "integer", "example": 1 },
-                        "page_size": { "type": "integer", "example": 20 },
-                        "total_pages": { "type": "integer", "example": 3 }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": { "description": "Server error" }
-        }
-      },
       "post": {
         "summary": "Create a new candidate",
         "tags": ["Candidates"],
@@ -126,9 +82,65 @@
           "409": { "description": "Candidate with this email already exists" },
           "500": { "description": "Server error" }
         }
+      },
+      "get": {
+        "summary": "Get all candidates with pagination",
+        "tags": ["Candidates"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "minimum": 1, "default": 1 },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 },
+            "description": "Number of candidates per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of candidates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "type": "array", "items": { "type": "object" } },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "total": { "type": "integer", "example": 50 },
+                        "page": { "type": "integer", "example": 1 },
+                        "page_size": { "type": "integer", "example": 20 },
+                        "total_pages": { "type": "integer", "example": 3 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
       }
     },
     "/api/candidates/{id}": {
+      "delete": {
+        "summary": "Delete a candidate",
+        "tags": ["Candidates"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Candidate deleted successfully" },
+          "404": { "description": "Candidate not found" },
+          "500": { "description": "Server error" }
+        }
+      },
       "get": {
         "summary": "Get a candidate by ID",
         "tags": ["Candidates"],
@@ -229,18 +241,6 @@
           "409": { "description": "Email already in use by another candidate" },
           "500": { "description": "Server error" }
         }
-      },
-      "delete": {
-        "summary": "Delete a candidate",
-        "tags": ["Candidates"],
-        "parameters": [
-          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
-        ],
-        "responses": {
-          "200": { "description": "Candidate deleted successfully" },
-          "404": { "description": "Candidate not found" },
-          "500": { "description": "Server error" }
-        }
       }
     },
     "/api/health-check": {
@@ -314,60 +314,6 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/questions/request": {
-      "post": {
-        "summary": "Create question request jobs for topics",
-        "description": "Creates jobs to generate questions for specified topics or all topics if none provided",
-        "tags": ["Questions"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "topics": {
-                    "type": "array",
-                    "description": "Array of topic IDs (if empty, all topics will be processed)",
-                    "items": { "type": "string" }
-                  },
-                  "limit": {
-                    "type": "number",
-                    "description": "Maximum number of questions to generate per topic",
-                    "default": 10
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Question request jobs created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean" },
-                    "message": { "type": "string" },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "jobCount": { "type": "number" },
-                        "jobs": { "type": "array", "items": { "type": "object" } }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": { "description": "Invalid request parameters" },
-          "500": { "description": "Server error" }
         }
       }
     },
@@ -496,10 +442,64 @@
         }
       }
     },
+    "/api/questions/request": {
+      "post": {
+        "summary": "Create question request jobs for topics",
+        "description": "Creates jobs to generate questions for specified topics or all topics if none provided",
+        "tags": ["Questions"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "topics": {
+                    "type": "array",
+                    "description": "Array of topic IDs (if empty, all topics will be processed)",
+                    "items": { "type": "string" }
+                  },
+                  "limit": {
+                    "type": "number",
+                    "description": "Maximum number of questions to generate per topic",
+                    "default": 10
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Question request jobs created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "message": { "type": "string" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "jobCount": { "type": "number" },
+                        "jobs": { "type": "array", "items": { "type": "object" } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request parameters" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
     "/api/questions/search": {
       "get": {
         "summary": "Search for questions based on various criteria",
-        "description": "Search for questions by topic, language, position, with sorting and pagination.\nThis endpoint allows you to filter questions based on multiple criteria and\nreturns paginated results that can be sorted by different fields.\n",
+        "description": "Search for questions by topic, language, position, with sorting and pagination.\nThis endpoint allows you to filter questions based on multiple criteria and\nreturns paginated results that can be sorted by different fields.\nSupports random sorting with 'sort_by=random' (default if not specified).\nYou can exclude specific questions by providing their IDs in the 'ignore_question_ids' parameter.\n",
         "tags": ["Questions"],
         "parameters": [
           {
@@ -535,11 +535,11 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["question", "category", "createdAt"],
-              "default": "createdAt"
+              "enum": ["question", "category", "createdAt", "random"],
+              "default": "random"
             },
-            "description": "Field to sort the results by",
-            "example": "createdAt"
+            "description": "Field to sort the results by. Use 'random' for random sorting.",
+            "example": "random"
           },
           {
             "in": "query",
@@ -576,6 +576,14 @@
             },
             "description": "Response mode - 'full' includes all fields, 'compact' excludes correctAnswer and explanation, 'minimalist' only includes _id and question",
             "example": "full"
+          },
+          {
+            "in": "query",
+            "name": "ignore_question_ids",
+            "required": false,
+            "schema": { "type": "string" },
+            "description": "Comma-separated list of question IDs to exclude from the results",
+            "example": "5f9d88b3e5daad3f349c2e2d,5f9d88b3e5daad3f349c2e2e"
           }
         ],
         "responses": {
@@ -819,26 +827,6 @@
         }
       }
     },
-    "/api/submissions/{id}": {
-      "get": {
-        "summary": "Get a submission by ID",
-        "tags": ["Submissions"],
-        "parameters": [
-          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } },
-          {
-            "in": "query",
-            "name": "enrich",
-            "schema": { "type": "boolean", "default": false },
-            "description": "Whether to include candidate and question data"
-          }
-        ],
-        "responses": {
-          "200": { "description": "Submission details" },
-          "404": { "description": "Submission not found" },
-          "500": { "description": "Server error" }
-        }
-      }
-    },
     "/api/submissions/candidate/{candidateId}": {
       "get": {
         "summary": "Get submissions by candidate ID",
@@ -855,6 +843,26 @@
         "responses": {
           "200": { "description": "List of submissions for the candidate" },
           "404": { "description": "Candidate not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/submissions/{id}": {
+      "get": {
+        "summary": "Get a submission by ID",
+        "tags": ["Submissions"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } },
+          {
+            "in": "query",
+            "name": "enrich",
+            "schema": { "type": "boolean", "default": false },
+            "description": "Whether to include candidate and question data"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Submission details" },
+          "404": { "description": "Submission not found" },
           "500": { "description": "Server error" }
         }
       }
@@ -914,8 +922,10 @@
   },
   "components": {},
   "tags": [
+    { "name": "Candidates", "description": "Candidate management endpoints" },
     { "name": "Health", "description": "API health check endpoints" },
     { "name": "Questions", "description": "API endpoints for generating and managing questions" },
+    { "name": "Submissions", "description": "Submission management endpoints" },
     { "name": "Topics", "description": "API endpoints for managing topics" }
   ]
 }

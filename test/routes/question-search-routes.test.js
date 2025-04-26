@@ -455,5 +455,30 @@ describe('Question Search Routes', () => {
         })
       );
     });
+
+    // Test for ignore_question_ids parameter
+    it('should search questions successfully with ignore_question_ids parameter', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        ignore_question_ids: '5f9d88b3e5daad3f349c2e2d,5f9d88b3e5daad3f349c2e2e',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          language: 'JavaScript',
+          position: 'junior',
+          ignore_question_ids: ['5f9d88b3e5daad3f349c2e2d', '5f9d88b3e5daad3f349c2e2e'],
+        })
+      );
+    });
   });
 });

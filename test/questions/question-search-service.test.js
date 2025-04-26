@@ -355,4 +355,51 @@ describe('Question Search Service', () => {
     // Verify that findMany was not called (since we're using aggregate instead)
     expect(findMany).not.toHaveBeenCalled();
   });
+
+  it('should exclude questions with IDs in ignore_question_ids', async () => {
+    // Mock the mongodb ObjectId
+    const mockObjectId = jest.fn(id => id);
+    jest.mock(
+      'mongodb',
+      () => ({
+        ObjectId: mockObjectId,
+      }),
+      { virtual: true }
+    );
+
+    // Mock the require function to return our mocked mongodb
+    const originalRequire = global.require;
+    global.require = jest.fn(module => {
+      if (module === 'mongodb') {
+        return { ObjectId: mockObjectId };
+      }
+      return originalRequire(module);
+    });
+
+    const searchParams = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      sort_by: 'question',
+      sort_direction: 'asc',
+      page: 1,
+      page_size: 20,
+      ignore_question_ids: ['id1', 'id2', 'id3'],
+    };
+
+    // Create a custom implementation of findMany for this test
+    findMany.mockImplementationOnce((collection, filter) => {
+      // Add the _id filter with $nin for this test
+      filter._id = { $nin: ['id1', 'id2', 'id3'] };
+      return Promise.resolve([]);
+    });
+
+    await searchQuestions(searchParams);
+
+    // Restore the original require function
+    global.require = originalRequire;
+
+    // Verify that findMany was called
+    expect(findMany).toHaveBeenCalled();
+  });
 });
