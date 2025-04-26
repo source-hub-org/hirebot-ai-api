@@ -5,6 +5,8 @@
 
 const { getFromQueue, DEFAULT_QUEUE } = require('../utils/redisQueueHelper');
 const { updateJobStatus, getJobById } = require('../repository/jobRepository');
+const { validateGenerateRequest } = require('../utils/generateRequestValidator');
+const { generateAndStoreQuestions } = require('../service/questionGenerationService');
 const logger = require('../utils/logger');
 
 /**
@@ -55,26 +57,57 @@ async function processJob(job) {
  * @returns {Promise<void>}
  */
 async function processQuestionRequest(job) {
-  // For this phase, just log the job information
-  logger.info(`Processing question request job: ${job._id}`, {
+  const payload = {
+    jobId: job._id,
     topicId: job.payload.topic_id,
     limit: job.payload.limit,
-  });
+    position: job.payload.position,
+    language: job.payload.language,
+    timestamp: new Date().toISOString(),
+  };
 
-  // Log to a specific file for question requests
-  await logger.logToFile(
-    'question-requests.log',
-    `Processed question request for topic: ${job.payload.topic_id}`,
-    {
-      jobId: job._id,
-      topicId: job.payload.topic_id,
-      limit: job.payload.limit,
-      timestamp: new Date().toISOString(),
+  // Log the job information
+  logger.info(`Processing question request job: ${job._id}`, payload);
+
+  try {
+    // 1. Find the topic by ID to get its title
+    const { findOne } = require('../repository/baseRepository');
+    const topic = await findOne('topics', { _id: job.payload.topic_id });
+
+    if (!topic) {
+      throw new Error(`Topic with ID ${job.payload.topic_id} not found`);
     }
-  );
 
-  // Simulate processing time
-  await new Promise(resolve => setTimeout(resolve, 500));
+    // 2. Update payload with required parameters
+    payload.topic = topic.title;
+
+    // 3. Validate the payload
+    const validation = validateGenerateRequest(payload);
+
+    if (validation.isValid) {
+      // 4. Generate and store questions
+      await generateAndStoreQuestions(payload);
+
+      // 5. Log to a specific file for question requests
+      await logger.logToFile(
+        'question-requests.log',
+        `Processed question request for topic: ${topic.title}`,
+        {
+          jobId: job._id,
+          topicId: job.payload.topic_id,
+          limit: job.payload.limit,
+          position: job.payload.position,
+          language: job.payload.language,
+          timestamp: new Date().toISOString(),
+        }
+      );
+    } else {
+      throw new Error(`Invalid payload: ${validation.errors.join(', ')}`);
+    }
+  } catch (error) {
+    logger.error(`Error processing job ${job._id}:`, error);
+    throw error; // Re-throw to be caught by the calling function
+  }
 }
 
 /**

@@ -6,10 +6,16 @@
 const { processJob } = require('../../src/service/jobProcessorService');
 const { updateJobStatus, getJobById } = require('../../src/repository/jobRepository');
 const logger = require('../../src/utils/logger');
+const { validateGenerateRequest } = require('../../src/utils/generateRequestValidator');
+const { generateAndStoreQuestions } = require('../../src/service/questionGenerationService');
+const baseRepository = require('../../src/repository/baseRepository');
 
 // Mock dependencies
 jest.mock('../../src/utils/redisQueueHelper');
 jest.mock('../../src/repository/jobRepository');
+jest.mock('../../src/utils/generateRequestValidator');
+jest.mock('../../src/service/questionGenerationService');
+jest.mock('../../src/repository/baseRepository');
 jest.mock('../../src/utils/logger', () => ({
   info: jest.fn(),
   warn: jest.fn(),
@@ -23,8 +29,20 @@ describe('Job Processor Service Tests', () => {
   const sampleJob = {
     _id: '507f1f77bcf86cd799439011',
     type: 'question-request',
-    payload: { topic_id: 'topic1', limit: 10 },
+    payload: {
+      topic_id: 'topic1',
+      limit: 10,
+      position: 'junior',
+      language: 'javascript',
+    },
     status: 'new',
+  };
+
+  // Sample topic data
+  const sampleTopic = {
+    _id: 'topic1',
+    title: 'JavaScript Basics',
+    description: 'Fundamentals of JavaScript programming',
   };
 
   beforeEach(() => {
@@ -35,6 +53,13 @@ describe('Job Processor Service Tests', () => {
     updateJobStatus.mockResolvedValue({ ...sampleJob, status: 'processing' });
     getJobById.mockResolvedValue(sampleJob);
     logger.logToFile.mockResolvedValue();
+
+    // Mock the findOne function to return the sample topic
+    baseRepository.findOne = jest.fn().mockResolvedValue(sampleTopic);
+
+    // Mock the validation and generation functions
+    validateGenerateRequest.mockReturnValue({ isValid: true, errors: [] });
+    generateAndStoreQuestions.mockResolvedValue();
   });
 
   describe('processJob', () => {
@@ -57,19 +82,27 @@ describe('Job Processor Service Tests', () => {
         expect.objectContaining({
           topicId: sampleJob.payload.topic_id,
           limit: sampleJob.payload.limit,
+          position: sampleJob.payload.position,
+          language: sampleJob.payload.language,
         })
       );
 
-      // Verify log file was written
-      expect(logger.logToFile).toHaveBeenCalledWith(
-        'question-requests.log',
-        expect.stringContaining('Processed question request for topic'),
+      // Verify the topic was fetched
+      expect(baseRepository.findOne).toHaveBeenCalledWith('topics', {
+        _id: sampleJob.payload.topic_id,
+      });
+
+      // Verify the validation was called with correct parameters
+      expect(validateGenerateRequest).toHaveBeenCalledWith(
         expect.objectContaining({
-          jobId: sampleJob._id,
-          topicId: sampleJob.payload.topic_id,
-          limit: sampleJob.payload.limit,
+          topic: sampleTopic.title,
+          position: sampleJob.payload.position,
+          language: sampleJob.payload.language,
         })
       );
+
+      // Verify the generation function was called
+      expect(generateAndStoreQuestions).toHaveBeenCalled();
 
       // Verify job status was updated to done
       expect(updateJobStatus).toHaveBeenCalledWith(sampleJob._id, 'done');

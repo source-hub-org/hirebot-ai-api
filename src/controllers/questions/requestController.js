@@ -12,7 +12,7 @@ const logger = require('../../utils/logger');
  * @returns {Object} - Validation result with isValid flag and errors array
  */
 const validateRequestParams = body => {
-  const { topics, limit } = body;
+  const { topics, limit, position, language } = body;
   const errors = [];
 
   // Validate limit if provided
@@ -23,6 +23,19 @@ const validateRequestParams = body => {
   // Validate topics if provided
   if (topics !== undefined && !Array.isArray(topics)) {
     errors.push('Topics must be an array');
+  }
+
+  // Validate position (required)
+  const validPositions = ['intern', 'fresher', 'junior', 'middle', 'senior', 'expert'];
+  if (!position) {
+    errors.push('Position is required');
+  } else if (!validPositions.includes(position.toLowerCase())) {
+    errors.push(`Position must be one of: ${validPositions.join(', ')}`);
+  }
+
+  // Validate language (required)
+  if (!language || typeof language !== 'string') {
+    errors.push('Language is required and must be a string');
   }
 
   return {
@@ -101,8 +114,8 @@ const processQuestionRequestController = async (req, res) => {
       return res.status(400).json(formatValidationErrorResponse(validation.errors[0]));
     }
 
-    const { topics, limit } = req.body;
-    const jobs = await processQuestionRequest({ topics, limit });
+    const { topics, limit, position, language } = req.body;
+    const jobs = await processQuestionRequest({ topics, limit, position, language });
 
     return res.status(200).json(formatSuccessResponse(jobs));
   } catch (error) {

@@ -14,12 +14,14 @@ const logger = require('../utils/logger');
  * @param {Object} requestData - Request data
  * @param {Array<string>} [requestData.topics=[]] - Array of topic IDs
  * @param {number} [requestData.limit=10] - Limit of questions per topic
+ * @param {string} requestData.position - Position level (intern, fresher, junior, middle, senior, expert)
+ * @param {string} requestData.language - Programming language
  * @returns {Promise<Array<Object>>} Array of created jobs
  * @throws {Error} If processing fails
  */
 async function processQuestionRequest(requestData) {
   try {
-    const { topics = [], limit = 10 } = requestData;
+    const { topics = [], limit = 10, position, language } = requestData;
     const createdJobs = [];
 
     // If topics array is empty, retrieve all topics from MongoDB
@@ -34,7 +36,12 @@ async function processQuestionRequest(requestData) {
       // Create job in MongoDB
       const jobData = {
         type: 'question-request',
-        payload: { topic_id: topicId, limit },
+        payload: {
+          topic_id: topicId,
+          limit,
+          position,
+          language,
+        },
         status: 'new',
       };
 
