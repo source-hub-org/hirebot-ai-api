@@ -41,5 +41,7 @@ jobs:
 
       - name: Run Tests
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || 'dummy-key-for-ci' }}
           MONGO_URL: mongodb://localhost:27017/hirebot_db
+          CI: true
         run: npm run test
