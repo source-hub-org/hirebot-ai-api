@@ -4,9 +4,7 @@
  */
 
 const express = require('express');
-const { validateGenerateRequest } = require('../../utils/generateRequestValidator');
-const { generateAndStoreQuestions } = require('../../service/questionGenerationService');
-const { handleApiError } = require('../../utils/errorResponseHandler');
+const { generateQuestionsController } = require('../../controllers/questions/generateController');
 
 const router = express.Router();
 
@@ -134,31 +132,6 @@ const router = express.Router();
  *                   type: string
  *                   example: Failed to generate questions from AI.
  */
-router.post('/generate', async (req, res) => {
-  try {
-    // 1. Validate the request body
-    const validation = validateGenerateRequest(req.body);
-
-    if (!validation.isValid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Validation failed',
-        errors: validation.errors,
-      });
-    }
-
-    // 2. Generate and store questions
-    const questionsWithMetadata = await generateAndStoreQuestions(req.body);
-
-    // 3. Respond to the client
-    return res.status(200).json({
-      status: 'success',
-      message: 'Questions generated and saved.',
-      data: questionsWithMetadata,
-    });
-  } catch (error) {
-    return handleApiError(error, req, res, 'Question Generation');
-  }
-});
+router.post('/generate', generateQuestionsController);
 
 module.exports = router;

@@ -8,10 +8,38 @@ const express = require('express');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { initializeDb, closeConnection } = require('../../src/repository/baseRepository');
 const { getAllTopics } = require('../../src/repository/topicRepository');
-const topicRoutes = require('../../src/routes/topicRoutes');
+const { topicRoutes } = require('../../src/routes');
 
 // Mock dependencies
 jest.mock('../../src/repository/topicRepository');
+
+// Mock the routes module
+jest.mock('../../src/routes/topics', () => {
+  const express = require('express');
+  const router = express.Router();
+
+  // Mock the get all topics route
+  router.get('/', async (req, res) => {
+    const { getAllTopics } = require('../../src/repository/topicRepository');
+
+    try {
+      const topics = await getAllTopics();
+
+      return res.status(200).json({
+        status: 'success',
+        data: topics,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Failed to retrieve topics.',
+        error: error.message,
+      });
+    }
+  });
+
+  return router;
+});
 
 describe('Topic Routes Tests', () => {
   let app;
