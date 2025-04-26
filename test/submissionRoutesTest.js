@@ -231,7 +231,7 @@ describe('Submission Routes', () => {
       const response = await request(app).get(`/api/submissions/${submissionId}`).expect(200);
 
       // Verify
-      expect(submissionRepository.getSubmissionById).toHaveBeenCalledWith(submissionId);
+      expect(submissionRepository.getSubmissionById).toHaveBeenCalledWith(submissionId, false);
       expect(response.body).toEqual({
         success: true,
         data: submission,
@@ -294,7 +294,10 @@ describe('Submission Routes', () => {
 
       // Verify
       expect(submissionRepository.candidateExists).toHaveBeenCalledWith(candidateId);
-      expect(submissionRepository.getSubmissionsByCandidateId).toHaveBeenCalledWith(candidateId);
+      expect(submissionRepository.getSubmissionsByCandidateId).toHaveBeenCalledWith(
+        candidateId,
+        false
+      );
       expect(response.body).toEqual({
         success: true,
         data: submissions,

@@ -46,16 +46,30 @@ async function insertSubmissionToDB(submissionData) {
  * Get a submission by ID
  * @async
  * @param {string} id - Submission ID
+ * @param {boolean} [enrich=false] - Whether to enrich the submission with candidate and question data
  * @returns {Promise<Object|null>} Submission object or null if not found
  * @throws {Error} If retrieval fails
  */
-async function getSubmissionById(id) {
+async function getSubmissionById(id, enrich = false) {
   try {
     if (!ObjectId.isValid(id)) {
       return null;
     }
 
-    return await baseRepository.findOne(submissionModel.collectionName, { _id: new ObjectId(id) });
+    const submission = await baseRepository.findOne(submissionModel.collectionName, {
+      _id: new ObjectId(id),
+    });
+
+    if (!submission) {
+      return null;
+    }
+
+    if (enrich) {
+      const { enrichSubmission } = require('../utils/submissionEnricher');
+      return await enrichSubmission(submission);
+    }
+
+    return submission;
   } catch (error) {
     logger.error(`Error retrieving submission with ID ${id}:`, error);
     throw error;
@@ -66,18 +80,26 @@ async function getSubmissionById(id) {
  * Get submissions by candidate ID
  * @async
  * @param {string} candidateId - Candidate ID
+ * @param {boolean} [enrich=false] - Whether to enrich the submissions with candidate and question data
  * @returns {Promise<Array<Object>>} Array of submissions
  * @throws {Error} If retrieval fails
  */
-async function getSubmissionsByCandidateId(candidateId) {
+async function getSubmissionsByCandidateId(candidateId, enrich = false) {
   try {
     if (!ObjectId.isValid(candidateId)) {
       return [];
     }
 
-    return await baseRepository.findMany(submissionModel.collectionName, {
+    const submissions = await baseRepository.findMany(submissionModel.collectionName, {
       candidate_id: candidateId,
     });
+
+    if (enrich && submissions.length > 0) {
+      const { enrichSubmissions } = require('../utils/submissionEnricher');
+      return await enrichSubmissions(submissions);
+    }
+
+    return submissions;
   } catch (error) {
     logger.error(`Error retrieving submissions for candidate ${candidateId}:`, error);
     throw error;

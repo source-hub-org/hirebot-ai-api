@@ -161,6 +161,12 @@ router.post('/', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: enrich
+ *         schema:
+ *           type: boolean
+ *           default: false
+ *         description: Whether to include candidate and question data
  *     responses:
  *       200:
  *         description: Submission details
@@ -171,7 +177,10 @@ router.post('/', async (req, res) => {
  */
 router.get('/:id', async (req, res) => {
   try {
-    const submission = await getSubmissionById(req.params.id);
+    // Check if enrichment is requested
+    const enrich = req.query.enrich === 'true';
+
+    const submission = await getSubmissionById(req.params.id, enrich);
 
     if (!submission) {
       return res.status(404).json({
@@ -205,6 +214,12 @@ router.get('/:id', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: enrich
+ *         schema:
+ *           type: boolean
+ *           default: false
+ *         description: Whether to include candidate and question data
  *     responses:
  *       200:
  *         description: List of submissions for the candidate
@@ -227,7 +242,10 @@ router.get('/candidate/:candidateId', async (req, res) => {
       });
     }
 
-    const submissions = await getSubmissionsByCandidateId(candidateId);
+    // Check if enrichment is requested
+    const enrich = req.query.enrich === 'true';
+
+    const submissions = await getSubmissionsByCandidateId(candidateId, enrich);
 
     res.status(200).json({
       success: true,
