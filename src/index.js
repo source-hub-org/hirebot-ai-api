@@ -4,9 +4,13 @@ const mongoose = require('mongoose');
 const { initializeDb } = require('./repository/baseRepository');
 const { initializeRedis } = require('./service/redisService');
 const { startJobProcessor } = require('./service/jobProcessorService');
-const { healthCheckRoutes, candidateRoutes, submissionRoutes } = require('./routes');
-const questionRoutes = require('./routes/questionRoutes');
-const topicRoutes = require('./routes/topicRoutes');
+const {
+  healthCheckRoutes,
+  candidateRoutes,
+  submissionRoutes,
+  questionRoutes,
+  topicRoutes,
+} = require('./routes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
 const logger = require('./utils/logger');

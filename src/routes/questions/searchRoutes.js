@@ -4,10 +4,7 @@
  */
 
 const express = require('express');
-const { validateSearchParams } = require('../../utils/questionSearchValidator');
-const { searchQuestions } = require('../../service/questionSearchService');
-const { handleApiError } = require('../../utils/errorResponseHandler');
-const logger = require('../../utils/logger');
+const { searchQuestionsController } = require('../../controllers/questions/searchController');
 
 const router = express.Router();
 
@@ -220,38 +217,6 @@ const router = express.Router();
  *                   example: Database connection error
  *                   description: Detailed error information
  */
-router.get('/search', async (req, res) => {
-  try {
-    // 1. Extract and validate query parameters
-    const validationResult = validateSearchParams(req.query);
-
-    if (validationResult.errors.length > 0) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Validation failed',
-        errors: validationResult.errors,
-      });
-    }
-
-    // 2. Search for questions using the service
-    const result = await searchQuestions(validationResult.params);
-
-    // 3. Return the results
-    return res.status(200).json({
-      status: 'success',
-      message: 'Questions retrieved successfully.',
-      data: result.questions,
-      pagination: result.pagination,
-    });
-  } catch (error) {
-    logger.error('Error searching questions:', error);
-
-    return res.status(500).json({
-      status: 'error',
-      message: 'An error occurred while searching for questions.',
-      error: error.message,
-    });
-  }
-});
+router.get('/search', searchQuestionsController);
 
 module.exports = router;

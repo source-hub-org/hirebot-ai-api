@@ -4,35 +4,11 @@
  */
 
 const express = require('express');
-const { processQuestionRequest } = require('../../service/questionRequestService');
-const logger = require('../../utils/logger');
+const {
+  processQuestionRequestController,
+} = require('../../controllers/questions/requestController');
 
 const router = express.Router();
-
-/**
- * Validates request parameters for question requests
- * @param {Object} body - Request body
- * @returns {Object} - Validation result with isValid flag and errors array
- */
-const validateRequestParams = body => {
-  const { topics, limit } = body;
-  const errors = [];
-
-  // Validate limit if provided
-  if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
-    errors.push('Limit must be a positive integer');
-  }
-
-  // Validate topics if provided
-  if (topics !== undefined && !Array.isArray(topics)) {
-    errors.push('Topics must be an array');
-  }
-
-  return {
-    isValid: errors.length === 0,
-    errors,
-  };
-};
 
 /**
  * @swagger
@@ -83,42 +59,6 @@ const validateRequestParams = body => {
  *       500:
  *         description: Server error
  */
-router.post('/request', async (req, res) => {
-  try {
-    // Validate request parameters
-    const validation = validateRequestParams(req.body);
-
-    if (!validation.isValid) {
-      return res.status(400).json({
-        success: false,
-        message: validation.errors[0],
-      });
-    }
-
-    const { topics, limit } = req.body;
-    const jobs = await processQuestionRequest({ topics, limit });
-
-    return res.status(200).json({
-      success: true,
-      message: `Created ${jobs.length} question request jobs`,
-      data: {
-        jobCount: jobs.length,
-        jobs: jobs.map(job => ({
-          _id: job._id,
-          type: job.type,
-          status: job.status,
-          created_at: job.created_at,
-        })),
-      },
-    });
-  } catch (error) {
-    logger.error('Error in question request route:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to process question request',
-      error: error.message,
-    });
-  }
-});
+router.post('/request', processQuestionRequestController);
 
 module.exports = router;

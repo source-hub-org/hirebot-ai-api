@@ -1,20 +1,12 @@
 /**
- * Topic Routes Module
- * @module routes/topicRoutes
+ * Get All Topics Routes
+ * @module routes/topics/getAllTopicsRoutes
  */
 
 const express = require('express');
-const { getAllTopics } = require('../repository/topicRepository');
-const logger = require('../utils/logger');
+const { getAllTopicsController } = require('../../controllers/topics/getAllTopicsController');
 
 const router = express.Router();
-
-/**
- * @swagger
- * tags:
- *   name: Topics
- *   description: API endpoints for managing topics
- */
 
 /**
  * @swagger
@@ -68,23 +60,6 @@ const router = express.Router();
  *                   type: string
  *                   example: Failed to retrieve topics.
  */
-router.get('/', async (req, res) => {
-  try {
-    const topics = await getAllTopics();
-
-    return res.status(200).json({
-      status: 'success',
-      data: topics,
-    });
-  } catch (error) {
-    logger.error('Error retrieving topics:', error);
-
-    return res.status(500).json({
-      status: 'error',
-      message: 'Failed to retrieve topics.',
-      error: error.message,
-    });
-  }
-});
+router.get('/', getAllTopicsController);
 
 module.exports = router;

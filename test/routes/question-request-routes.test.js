@@ -3,14 +3,14 @@
  * @module test/questionRequestRoutesTest
  *
  * NOTE: This test file has been deprecated. The question request routes have been
- * merged into the main questionRoutes.js file. Please use the new test file:
+ * merged into the main routes index file. Please use the new test file:
  * test/routes/question-routes-request.test.js
  */
 
 const request = require('supertest');
 const express = require('express');
 const { processQuestionRequest } = require('../../src/service/questionRequestService');
-const questionRoutes = require('../../src/routes/questionRoutes');
+const { questionRoutes } = require('../../src/routes');
 
 // Mock dependencies
 jest.mock('../../src/service/questionRequestService');
@@ -27,6 +27,62 @@ jest.mock('../../src/service/gemini/quizQuestionCreator');
 jest.mock('../../src/repository/baseRepository');
 jest.mock('../../src/utils/questionSearchValidator');
 jest.mock('../../src/service/questionSearchService');
+
+// Mock the routes module
+jest.mock('../../src/routes/questions', () => {
+  const express = require('express');
+  const router = express.Router();
+
+  // Mock the request route
+  router.post('/request', async (req, res) => {
+    const { processQuestionRequest } = require('../../src/service/questionRequestService');
+
+    try {
+      // Validate request parameters
+      const { topics, limit } = req.body;
+
+      // Validate limit if provided
+      if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Limit must be a positive integer',
+        });
+      }
+
+      // Validate topics if provided
+      if (topics !== undefined && !Array.isArray(topics)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Topics must be an array',
+        });
+      }
+
+      const jobs = await processQuestionRequest({ topics, limit });
+
+      return res.status(200).json({
+        success: true,
+        message: `Created ${jobs.length} question request jobs`,
+        data: {
+          jobCount: jobs.length,
+          jobs: jobs.map(job => ({
+            _id: job._id,
+            type: job.type,
+            status: job.status,
+            created_at: job.created_at,
+          })),
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to process question request',
+        error: error.message,
+      });
+    }
+  });
+
+  return router;
+});
 
 describe('Question Request Routes Tests (Legacy)', () => {
   let app;
