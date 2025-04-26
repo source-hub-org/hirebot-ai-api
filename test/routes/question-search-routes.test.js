@@ -185,7 +185,7 @@ describe('Question Search Routes', () => {
       expect(response.body).toBeInstanceOf(Object);
       expect(response.body.status).toBe('error');
       expect(response.body.errors).toContain(
-        'sort_by must be one of: question, category, createdAt'
+        'sort_by must be one of: question, category, createdAt, random'
       );
     });
 
@@ -262,7 +262,7 @@ describe('Question Search Routes', () => {
           topic: 'JavaScript',
           language: 'JavaScript',
           position: 'junior',
-          sort_by: 'createdAt',
+          sort_by: 'random',
           sort_direction: 'desc',
           page: 1,
           page_size: 20,
@@ -426,6 +426,32 @@ describe('Question Search Routes', () => {
           language: 'JavaScript',
           position: 'junior',
           mode: 'minimalist',
+        })
+      );
+    });
+
+    // Test for random sorting
+    it('should search questions successfully with random sorting', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        sort_by: 'random',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          language: 'JavaScript',
+          position: 'junior',
+          sort_by: 'random',
+          sort_direction: 'desc',
         })
       );
     });

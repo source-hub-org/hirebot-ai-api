@@ -27,8 +27,17 @@ function buildMongoQuery(topic, language, position, sortBy, sortDirection, page,
   filter.position = { $regex: positionRegex };
 
   // 2. Build sort options
-  const sortOptions = {};
-  sortOptions[sortBy] = sortDirection === 'asc' ? 1 : -1;
+  let sortOptions = {};
+
+  // Handle random sort separately
+  if (sortBy === 'random') {
+    // For random sorting, we use MongoDB's $sample aggregation
+    // This will be handled differently in the service layer
+    sortOptions = null; // We'll use a different approach for random sorting
+  } else {
+    // Standard sorting
+    sortOptions[sortBy] = sortDirection === 'asc' ? 1 : -1;
+  }
 
   // 3. Calculate pagination parameters
   const skip = (page - 1) * pageSize;

@@ -36,12 +36,12 @@ function validateSearchParams(query) {
 
   // Optional sort_by parameter
   if (params.sort_by !== undefined) {
-    const validSortFields = ['question', 'category', 'createdAt'];
+    const validSortFields = ['question', 'category', 'createdAt', 'random'];
     if (typeof params.sort_by !== 'string' || !validSortFields.includes(params.sort_by)) {
       errors.push(`sort_by must be one of: ${validSortFields.join(', ')}`);
     }
   } else {
-    params.sort_by = 'createdAt'; // Default value
+    params.sort_by = 'random'; // Default value is now random
   }
 
   // Optional sort_direction parameter

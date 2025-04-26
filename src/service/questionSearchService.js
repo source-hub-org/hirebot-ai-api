@@ -14,11 +14,11 @@ const logger = require('../utils/logger');
  * @param {string} searchParams.topic - Topic to search for
  * @param {string} searchParams.language - Language to search for
  * @param {string} searchParams.position - Position level to search for
- * @param {string} searchParams.sort_by - Field to sort by
+ * @param {string} searchParams.sort_by - Field to sort by (can be 'random' for random sorting)
  * @param {string} searchParams.sort_direction - Direction to sort (asc/desc)
  * @param {number} searchParams.page - Page number
  * @param {number} searchParams.page_size - Number of items per page
- * @param {string} searchParams.mode - Response mode ('full' or 'compact')
+ * @param {string} searchParams.mode - Response mode ('full', 'compact', or 'minimalist')
  * @returns {Promise<Object>} Search results with pagination metadata
  */
 async function searchQuestions(searchParams) {
@@ -27,7 +27,7 @@ async function searchQuestions(searchParams) {
       topic,
       language,
       position,
-      sort_by,
+      sort_by = 'random', // Default to random sorting if not specified
       sort_direction,
       page,
       page_size,
@@ -45,15 +45,27 @@ async function searchQuestions(searchParams) {
       page_size
     );
 
-    // Execute the query with pagination
-    const questions = await findMany('questions', filter, {
-      sort: sortOptions,
-      skip,
-      limit,
-    });
+    // Get collection for operations
+    const collection = getCollection('questions');
+
+    let questions;
+
+    // Handle random sorting differently using aggregation pipeline
+    if (sort_by === 'random') {
+      // Use MongoDB's aggregation with $sample for random sorting
+      const pipeline = [{ $match: filter }, { $sample: { size: limit } }, { $skip: skip }];
+
+      questions = await collection.aggregate(pipeline).toArray();
+    } else {
+      // Execute the standard query with pagination
+      questions = await findMany('questions', filter, {
+        sort: sortOptions,
+        skip,
+        limit,
+      });
+    }
 
     // Get total count for pagination info
-    const collection = getCollection('questions');
     const totalCount = await collection.countDocuments(filter);
 
     // Calculate pagination metadata

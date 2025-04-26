@@ -17,6 +17,7 @@ const router = express.Router();
  *       Search for questions by topic, language, position, with sorting and pagination.
  *       This endpoint allows you to filter questions based on multiple criteria and
  *       returns paginated results that can be sorted by different fields.
+ *       Supports random sorting with 'sort_by=random' (default if not specified).
  *     tags: [Questions]
  *     parameters:
  *       - in: query
@@ -46,10 +47,10 @@ const router = express.Router();
  *         required: false
  *         schema:
  *           type: string
- *           enum: [question, category, createdAt]
- *           default: createdAt
- *         description: Field to sort the results by
- *         example: createdAt
+ *           enum: [question, category, createdAt, random]
+ *           default: random
+ *         description: Field to sort the results by. Use 'random' for random sorting.
+ *         example: random
  *       - in: query
  *         name: sort_direction
  *         required: false

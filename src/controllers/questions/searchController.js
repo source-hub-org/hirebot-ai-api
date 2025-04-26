@@ -53,6 +53,7 @@ const formatErrorResponse = error => {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @returns {Object} Response with questions or error
+ * @description Supports random sorting with 'sort_by=random' query parameter (default)
  */
 const searchQuestionsController = async (req, res) => {
   try {
@@ -64,6 +65,7 @@ const searchQuestionsController = async (req, res) => {
     }
 
     // 2. Search for questions using the service
+    // Note: sort_by=random is now the default if not specified
     const result = await searchQuestions(validationResult.params);
 
     // 3. Return the results

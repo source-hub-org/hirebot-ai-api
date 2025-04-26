@@ -47,13 +47,13 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
    MONGODB_URI=mongodb://localhost:27017
    DB_NAME=hirebot_db
    JWT_SECRET=secret
-   
+
    # Redis Configuration
    REDIS_HOST=localhost
    REDIS_PORT=6379
    REDIS_PASSWORD=
    JOB_POLLING_INTERVAL=5000
-   
+
    # Gemini AI Configuration
    GEMINI_API_KEY=your_api_key_here
    GEMINI_MODEL=gemini-2.0-flash
@@ -70,7 +70,7 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
    # Start MongoDB
    cd docker/mongodb
    docker-compose up -d
-   
+
    # Start Redis
    cd ../redis
    docker-compose up -d
@@ -221,12 +221,14 @@ The project follows a layered architecture with MVC pattern:
 The application implements an asynchronous processing architecture for question generation:
 
 1. **Request Handling**:
+
    - Client requests question generation via API
    - Request is validated and a job is created
    - Job is added to Redis queue
    - Client receives a job ID for status tracking
 
 2. **Job Processing**:
+
    - Background service polls Redis queue for pending jobs
    - Jobs are processed asynchronously by the job processor service
    - Results are stored in MongoDB

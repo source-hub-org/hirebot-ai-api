@@ -19,7 +19,7 @@ describe('Question Search Validator', () => {
       topic: 'JavaScript',
       language: 'JavaScript',
       position: 'junior',
-      sort_by: 'createdAt',
+      sort_by: 'random',
       sort_direction: 'desc',
       page: 1,
       page_size: 20,
@@ -118,7 +118,9 @@ describe('Question Search Validator', () => {
     const result = validateSearchParams(query);
 
     expect(result.errors).toHaveLength(1);
-    expect(result.errors).toContain('sort_by must be one of: question, category, createdAt');
+    expect(result.errors).toContain(
+      'sort_by must be one of: question, category, createdAt, random'
+    );
   });
 
   it('should detect invalid sort_direction value', () => {
@@ -231,5 +233,19 @@ describe('Question Search Validator', () => {
 
     expect(result.errors).toHaveLength(0);
     expect(result.params.mode).toBe('minimalist');
+  });
+
+  it('should validate random sort option', () => {
+    const query = {
+      topic: 'JavaScript',
+      language: 'JavaScript',
+      position: 'junior',
+      sort_by: 'random',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params.sort_by).toBe('random');
   });
 });
