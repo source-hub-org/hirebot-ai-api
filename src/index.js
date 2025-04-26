@@ -1,11 +1,15 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const { initializeDb } = require('./repository/baseRepository');
+const { initializeRedis } = require('./service/redisService');
+const { startJobProcessor } = require('./service/jobProcessorService');
 const healthCheckRoutes = require('./routes/healthCheckRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const topicRoutes = require('./routes/topicRoutes');
 const candidateRoutes = require('./routes/candidateRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
+const questionRequestRoutes = require('./routes/questionRequestRoutes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
 const logger = require('./utils/logger');
@@ -18,6 +22,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const DB_NAME = process.env.DB_NAME || 'hirebot_db';
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
+const REDIS_PORT = process.env.REDIS_PORT || 6379;
+const JOB_POLLING_INTERVAL = process.env.JOB_POLLING_INTERVAL || 5000;
 
 // Middleware
 app.use(express.json());
@@ -28,16 +35,34 @@ app.use('/api/questions', questionRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/candidates', candidateRoutes);
 app.use('/api/submissions', submissionRoutes);
+app.use('/api/question', questionRequestRoutes);
 
-// Initialize MongoDB connection
+// Initialize application
 async function initializeApp() {
   try {
     // Ensure required directories exist
     await ensureDirectoriesExist();
     logger.info('Required directories have been verified');
 
-    // Connect to MongoDB
+    // Connect to MongoDB using both native driver and mongoose
     await initializeDb(MONGODB_URI, DB_NAME);
+    await mongoose.connect(`${MONGODB_URI}/${DB_NAME}`);
+    logger.info('Mongoose connected to MongoDB');
+
+    // Initialize Redis
+    await initializeRedis({
+      host: REDIS_HOST,
+      port: REDIS_PORT,
+    });
+    logger.info('Redis initialized');
+
+    // Start the job processor
+    startJobProcessor({
+      pollingInterval: parseInt(JOB_POLLING_INTERVAL),
+    }).catch(err => {
+      logger.error('Error starting job processor:', err);
+    });
+    logger.info('Job processor started');
 
     // Initialize Swagger documentation
     swaggerDocs(app);
@@ -45,6 +70,16 @@ async function initializeApp() {
     // Start the server
     const server = app.listen(PORT, () => {
       logger.info(`Server running on port ${PORT}`);
+    });
+
+    // Handle graceful shutdown
+    process.on('SIGTERM', async () => {
+      logger.info('SIGTERM received, shutting down gracefully');
+      await mongoose.disconnect();
+      server.close(() => {
+        logger.info('Server closed');
+        process.exit(0);
+      });
     });
 
     return { app, server };
