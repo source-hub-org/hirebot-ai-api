@@ -23,6 +23,9 @@ const router = express.Router();
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - position
+ *               - language
  *             properties:
  *               topics:
  *                 type: array
@@ -33,6 +36,15 @@ const router = express.Router();
  *                 type: number
  *                 description: Maximum number of questions to generate per topic
  *                 default: 10
+ *               position:
+ *                 type: string
+ *                 description: Experience level for the questions
+ *                 enum: [intern, fresher, junior, middle, senior, expert]
+ *                 required: true
+ *               language:
+ *                 type: string
+ *                 description: Programming language for the questions
+ *                 required: true
  *     responses:
  *       200:
  *         description: Question request jobs created successfully
