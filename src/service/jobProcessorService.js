@@ -8,6 +8,7 @@ const { updateJobStatus, getJobById } = require('../repository/jobRepository');
 const { validateGenerateRequest } = require('../utils/generateRequestValidator');
 const { generateAndStoreQuestions } = require('../service/questionGenerationService');
 const logger = require('../utils/logger');
+const { ObjectId } = require('mongodb');
 
 /**
  * Flag to control the job processor loop
@@ -60,6 +61,7 @@ async function processQuestionRequest(job) {
   const payload = {
     jobId: job._id,
     topicId: job.payload.topic_id,
+    topic: '',
     limit: job.payload.limit,
     position: job.payload.position,
     language: job.payload.language,
@@ -72,7 +74,7 @@ async function processQuestionRequest(job) {
   try {
     // 1. Find the topic by ID to get its title
     const { findOne } = require('../repository/baseRepository');
-    const topic = await findOne('topics', { _id: job.payload.topic_id });
+    const topic = await findOne('topics', { _id: new ObjectId(job.payload.topic_id) });
 
     if (!topic) {
       throw new Error(`Topic with ID ${job.payload.topic_id} not found`);
