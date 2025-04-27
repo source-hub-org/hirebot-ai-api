@@ -9,6 +9,7 @@ const logger = require('../../src/utils/logger');
 const { validateGenerateRequest } = require('../../src/utils/generateRequestValidator');
 const { generateAndStoreQuestions } = require('../../src/service/questionGenerationService');
 const baseRepository = require('../../src/repository/baseRepository');
+const { ObjectId } = require('mongodb');
 
 // Mock dependencies
 jest.mock('../../src/utils/redisQueueHelper');
@@ -30,7 +31,7 @@ describe('Job Processor Service Tests', () => {
     _id: '507f1f77bcf86cd799439011',
     type: 'question-request',
     payload: {
-      topic_id: 'topic1',
+      topic_id: '680d89491cb3f55e07291e4d', // This is already a 24-character hex string
       limit: 10,
       position: 'junior',
       language: 'javascript',
@@ -40,7 +41,7 @@ describe('Job Processor Service Tests', () => {
 
   // Sample topic data
   const sampleTopic = {
-    _id: 'topic1',
+    _id: new ObjectId('680d89491cb3f55e07291e4d'),
     title: 'JavaScript Basics',
     description: 'Fundamentals of JavaScript programming',
   };
@@ -89,7 +90,7 @@ describe('Job Processor Service Tests', () => {
 
       // Verify the topic was fetched
       expect(baseRepository.findOne).toHaveBeenCalledWith('topics', {
-        _id: sampleJob.payload.topic_id,
+        _id: new ObjectId(sampleJob.payload.topic_id),
       });
 
       // Verify the validation was called with correct parameters
