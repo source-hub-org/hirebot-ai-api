@@ -131,6 +131,7 @@ describe('Submission Enricher', () => {
         { _id: { $in: expect.any(Array) } },
         {
           projection: {
+            question: 1,
             text: 1,
             type: 1,
             difficulty: 1,

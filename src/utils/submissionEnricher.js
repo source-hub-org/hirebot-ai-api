@@ -68,6 +68,7 @@ async function fetchQuestionsByIds(questionIds) {
       { _id: { $in: objectIds } },
       {
         projection: {
+          question: 1,
           text: 1,
           type: 1,
           difficulty: 1,
