@@ -14,8 +14,8 @@ module.exports = {
         DB_NAME: 'hirebot_db',
         REDIS_HOST: 'redis',
         REDIS_PORT: 6379,
-        JOB_POLLING_INTERVAL: 5000
-      }
-    }
-  ]
+        JOB_POLLING_INTERVAL: 5000,
+      },
+    },
+  ],
 };
