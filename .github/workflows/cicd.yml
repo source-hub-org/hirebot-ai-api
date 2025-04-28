@@ -39,21 +39,6 @@ jobs:
       JOB_POLLING_INTERVAL: 5000
 
     steps:
-      - name: Check MongoDB health
-        run: |
-          until mongosh --host mongo --eval 'db.adminCommand("ping")'; do
-            echo "Waiting for MongoDB to be ready..."
-            sleep 5
-          done
-
-      - name: Check Redis health
-        run: |
-          until redis-cli -h redis -p 6379 ping; do
-            echo "Waiting for Redis to be ready..."
-            sleep 5
-          done
-          echo "Redis is ready!"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
