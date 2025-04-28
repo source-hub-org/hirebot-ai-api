@@ -53,4 +53,5 @@ jobs:
           git config --global user.name "tranthethang"
           git config --global user.email "tranthethang@gmail.com"
           git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/tranthethang/hirebot-ai-api.git
-          git push --mirror gitlab
+          git push --all gitlab
+          git push --tags gitlab
