@@ -17,13 +17,43 @@ jobs:
         image: mongo:6.0
         ports:
           - 27017:27017
-        options: >-
-          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'" 
-          --health-interval=10s 
-          --health-timeout=5s 
+        options: --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval=10s
+          --health-timeout=5s
           --health-retries=5
 
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+        options: --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      MONGODB_URI: mongodb://mongo:27017/hirebot_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ''
+      JOB_POLLING_INTERVAL: 5000
+
     steps:
+      - name: Check MongoDB health
+        run: |
+          until mongosh --host mongo --eval 'db.adminCommand("ping")'; do
+            echo "Waiting for MongoDB to be ready..."
+            sleep 5
+          done
+
+      - name: Check Redis health
+        run: |
+          until redis-cli -h redis -p 6379 ping; do
+            echo "Waiting for Redis to be ready..."
+            sleep 5
+          done
+          echo "Redis is ready!"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -42,6 +72,6 @@ jobs:
       - name: Run Tests
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || 'dummy-key-for-ci' }}
-          MONGO_URL: mongodb://localhost:27017/hirebot_db
+          MONGO_URL: mongodb://mongodb:27017/hirebot_db
           CI: true
         run: npm run test
