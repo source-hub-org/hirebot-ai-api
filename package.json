@@ -8,9 +8,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:coverage:report": "jest --coverage && open-cli coverage/index.html",
+    "test": "NODE_ENV=testing jest",
+    "test:coverage": "NODE_ENV=testing jest --coverage",
+    "test:coverage:report": "NODE_ENV=testing jest --coverage && open-cli coverage/index.html",
     "command": "node src/cli.js"
   },
   "keywords": [],

@@ -31,13 +31,21 @@ function formatLogMessage(level, message, data) {
 }
 
 /**
+ * Check if the current environment is a test environment
+ * @returns {boolean} True if in test environment
+ */
+function isTestEnvironment() {
+  return process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'testing';
+}
+
+/**
  * Log an info message
  * @param {string} message - Log message
  * @param {Object} [data] - Optional data to log
  */
 function info(message, data) {
   // Only log in non-test environments
-  if (process.env.NODE_ENV !== 'test') {
+  if (!isTestEnvironment()) {
     console.log(formatLogMessage(LogLevel.INFO, message, data));
   }
 }
@@ -49,7 +57,7 @@ function info(message, data) {
  */
 function warn(message, data) {
   // Only log in non-test environments
-  if (process.env.NODE_ENV !== 'test') {
+  if (!isTestEnvironment()) {
     console.warn(formatLogMessage(LogLevel.WARN, message, data));
   }
 }
@@ -61,7 +69,7 @@ function warn(message, data) {
  */
 function error(message, error) {
   // Only log in non-test environments
-  if (process.env.NODE_ENV !== 'test') {
+  if (!isTestEnvironment()) {
     console.error(formatLogMessage(LogLevel.ERROR, message, error));
   }
 }
@@ -86,7 +94,7 @@ function debug(message, data) {
  */
 async function logToFile(filename, message, data) {
   // Skip file operations during tests
-  if (process.env.NODE_ENV === 'test') {
+  if (isTestEnvironment()) {
     return;
   }
 
@@ -109,7 +117,7 @@ async function logToFile(filename, message, data) {
     await fs.appendFile(logPath, logEntry, 'utf8');
   } catch (err) {
     // Only log errors in non-test environments
-    if (process.env.NODE_ENV !== 'test') {
+    if (!isTestEnvironment()) {
       console.error(`Failed to write to log file ${filename}:`, err);
     }
   }

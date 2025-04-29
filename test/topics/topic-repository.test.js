@@ -37,7 +37,7 @@ describe('Topic Repository Tests', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     mongoUri = mongoServer.getUri();
-    await initializeDb(mongoUri, 'test_db');
+    await initializeDb(mongoUri, 'hirebot_db_test');
   });
 
   // Close connections after all tests

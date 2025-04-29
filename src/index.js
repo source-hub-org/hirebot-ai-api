@@ -17,7 +17,12 @@ const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
 const logger = require('./utils/logger');
 
 // Load environment variables
-dotenv.config();
+// Use .env.testing for test environments, otherwise use .env
+if (process.env.NODE_ENV === 'testing') {
+  dotenv.config({ path: '.env.testing' });
+} else {
+  dotenv.config();
+}
 
 // Initialize Express app
 const app = express();
@@ -48,7 +53,7 @@ async function initializeApp() {
 
     // Connect to MongoDB using both native driver and mongoose
     await initializeDb(MONGODB_URI, DB_NAME);
-    await mongoose.connect(`${MONGODB_URI}/${DB_NAME}`);
+    await mongoose.connect(MONGODB_URI, { dbName: DB_NAME });
     logger.info('Mongoose connected to MongoDB');
 
     // Initialize Redis

@@ -101,6 +101,17 @@ describe('Logger Utility', () => {
 
       consoleLogSpy.mockRestore();
     });
+
+    test('should not log in testing environment', () => {
+      process.env.NODE_ENV = 'testing';
+      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+
+      logger.info('This should not be logged');
+
+      expect(consoleLogSpy).not.toHaveBeenCalled();
+
+      consoleLogSpy.mockRestore();
+    });
   });
 
   describe('warn', () => {
@@ -117,6 +128,17 @@ describe('Logger Utility', () => {
 
     test('should not log in test environment', () => {
       process.env.NODE_ENV = 'test';
+      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+      logger.warn('This should not be logged');
+
+      expect(consoleWarnSpy).not.toHaveBeenCalled();
+
+      consoleWarnSpy.mockRestore();
+    });
+
+    test('should not log in testing environment', () => {
+      process.env.NODE_ENV = 'testing';
       const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       logger.warn('This should not be logged');
@@ -161,6 +183,17 @@ describe('Logger Utility', () => {
 
     test('should not log in test environment', () => {
       process.env.NODE_ENV = 'test';
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      logger.error('This should not be logged');
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    test('should not log in testing environment', () => {
+      process.env.NODE_ENV = 'testing';
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
       logger.error('This should not be logged');
@@ -298,6 +331,19 @@ describe('Logger Utility', () => {
 
       appendFileSpy.mockRestore();
     });
+
+    test('should not attempt to write logs in testing environment', async () => {
+      process.env.NODE_ENV = 'testing';
+
+      // Spy on fs.appendFile to ensure it's not called
+      const appendFileSpy = jest.spyOn(fs, 'appendFile').mockImplementation();
+
+      await logger.logToFile(testLogFile, 'This should not be written');
+
+      expect(appendFileSpy).not.toHaveBeenCalled();
+
+      appendFileSpy.mockRestore();
+    });
   });
 
   test('LogLevel enum should have the correct values', () => {
@@ -312,6 +358,35 @@ describe('Logger Utility', () => {
   test('logger functions should not log in test environment', () => {
     // Set NODE_ENV to test
     process.env.NODE_ENV = 'test';
+
+    // Spy on console methods
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation();
+
+    // Call logger methods
+    logger.info('Test info');
+    logger.warn('Test warn');
+    logger.error('Test error');
+    logger.debug('Test debug');
+
+    // Verify console methods were not called
+    expect(consoleLogSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(consoleDebugSpy).not.toHaveBeenCalled();
+
+    // Restore console methods
+    consoleLogSpy.mockRestore();
+    consoleWarnSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+    consoleDebugSpy.mockRestore();
+  });
+
+  test('logger functions should not log in testing environment', () => {
+    // Set NODE_ENV to testing
+    process.env.NODE_ENV = 'testing';
 
     // Spy on console methods
     const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();

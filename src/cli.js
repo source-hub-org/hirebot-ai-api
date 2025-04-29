@@ -11,7 +11,12 @@ const { initializeDb } = require('./repository/baseRepository');
 const logger = require('./utils/logger');
 
 // Load environment variables
-dotenv.config();
+// Use .env.testing for test environments, otherwise use .env
+if (process.env.NODE_ENV === 'testing') {
+  dotenv.config({ path: '.env.testing' });
+} else {
+  dotenv.config();
+}
 
 // MongoDB connection details
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';

@@ -35,7 +35,7 @@ beforeAll(async () => {
   const mongoUri = mongoServer.getUri();
 
   // Initialize the app with the in-memory database
-  const result = await initializeApp(mongoUri, 'test_db');
+  const result = await initializeApp(mongoUri, 'hirebot_db_test');
   server = result.server;
 });
 

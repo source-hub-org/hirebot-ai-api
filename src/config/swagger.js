@@ -3,7 +3,12 @@ const swaggerUi = require('swagger-ui-express');
 const dotenv = require('dotenv');
 
 // Load environment variables
-dotenv.config();
+// Use .env.testing for test environments, otherwise use .env
+if (process.env.NODE_ENV === 'testing') {
+  dotenv.config({ path: '.env.testing' });
+} else {
+  dotenv.config();
+}
 
 // Get port from environment variables or use default
 const PORT = process.env.PORT || 3000;

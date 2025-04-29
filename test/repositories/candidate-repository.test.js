@@ -41,7 +41,7 @@ describe('Candidate Repository', () => {
     const mongoUri = mongoServer.getUri();
 
     // Initialize the database connection
-    await initializeDb(mongoUri, 'test_db');
+    await initializeDb(mongoUri, 'hirebot_db_test');
   });
 
   afterAll(async () => {

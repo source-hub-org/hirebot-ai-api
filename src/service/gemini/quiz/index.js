@@ -20,7 +20,12 @@ const parsers = require('./parsers');
 const validators = require('./validators');
 
 // Load environment variables
-dotenv.config();
+// Use .env.testing for test environments, otherwise use .env
+if (process.env.NODE_ENV === 'testing') {
+  dotenv.config({ path: '.env.testing' });
+} else {
+  dotenv.config();
+}
 
 /**
  * Generates quiz questions using Gemini AI

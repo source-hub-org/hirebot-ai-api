@@ -9,7 +9,12 @@ const dotenv = require('dotenv');
 const logger = require('../../utils/logger');
 
 // Load environment variables
-dotenv.config();
+// Use .env.testing for test environments, otherwise use .env
+if (process.env.NODE_ENV === 'testing') {
+  dotenv.config({ path: '.env.testing' });
+} else {
+  dotenv.config();
+}
 
 // Configuration from environment variables
 const API_KEY = process.env.GEMINI_API_KEY;

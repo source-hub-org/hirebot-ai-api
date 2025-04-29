@@ -37,7 +37,7 @@ describe('MongoDB Repository Tests', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     mongoUri = mongoServer.getUri();
-    await initializeDb(mongoUri, 'test_db');
+    await initializeDb(mongoUri, 'hirebot_db_test');
   });
 
   // Close connections after all tests
@@ -53,7 +53,7 @@ describe('MongoDB Repository Tests', () => {
     test('should connect to MongoDB successfully', async () => {
       const connectionInfo = getConnectionInfo();
       expect(connectionInfo.isConnected).toBe(true);
-      expect(connectionInfo.dbName).toBe('test_db');
+      expect(connectionInfo.dbName).toBe('hirebot_db_test');
     });
   });
 

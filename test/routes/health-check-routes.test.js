@@ -27,7 +27,7 @@ describe('Health Check Routes Tests', () => {
       getConnectionInfo.mockReturnValue({
         isConnected: true,
         serverAddress: 'mongodb://localhost:27017',
-        dbName: 'test_db',
+        dbName: 'hirebot_db_test',
       });
 
       // Make a request to the endpoint
@@ -40,7 +40,7 @@ describe('Health Check Routes Tests', () => {
         data: {
           isConnected: true,
           serverAddress: 'mongodb://localhost:27017',
-          dbName: 'test_db',
+          dbName: 'hirebot_db_test',
         },
       });
 
