@@ -43,16 +43,15 @@ const getAllPositionsController = async (req, res) => {
   try {
     const { positions, totalCount } = await getAllPositionsService(req.query);
 
-    // Calculate metadata for pagination if needed
-    const metadata = {};
-    if (req.query.page || req.query.limit) {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
-      metadata.page = page;
-      metadata.limit = limit;
-      metadata.total = totalCount;
-      metadata.total_pages = Math.ceil(totalCount / limit);
-    }
+    // Calculate metadata for pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const metadata = {
+      page: page,
+      limit: limit,
+      total: totalCount,
+      total_pages: Math.ceil(totalCount / limit),
+    };
 
     return res.status(200).json(formatSuccessResponse(positions, metadata));
   } catch (error) {

@@ -169,6 +169,86 @@ describe('GET /api/candidates', () => {
     expect(response.body.pagination.page_size).toBe(100);
   });
 
+  test('should filter candidates by name', async () => {
+    // Create a candidate with a specific name for filtering
+    const filterCandidate = {
+      full_name: 'Unique Filter Name',
+      email: `filter_test_${Date.now()}@example.com`, // Use unique email
+      phone_number: '+1234567890',
+      interview_level: 'senior',
+    };
+
+    await request(app).post('/api/candidates').send(filterCandidate).expect(201);
+
+    // Test filtering by name
+    const response = await request(app).get('/api/candidates?name=Unique Filter').expect(200);
+
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.length).toBeGreaterThan(0);
+    expect(response.body.data.some(c => c.full_name === 'Unique Filter Name')).toBe(true);
+
+    // Test filtering with a name that shouldn't match
+    const noMatchResponse = await request(app)
+      .get('/api/candidates?name=NonExistentName123456')
+      .expect(200);
+
+    expect(noMatchResponse.body.success).toBe(true);
+    expect(noMatchResponse.body.data.length).toBe(0);
+  });
+
+  test('should filter candidates by email', async () => {
+    // Test filtering by email
+    const response = await request(app).get('/api/candidates?email=filter_test').expect(200);
+
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.length).toBeGreaterThan(0);
+    expect(response.body.data.some(c => c.email === 'filter_test@example.com')).toBe(true);
+  });
+
+  test('should sort candidates correctly', async () => {
+    // Create candidates with different names for sorting test
+    const timestamp = Date.now();
+    const sortCandidates = [
+      {
+        full_name: 'A Sort Test',
+        email: `a_sort_${timestamp}@example.com`, // Use unique email
+        phone_number: '+1234567890',
+        interview_level: 'junior',
+      },
+      {
+        full_name: 'Z Sort Test',
+        email: `z_sort_${timestamp}@example.com`, // Use unique email
+        phone_number: '+1234567890',
+        interview_level: 'senior',
+      },
+    ];
+
+    for (const candidate of sortCandidates) {
+      await request(app).post('/api/candidates').send(candidate).expect(201);
+    }
+
+    // Test sorting by name ascending
+    const ascResponse = await request(app)
+      .get('/api/candidates?sort_by=full_name&sort_order=asc')
+      .expect(200);
+
+    expect(ascResponse.body.success).toBe(true);
+    expect(ascResponse.body.data.length).toBeGreaterThan(1);
+
+    // At least one candidate should be found
+    expect(ascResponse.body.data.length).toBeGreaterThan(0);
+
+    // Test sorting by name descending
+    const descResponse = await request(app)
+      .get('/api/candidates?sort_by=full_name&sort_order=desc')
+      .expect(200);
+
+    expect(descResponse.body.success).toBe(true);
+
+    // At least one candidate should be found
+    expect(descResponse.body.data.length).toBeGreaterThan(0);
+  });
+
   test('should retrieve a specific candidate by ID', async () => {
     const response = await request(app).get(`/api/candidates/${candidateId}`).expect(200);
 

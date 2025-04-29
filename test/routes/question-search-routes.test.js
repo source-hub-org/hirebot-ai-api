@@ -456,6 +456,67 @@ describe('Question Search Routes', () => {
       );
     });
 
+    // Test for random sorting with pagination
+    it('should handle random sorting with pagination correctly', async () => {
+      // Mock implementation for random sorting with pagination
+      searchQuestions.mockImplementation(params => {
+        const { page, page_size } = params;
+
+        // Create mock questions for pagination test
+        const mockQuestions = Array(5)
+          .fill(null)
+          .map((_, i) => ({
+            _id: new ObjectId(),
+            question: `Random question ${i + 1}`,
+            options: ['Option A', 'Option B', 'Option C', 'Option D'],
+            correctAnswer: 0,
+          }));
+
+        return {
+          questions: mockQuestions,
+          pagination: {
+            total: 20, // Total of 20 questions
+            page: parseInt(page),
+            page_size: parseInt(page_size),
+            total_pages: Math.ceil(20 / parseInt(page_size)),
+          },
+        };
+      });
+
+      // Test first page
+      const response1 = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        sort_by: 'random',
+        page: 1,
+        page_size: 5,
+      });
+
+      expect(response1.status).toBe(200);
+      expect(response1.body.data.length).toBe(5);
+      expect(response1.body.pagination.page).toBe(1);
+      expect(response1.body.pagination.total_pages).toBe(4);
+
+      // Test second page
+      const response2 = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior',
+        sort_by: 'random',
+        page: 2,
+        page_size: 5,
+      });
+
+      expect(response2.status).toBe(200);
+      expect(response2.body.data.length).toBe(5);
+      expect(response2.body.pagination.page).toBe(2);
+
+      // The questions on page 1 and page 2 should be different due to random sorting
+      // but we can't test this directly since our mock always returns the same data
+      // In a real scenario, the random sorting algorithm would handle this
+    });
+
     // Test for ignore_question_ids parameter
     it('should search questions successfully with ignore_question_ids parameter', async () => {
       const response = await request(app).get('/api/questions/search').query({

@@ -43,6 +43,10 @@ describe('Position Routes', () => {
       expect(Array.isArray(res.body.data)).toBe(true);
       expect(res.body.data.length).toBe(1);
       expect(res.body.data[0].slug).toBe('test-position');
+
+      // Check that metadata is present
+      expect(res.body.metadata).toBeDefined();
+      expect(res.body.metadata.total).toBeDefined();
     });
 
     it('should filter positions by query parameters', async () => {
@@ -67,6 +71,44 @@ describe('Position Routes', () => {
       expect(res2.status).toBe(200);
       expect(res2.body.data.length).toBe(1);
       expect(res2.body.data[0].slug).toBe('another-position');
+    });
+
+    it('should handle pagination correctly', async () => {
+      // Create multiple additional positions for pagination testing
+      const positionsToCreate = [];
+      for (let i = 0; i < 15; i++) {
+        positionsToCreate.push({
+          slug: `paginated-position-${i}`,
+          title: `Paginated Position ${i}`,
+          description: `This is paginated position ${i}`,
+          instruction: `Paginated instruction ${i}`,
+          level: (i % 5) + 1,
+          is_active: i % 2 === 0,
+        });
+      }
+
+      await Position.insertMany(positionsToCreate);
+
+      // Test first page with limit
+      const res1 = await request(app).get('/api/positions?page=1&limit=10');
+      expect(res1.status).toBe(200);
+      expect(res1.body.data.length).toBe(10);
+      expect(res1.body.metadata.page).toBe(1);
+      expect(res1.body.metadata.limit).toBe(10);
+      expect(res1.body.metadata.total).toBe(16); // 1 original + 15 new ones
+      expect(res1.body.metadata.total_pages).toBe(2);
+
+      // Test second page
+      const res2 = await request(app).get('/api/positions?page=2&limit=10');
+      expect(res2.status).toBe(200);
+      expect(res2.body.data.length).toBe(6); // Remaining 6 positions
+      expect(res2.body.metadata.page).toBe(2);
+
+      // Test with different limit
+      const res3 = await request(app).get('/api/positions?page=1&limit=5');
+      expect(res3.status).toBe(200);
+      expect(res3.body.data.length).toBe(5);
+      expect(res3.body.metadata.total_pages).toBe(4); // 17 positions with 5 per page = 4 pages
     });
   });
 
