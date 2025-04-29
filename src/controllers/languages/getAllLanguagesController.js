@@ -9,14 +9,14 @@ const logger = require('../../utils/logger');
 /**
  * Formats the response for successful languages retrieval
  * @param {Array} languages - Array of language objects
- * @param {Object} metadata - Metadata about the query results
+ * @param {Object} pagination - Metadata about the query results
  * @returns {Object} Formatted response object
  */
-const formatSuccessResponse = (languages, metadata = {}) => {
+const formatSuccessResponse = (languages, pagination = {}) => {
   return {
     status: 'success',
     data: languages,
-    metadata,
+    pagination,
   };
 };
 
@@ -43,17 +43,17 @@ const getAllLanguagesController = async (req, res) => {
   try {
     const { languages, totalCount } = await getAllLanguagesService(req.query);
 
-    // Calculate metadata for pagination
+    // Calculate pagination for pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const metadata = {
+    const pagination = {
       page: page,
       limit: limit,
       total: totalCount,
       total_pages: Math.ceil(totalCount / limit),
     };
 
-    return res.status(200).json(formatSuccessResponse(languages, metadata));
+    return res.status(200).json(formatSuccessResponse(languages, pagination));
   } catch (error) {
     logger.error('Error retrieving languages:', error);
     return res.status(500).json(formatErrorResponse(error));

@@ -22,7 +22,7 @@ const formatValidationErrorResponse = errors => {
 
 /**
  * Formats the success response
- * @param {Array} questionsWithMetadata - Array of generated questions with metadata
+ * @param {Array} questionsWithMetadata - Array of generated questions with pagination
  * @returns {Object} Formatted success response
  */
 const formatSuccessResponse = questionsWithMetadata => {

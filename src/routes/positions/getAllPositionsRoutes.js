@@ -75,7 +75,7 @@ const router = express.Router();
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Position'
- *                 metadata:
+ *                 pagination:
  *                   type: object
  *                   properties:
  *                     page:

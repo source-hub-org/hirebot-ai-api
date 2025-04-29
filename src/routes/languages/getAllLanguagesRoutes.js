@@ -85,7 +85,7 @@ const router = express.Router();
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Language'
- *                 metadata:
+ *                 pagination:
  *                   type: object
  *                   properties:
  *                     page:
