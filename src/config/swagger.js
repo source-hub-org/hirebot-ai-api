@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'testing') {
 }
 
 // Get port from environment variables or use default
-const PORT = process.env.PORT || 3000;
+const SWAGGER_URL = process.env.SWAGGER_URL || 'http://localhost:8000';
 
 // Swagger definition
 const swaggerOptions = {
@@ -28,7 +28,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
+        url: `${SWAGGER_URL}`,
         description: 'Development server',
       },
     ],
@@ -107,7 +107,7 @@ const swaggerDocs = app => {
     res.send(swaggerSpec);
   });
 
-  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+  console.log(`Swagger docs available at ${SWAGGER_URL}/api-docs`);
 };
 
 module.exports = { swaggerDocs };
