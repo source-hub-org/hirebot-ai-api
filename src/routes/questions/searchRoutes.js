@@ -19,30 +19,32 @@ const router = express.Router();
  *       returns paginated results that can be sorted by different fields.
  *       Supports random sorting with 'sort_by=random' (default if not specified).
  *       You can exclude specific questions by providing their IDs in the 'ignore_question_ids' parameter.
+ *
+ *       Topic, language, and position parameters are all optional and support multiple values separated by commas.
+ *       All searches are case-insensitive.
  *     tags: [Questions]
  *     parameters:
  *       - in: query
  *         name: topic
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
- *         description: The topic of the questions to search for (e.g., JavaScript, React, Node.js)
- *         example: JavaScript
+ *         description: The topic(s) of the questions to search for, separated by commas (e.g., JavaScript,React,Node.js)
+ *         example: JavaScript,React
  *       - in: query
  *         name: language
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
- *         description: The programming or spoken language of the questions (e.g., JavaScript, Python, Java)
- *         example: JavaScript
+ *         description: The programming or spoken language(s) of the questions, separated by commas (e.g., JavaScript,Python,Java)
+ *         example: JavaScript,TypeScript
  *       - in: query
  *         name: position
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
- *           enum: [intern, fresher, junior, middle, senior, expert]
- *         description: The experience level for the questions
- *         example: junior
+ *         description: The experience level(s) for the questions, separated by commas (e.g., junior,middle,senior)
+ *         example: junior,middle
  *       - in: query
  *         name: sort_by
  *         required: false

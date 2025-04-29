@@ -11,6 +11,7 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 - Asynchronous question generation with Redis-based job queue
 - Manage interview topics and positions through commands and API
 - RESTful API for quiz, topic, position, language, candidate, and submission management
+- Flexible question search API with support for multiple topics, languages, and positions
 - Comprehensive validation and error handling
 - Swagger API documentation
 - Extensive test coverage
@@ -254,6 +255,39 @@ The application implements an asynchronous processing architecture for question 
 3. **Result Retrieval**:
    - Client can check job status using the job ID
    - When job is complete, client can retrieve the generated questions
+
+### Question Search API
+
+The application provides a flexible search API for retrieving questions based on various criteria:
+
+1. **Flexible Filtering**:
+   - All search parameters (topic, language, position) are optional
+   - Support for multiple values in each parameter (comma-separated)
+   - Case-insensitive search for all text fields
+
+2. **Search Parameters**:
+   - `topic`: Filter by one or more topics (e.g., `JavaScript,React,Node.js`)
+   - `language`: Filter by one or more programming languages (e.g., `JavaScript,TypeScript`)
+   - `position`: Filter by one or more experience levels (e.g., `junior,middle,senior`)
+
+3. **Sorting and Pagination**:
+   - `sort_by`: Field to sort by (`question`, `category`, `createdAt`, or `random`)
+   - `sort_direction`: Sort direction (`asc` or `desc`)
+   - `page` and `page_size`: Standard pagination parameters
+
+4. **Response Modes**:
+   - `mode`: Controls the level of detail in the response
+     - `full`: All question fields (default)
+     - `compact`: Excludes correct answers and explanations
+     - `minimalist`: Only includes question ID and text
+
+5. **Additional Features**:
+   - `ignore_question_ids`: Exclude specific questions from results
+
+Example request:
+```
+GET /api/questions/search?topic=JavaScript,React&language=JavaScript&position=junior,middle&sort_by=random&page=1&page_size=10&mode=compact
+```
 
 ### Quiz Generation Module
 

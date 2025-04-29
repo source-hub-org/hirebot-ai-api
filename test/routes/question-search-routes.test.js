@@ -100,60 +100,90 @@ describe('Question Search Routes', () => {
   });
 
   describe('GET /api/questions/search', () => {
-    // Test for missing required parameters
-    it('should validate all required fields are missing', async () => {
+    // Test for empty query parameters - should now be valid
+    it('should accept empty query parameters', async () => {
       const response = await request(app).get('/api/questions/search').query({
-        // Missing all required fields
+        // No parameters
       });
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(200);
       expect(response.body).toBeInstanceOf(Object);
-      expect(response.body.status).toBe('error');
-      expect(response.body.message).toBe('Validation failed');
-      expect(response.body.errors).toBeInstanceOf(Array);
-      expect(response.body.errors.length).toBe(3); // Should have 3 validation errors
-      expect(response.body.errors).toContain('Topic is required and must be a string');
-      expect(response.body.errors).toContain('Language is required and must be a string');
-      expect(response.body.errors).toContain('Position is required and must be a string');
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with default parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sort_by: 'random',
+          sort_direction: 'desc',
+          page: 1,
+          page_size: 20,
+          mode: 'full',
+          ignore_question_ids: [],
+        })
+      );
     });
 
-    // Test for missing topic field
-    it('should validate missing topic field', async () => {
-      const response = await request(app).get('/api/questions/search').query({
-        language: 'JavaScript',
-        position: 'junior',
-        // Missing topic
-      });
-
-      expect(response.status).toBe(400);
-      expect(response.body.status).toBe('error');
-      expect(response.body.errors).toContain('Topic is required and must be a string');
-    });
-
-    // Test for missing language field
-    it('should validate missing language field', async () => {
+    // Test with only topic parameter
+    it('should accept only topic parameter', async () => {
       const response = await request(app).get('/api/questions/search').query({
         topic: 'JavaScript',
-        position: 'junior',
-        // Missing language
       });
 
-      expect(response.status).toBe(400);
-      expect(response.body.status).toBe('error');
-      expect(response.body.errors).toContain('Language is required and must be a string');
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          sort_by: 'random',
+          sort_direction: 'desc',
+          page: 1,
+          page_size: 20,
+        })
+      );
     });
 
-    // Test for missing position field
-    it('should validate missing position field', async () => {
+    // Test with only language parameter
+    it('should accept only language parameter', async () => {
       const response = await request(app).get('/api/questions/search').query({
-        topic: 'JavaScript',
         language: 'JavaScript',
-        // Missing position
       });
 
-      expect(response.status).toBe(400);
-      expect(response.body.status).toBe('error');
-      expect(response.body.errors).toContain('Position is required and must be a string');
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          language: 'JavaScript',
+          sort_by: 'random',
+          sort_direction: 'desc',
+          page: 1,
+          page_size: 20,
+        })
+      );
+    });
+
+    // Test with only position parameter
+    it('should accept only position parameter', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        position: 'junior',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          position: 'junior',
+          sort_by: 'random',
+          sort_direction: 'desc',
+          page: 1,
+          page_size: 20,
+        })
+      );
     });
 
     // Test for invalid position value
@@ -266,6 +296,72 @@ describe('Question Search Routes', () => {
           sort_direction: 'desc',
           page: 1,
           page_size: 20,
+        })
+      );
+    });
+
+    // Test for multiple topics
+    it('should search questions successfully with multiple topics', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript,React,Node.js',
+        language: 'JavaScript',
+        position: 'junior',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript,React,Node.js',
+          language: 'JavaScript',
+          position: 'junior',
+        })
+      );
+    });
+
+    // Test for multiple languages
+    it('should search questions successfully with multiple languages', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript,TypeScript,Python',
+        position: 'junior',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          language: 'JavaScript,TypeScript,Python',
+          position: 'junior',
+        })
+      );
+    });
+
+    // Test for multiple positions
+    it('should search questions successfully with multiple positions', async () => {
+      const response = await request(app).get('/api/questions/search').query({
+        topic: 'JavaScript',
+        language: 'JavaScript',
+        position: 'junior,middle,senior',
+      });
+
+      // Verify the response
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('success');
+
+      // Verify the mock was called with correct parameters
+      expect(searchQuestions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          topic: 'JavaScript',
+          language: 'JavaScript',
+          position: 'junior,middle,senior',
         })
       );
     });

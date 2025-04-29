@@ -12,25 +12,34 @@ function validateSearchParams(query) {
   const errors = [];
   const params = { ...query };
 
-  // Required string parameters: topic, language, position
-  if (!params.topic || typeof params.topic !== 'string') {
-    errors.push('Topic is required and must be a string');
+  // Optional topic parameter (previously required)
+  if (params.topic !== undefined && typeof params.topic !== 'string') {
+    errors.push('Topic must be a string');
   }
 
-  if (!params.language || typeof params.language !== 'string') {
-    errors.push('Language is required and must be a string');
+  // Optional language parameter (previously required)
+  if (params.language !== undefined && typeof params.language !== 'string') {
+    errors.push('Language must be a string');
   }
 
-  if (!params.position || typeof params.position !== 'string') {
-    errors.push('Position is required and must be a string');
-  } else {
-    // Validate position is one of the allowed values
-    const validPositions = ['intern', 'fresher', 'junior', 'middle', 'senior', 'expert'];
-    if (!validPositions.includes(params.position.toLowerCase())) {
-      errors.push(`Position must be one of: ${validPositions.join(', ')}`);
+  // Optional position parameter (previously required)
+  if (params.position !== undefined) {
+    if (typeof params.position !== 'string') {
+      errors.push('Position must be a string');
     } else {
-      // Normalize position to lowercase
-      params.position = params.position.toLowerCase();
+      // Handle multiple positions separated by commas
+      const positions = params.position.split(',').map(p => p.trim().toLowerCase());
+      const validPositions = ['intern', 'fresher', 'junior', 'middle', 'senior', 'expert'];
+
+      // Check if all positions are valid
+      const invalidPositions = positions.filter(p => !validPositions.includes(p));
+
+      if (invalidPositions.length > 0) {
+        errors.push(`Position must be one of: ${validPositions.join(', ')}`);
+      } else {
+        // Normalize position to lowercase (keep the comma-separated format)
+        params.position = positions.join(',');
+      }
     }
   }
 

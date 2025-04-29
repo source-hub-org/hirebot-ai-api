@@ -5,7 +5,7 @@
 const { validateSearchParams } = require('../../src/utils/questionSearchValidator');
 
 describe('Question Search Validator', () => {
-  it('should validate required parameters', () => {
+  it('should validate with all parameters', () => {
     const query = {
       topic: 'JavaScript',
       language: 'JavaScript',
@@ -28,10 +28,81 @@ describe('Question Search Validator', () => {
     });
   });
 
-  it('should validate and normalize position to lowercase', () => {
+  it('should validate with no parameters', () => {
+    const query = {};
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params).toEqual({
+      sort_by: 'random',
+      sort_direction: 'desc',
+      page: 1,
+      page_size: 20,
+      mode: 'full',
+      ignore_question_ids: [],
+    });
+  });
+
+  it('should validate with only topic parameter', () => {
     const query = {
       topic: 'JavaScript',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params).toEqual({
+      topic: 'JavaScript',
+      sort_by: 'random',
+      sort_direction: 'desc',
+      page: 1,
+      page_size: 20,
+      mode: 'full',
+      ignore_question_ids: [],
+    });
+  });
+
+  it('should validate with only language parameter', () => {
+    const query = {
       language: 'JavaScript',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params).toEqual({
+      language: 'JavaScript',
+      sort_by: 'random',
+      sort_direction: 'desc',
+      page: 1,
+      page_size: 20,
+      mode: 'full',
+      ignore_question_ids: [],
+    });
+  });
+
+  it('should validate with only position parameter', () => {
+    const query = {
+      position: 'junior',
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.params).toEqual({
+      position: 'junior',
+      sort_by: 'random',
+      sort_direction: 'desc',
+      page: 1,
+      page_size: 20,
+      mode: 'full',
+      ignore_question_ids: [],
+    });
+  });
+
+  it('should validate and normalize position to lowercase', () => {
+    const query = {
       position: 'JUNIOR',
     };
 
@@ -43,9 +114,6 @@ describe('Question Search Validator', () => {
 
   it('should validate and normalize sort_direction to lowercase', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       sort_direction: 'ASC',
     };
 
@@ -83,21 +151,41 @@ describe('Question Search Validator', () => {
     });
   });
 
-  it('should detect missing required parameters', () => {
-    const query = {};
+  it('should detect invalid topic type', () => {
+    const query = {
+      topic: 123, // Not a string
+    };
 
     const result = validateSearchParams(query);
 
-    expect(result.errors).toHaveLength(3);
-    expect(result.errors).toContain('Topic is required and must be a string');
-    expect(result.errors).toContain('Language is required and must be a string');
-    expect(result.errors).toContain('Position is required and must be a string');
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors).toContain('Topic must be a string');
+  });
+
+  it('should detect invalid language type', () => {
+    const query = {
+      language: 123, // Not a string
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors).toContain('Language must be a string');
+  });
+
+  it('should detect invalid position type', () => {
+    const query = {
+      position: 123, // Not a string
+    };
+
+    const result = validateSearchParams(query);
+
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors).toContain('Position must be a string');
   });
 
   it('should detect invalid position value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
       position: 'invalid_position',
     };
 
@@ -111,9 +199,6 @@ describe('Question Search Validator', () => {
 
   it('should detect invalid sort_by value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       sort_by: 'invalid_field',
     };
 
@@ -127,9 +212,6 @@ describe('Question Search Validator', () => {
 
   it('should detect invalid sort_direction value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       sort_direction: 'invalid_direction',
     };
 
@@ -141,9 +223,6 @@ describe('Question Search Validator', () => {
 
   it('should detect invalid page value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       page: 'not_a_number',
     };
 
@@ -155,9 +234,6 @@ describe('Question Search Validator', () => {
 
   it('should detect negative page value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       page: -1,
     };
 
@@ -169,9 +245,6 @@ describe('Question Search Validator', () => {
 
   it('should detect invalid page_size value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       page_size: 'not_a_number',
     };
 
@@ -183,9 +256,6 @@ describe('Question Search Validator', () => {
 
   it('should detect negative page_size value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       page_size: -10,
     };
 
@@ -197,9 +267,6 @@ describe('Question Search Validator', () => {
 
   it('should validate and normalize mode to lowercase', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       mode: 'COMPACT',
     };
 
@@ -211,9 +278,6 @@ describe('Question Search Validator', () => {
 
   it('should detect invalid mode value', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       mode: 'invalid_mode',
     };
 
@@ -225,9 +289,6 @@ describe('Question Search Validator', () => {
 
   it('should validate minimalist mode', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       mode: 'minimalist',
     };
 
@@ -239,9 +300,6 @@ describe('Question Search Validator', () => {
 
   it('should validate random sort option', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       sort_by: 'random',
     };
 
@@ -253,9 +311,6 @@ describe('Question Search Validator', () => {
 
   it('should validate and process ignore_question_ids parameter', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       ignore_question_ids: '5f9d88b3e5daad3f349c2e2d,5f9d88b3e5daad3f349c2e2e',
     };
 
@@ -270,9 +325,6 @@ describe('Question Search Validator', () => {
 
   it('should handle empty ignore_question_ids parameter', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       ignore_question_ids: '',
     };
 
@@ -284,9 +336,6 @@ describe('Question Search Validator', () => {
 
   it('should validate ignore_question_ids type', () => {
     const query = {
-      topic: 'JavaScript',
-      language: 'JavaScript',
-      position: 'junior',
       ignore_question_ids: 123, // Not a string
     };
 
