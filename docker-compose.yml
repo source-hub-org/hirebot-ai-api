@@ -20,7 +20,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     ports:
-      - '${APP_PORT:-27017}:27017'      
+      - '${MONGODB_PORT:-27017}:27017'      
     networks:
       - hirebot_network
     # No port mapping to host, only internal exposure
