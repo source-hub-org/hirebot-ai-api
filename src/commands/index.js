@@ -5,6 +5,7 @@
 
 const { initTopicsCommand } = require('./topicCommands');
 const { initPositionsCommand } = require('./positionCommands');
+const { initLanguagesCommand } = require('./languageCommands');
 
 /**
  * Execute a command with the given arguments
@@ -17,6 +18,7 @@ async function executeCommand(commandName, args) {
   const commands = {
     'app:init-topics': initTopicsCommand,
     'app:init-positions': initPositionsCommand,
+    'app:init-languages': initLanguagesCommand,
   };
 
   const command = commands[commandName];

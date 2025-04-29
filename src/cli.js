@@ -6,6 +6,7 @@
  */
 
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const { executeCommand } = require('./commands');
 const { initializeDb } = require('./repository/baseRepository');
 const logger = require('./utils/logger');
@@ -38,15 +39,30 @@ async function main() {
 
     // Initialize database connection
     await initializeDb(MONGODB_URI, DB_NAME);
+    await mongoose.connect(MONGODB_URI, { dbName: DB_NAME });
+    logger.info('Connected to MongoDB');
     logger.info(`Connected to database: ${DB_NAME}`);
 
     // Execute the command
     await executeCommand(commandName, args);
 
+    // Disconnect from MongoDB
+    await mongoose.disconnect();
+    logger.info('Disconnected from MongoDB');
+
     // Exit successfully
     process.exit(0);
   } catch (error) {
     console.error('Error:', error.message);
+
+    // Ensure we disconnect from MongoDB even on error
+    try {
+      await mongoose.disconnect();
+      logger.info('Disconnected from MongoDB');
+    } catch (disconnectError) {
+      logger.error('Error disconnecting from MongoDB:', disconnectError);
+    }
+
     process.exit(1);
   }
 }

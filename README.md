@@ -10,7 +10,7 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 - Store and retrieve questions from MongoDB
 - Asynchronous question generation with Redis-based job queue
 - Manage interview topics and positions through commands and API
-- RESTful API for quiz, topic, position, candidate, and submission management
+- RESTful API for quiz, topic, position, language, candidate, and submission management
 - Comprehensive validation and error handling
 - Swagger API documentation
 - Extensive test coverage
@@ -108,31 +108,39 @@ hirebot-ai-api/
 ├── src/
 │   ├── commands/       # CLI commands
 │   │   ├── index.js
-│   │   ├── topicCommands.js       # Topic management commands
-│   │   └── positionCommands.js    # Position management commands
+│   │   ├── languageCommands.js    # Language management commands
+│   │   ├── positionCommands.js    # Position management commands
+│   │   └── topicCommands.js       # Topic management commands
 │   ├── config/         # Configuration files
 │   │   ├── question-format.json   # Question format schema
 │   │   └── swagger.js             # Swagger configuration
 │   ├── controllers/    # Request handlers
 │   │   ├── candidates/            # Candidate controllers
 │   │   ├── health-check/          # Health check controllers
+│   │   ├── languages/             # Language controllers
+│   │   ├── positions/             # Position controllers
 │   │   ├── questions/             # Question controllers
 │   │   ├── submissions/           # Submission controllers
 │   │   └── topics/                # Topic controllers
 │   ├── models/         # Data models
 │   │   ├── candidateModel.js      # Candidate schema and validation
 │   │   ├── jobModel.js            # Job queue schema
+│   │   ├── languageModel.js       # Language schema and validation
+│   │   ├── positionModel.js       # Position schema and validation
 │   │   └── submissionModel.js     # Submission schema and validation
 │   ├── repository/     # Data access layer
 │   │   ├── baseRepository.js      # Base repository with common operations
 │   │   ├── candidateRepository.js # Candidate data operations
 │   │   ├── jobRepository.js       # Job queue operations
+│   │   ├── languageRepository.js  # Language data operations
 │   │   ├── positionRepository.js  # Position data operations
 │   │   ├── submissionRepository.js # Submission data operations
 │   │   └── topicRepository.js     # Topic data operations
 │   ├── routes/         # API routes
 │   │   ├── candidates/            # Candidate API endpoints
 │   │   ├── health-check/          # Health check endpoints
+│   │   ├── languages/             # Language API endpoints
+│   │   ├── positions/             # Position API endpoints
 │   │   ├── questions/             # Question generation endpoints
 │   │   ├── submissions/           # Submission API endpoints
 │   │   ├── topics/                # Topic API endpoints
@@ -149,6 +157,8 @@ hirebot-ai-api/
 │   │   │       ├── promptBuilder.js    # AI prompt construction
 │   │   │       └── validators.js       # Question validation utilities
 │   │   ├── jobProcessorService.js      # Background job processor
+│   │   ├── languageService.js          # Language service
+│   │   ├── positionsService.js         # Positions service
 │   │   ├── questionGenerationService.js # Question generation service
 │   │   ├── questionRequestService.js   # Async question request service
 │   │   ├── questionSearchService.js    # Question search service
@@ -159,6 +169,7 @@ hirebot-ai-api/
 │       ├── errorResponseHandler.js     # Error handling utilities
 │       ├── fileParser.js               # File reading utilities
 │       ├── generateRequestValidator.js # Request validation
+│       ├── languageValidator.js        # Language validation utilities
 │       ├── logger.js                   # Logging utilities
 │       ├── paginationUtils.js          # Pagination utilities
 │       ├── positionUtils.js            # Position-related utilities
@@ -189,6 +200,8 @@ hirebot-ai-api/
 │   ├── sample-candidate.json # Sample candidate data
 │   ├── sample-positions.json # Sample positions data
 │   └── sample-topics.json    # Sample topics data
+├── tmp/                # Temporary data files
+│   └── languages.json  # Sample languages data
 ├── .env.example        # Example environment variables
 ├── .github/workflows/  # CI/CD configuration
 ├── assets/             # Project assets
@@ -362,6 +375,84 @@ Optional fields:
 
 - `is_active`: Whether the position is active (boolean, defaults to true)
 
+### Language Management
+
+Initialize programming languages from a JSON file:
+
+```bash
+npm run command app:init-languages ./tmp/languages.json
+```
+
+The command supports two JSON file formats:
+
+#### Format 1: Direct Array of Language Objects (Recommended)
+
+```json
+[
+  {
+    "name": "Python",
+    "designed_by": "Guido van Rossum",
+    "first_appeared": 1991,
+    "paradigm": ["object-oriented", "imperative", "functional", "procedural"],
+    "usage": "AI, data science, web development, scripting",
+    "popularity_rank": 1,
+    "type_system": "dynamic, strong"
+  },
+  {
+    "name": "JavaScript",
+    "designed_by": "Brendan Eich",
+    "first_appeared": 1995,
+    "paradigm": ["event-driven", "functional", "imperative"],
+    "usage": "Front-end web, back-end (Node.js), mobile apps",
+    "popularity_rank": 2,
+    "type_system": "dynamic, weak"
+  }
+]
+```
+
+#### Format 2: Object with Languages Array
+
+```json
+{
+  "languages": [
+    {
+      "name": "Python",
+      "designed_by": "Guido van Rossum",
+      "first_appeared": 1991,
+      "paradigm": ["object-oriented", "imperative", "functional", "procedural"],
+      "usage": "AI, data science, web development, scripting",
+      "popularity_rank": 1,
+      "type_system": "dynamic, strong"
+    },
+    {
+      "name": "JavaScript",
+      "designed_by": "Brendan Eich",
+      "first_appeared": 1995,
+      "paradigm": ["event-driven", "functional", "imperative"],
+      "usage": "Front-end web, back-end (Node.js), mobile apps",
+      "popularity_rank": 2,
+      "type_system": "dynamic, weak"
+    }
+  ]
+}
+```
+
+#### Required Fields for Language Objects
+
+Each language object must include the following fields:
+
+- `name`: The name of the programming language (string)
+- `designed_by`: The designer(s) of the language (string)
+- `first_appeared`: The year the language first appeared (number, >= 1940)
+- `paradigm`: Programming paradigms supported by the language (array of strings)
+- `usage`: Common usage areas for the language (string)
+- `popularity_rank`: Popularity ranking of the language (number, >= 1)
+- `type_system`: Type system characteristics (string)
+
+Optional fields:
+
+- `slug`: URL-friendly identifier (string, generated from name if not provided)
+
 ## API Documentation
 
 This project uses Swagger to document the API endpoints. The documentation is automatically generated from JSDoc comments in the route files.
@@ -385,6 +476,22 @@ http://localhost:3000/api-docs
 #### Topics API
 
 - `GET /api/topics` - Get all available topics
+
+#### Positions API
+
+- `GET /api/positions` - Get all positions with pagination
+- `GET /api/positions/{id}` - Get a position by ID
+- `POST /api/positions` - Create a new position
+- `PUT /api/positions/{id}` - Update a position
+- `DELETE /api/positions/{id}` - Delete a position
+
+#### Languages API
+
+- `GET /api/languages` - Get all programming languages with pagination
+- `GET /api/languages/{id}` - Get a programming language by ID
+- `POST /api/languages` - Create a new programming language
+- `PUT /api/languages/{id}` - Update a programming language
+- `DELETE /api/languages/{id}` - Delete a programming language
 
 #### Candidates API
 

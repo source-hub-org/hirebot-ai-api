@@ -12,6 +12,7 @@ if (process.env.NODE_ENV === 'testing') {
 
 // Get port from environment variables or use default
 const SWAGGER_URL = process.env.SWAGGER_URL || 'http://localhost:8000';
+const PORT = process.env.PORT || '3000';
 
 // Swagger definition
 const swaggerOptions = {
@@ -28,8 +29,12 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `${SWAGGER_URL}`,
+        url: `http://localhost:${PORT}`,
         description: 'Development server',
+      },
+      {
+        url: `${SWAGGER_URL}`,
+        description: 'Nginx reverse proxy server',
       },
     ],
     components: {
