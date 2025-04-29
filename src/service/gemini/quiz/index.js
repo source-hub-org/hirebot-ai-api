@@ -116,8 +116,8 @@ async function sendRequestToGemini(prompt, options) {
   // Create a unique request ID for tracking
   const requestId = Date.now().toString();
 
-  // Create metadata for the request
-  const metadata = {
+  // Create pagination for the request
+  const pagination = {
     timestamp: new Date().toISOString(),
     requestId,
     options: {
@@ -139,7 +139,7 @@ async function sendRequestToGemini(prompt, options) {
   await logger.logToFile(
     'gemini-conversations.log',
     `REQUEST ID: ${requestId} - METADATA:`,
-    metadata
+    pagination
   );
   await logger.logToFile('gemini-conversations.log', `REQUEST ID: ${requestId} - PROMPT:`, prompt);
 
