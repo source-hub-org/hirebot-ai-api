@@ -6,7 +6,10 @@
     "description": "API documentation for HireBot AI, a service responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates.",
     "contact": { "name": "HireBot AI Team" }
   },
-  "servers": [{ "url": "http://localhost:3000", "description": "Development server" }],
+  "servers": [
+    { "url": "http://localhost:8000", "description": "Nginx reverse proxy server" },
+    { "url": "http://localhost:3000", "description": "Development server" }
+  ],
   "components": {
     "schemas": {
       "Position": {
@@ -399,6 +402,314 @@
               }
             }
           }
+        }
+      }
+    },
+    "/api/languages": {
+      "post": {
+        "summary": "Create a new programming language",
+        "tags": ["Languages"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "designed_by",
+                  "first_appeared",
+                  "paradigm",
+                  "usage",
+                  "popularity_rank",
+                  "type_system"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the programming language"
+                  },
+                  "designed_by": {
+                    "type": "string",
+                    "description": "The designer(s) of the language"
+                  },
+                  "first_appeared": {
+                    "type": "integer",
+                    "description": "The year the language first appeared"
+                  },
+                  "paradigm": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Programming paradigms supported by the language"
+                  },
+                  "usage": {
+                    "type": "string",
+                    "description": "Common usage areas for the language"
+                  },
+                  "popularity_rank": {
+                    "type": "integer",
+                    "description": "Popularity ranking of the language"
+                  },
+                  "type_system": { "type": "string", "description": "Type system characteristics" },
+                  "slug": {
+                    "type": "string",
+                    "description": "URL-friendly identifier (optional, generated from name if not provided)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Language created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Language created successfully." },
+                    "data": { "$ref": "#/components/schemas/Language" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid input data" },
+          "409": { "description": "Language with the same name or slug already exists" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "get": {
+        "summary": "Retrieve a list of all programming languages",
+        "tags": ["Languages"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "schema": { "type": "string" },
+            "description": "Filter languages by name (case-insensitive)"
+          },
+          {
+            "in": "query",
+            "name": "designed_by",
+            "schema": { "type": "string" },
+            "description": "Filter languages by designer (case-insensitive)"
+          },
+          {
+            "in": "query",
+            "name": "first_appeared",
+            "schema": { "type": "integer" },
+            "description": "Filter languages by first appearance year"
+          },
+          {
+            "in": "query",
+            "name": "paradigm",
+            "schema": { "type": "string" },
+            "description": "Filter languages by paradigm"
+          },
+          {
+            "in": "query",
+            "name": "popularity_rank",
+            "schema": { "type": "integer" },
+            "description": "Filter languages by popularity rank"
+          },
+          {
+            "in": "query",
+            "name": "type_system",
+            "schema": { "type": "string" },
+            "description": "Filter languages by type system (case-insensitive)"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 10 },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": { "type": "string", "default": "popularity_rank" },
+            "description": "Field to sort by"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "asc" },
+            "description": "Sort order (ascending or descending)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of programming languages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Language" }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "page": { "type": "integer" },
+                        "limit": { "type": "integer" },
+                        "total": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/languages/{id}": {
+      "delete": {
+        "summary": "Delete a programming language by ID",
+        "tags": ["Languages"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The language ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Language deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Language deleted successfully." }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Language not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "get": {
+        "summary": "Get a programming language by ID",
+        "tags": ["Languages"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The language ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A programming language object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/Language" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Language not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "put": {
+        "summary": "Update a programming language by ID",
+        "tags": ["Languages"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The language ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the programming language"
+                  },
+                  "designed_by": {
+                    "type": "string",
+                    "description": "The designer(s) of the language"
+                  },
+                  "first_appeared": {
+                    "type": "integer",
+                    "description": "The year the language first appeared"
+                  },
+                  "paradigm": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Programming paradigms supported by the language"
+                  },
+                  "usage": {
+                    "type": "string",
+                    "description": "Common usage areas for the language"
+                  },
+                  "popularity_rank": {
+                    "type": "integer",
+                    "description": "Popularity ranking of the language"
+                  },
+                  "type_system": { "type": "string", "description": "Type system characteristics" },
+                  "slug": { "type": "string", "description": "URL-friendly identifier" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Language updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Language updated successfully." },
+                    "data": { "$ref": "#/components/schemas/Language" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid input data" },
+          "404": { "description": "Language not found" },
+          "409": { "description": "Language with the same name or slug already exists" },
+          "500": { "description": "Server error" }
         }
       }
     },
@@ -1267,6 +1578,7 @@
   "tags": [
     { "name": "Candidates", "description": "Candidate management endpoints" },
     { "name": "Health", "description": "API health check endpoints" },
+    { "name": "Languages", "description": "API endpoints for managing programming languages" },
     { "name": "Positions", "description": "API endpoints for managing positions" },
     { "name": "Questions", "description": "API endpoints for generating and managing questions" },
     { "name": "Submissions", "description": "Submission management endpoints" },
