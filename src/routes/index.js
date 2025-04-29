@@ -10,6 +10,7 @@ const submissionRoutes = require('./submissions');
 const questionRoutes = require('./questions');
 const topicRoutes = require('./topics');
 const positionRoutes = require('./positions');
+const languageRoutes = require('./languages');
 
 /**
  * Creates a router for question routes
@@ -41,6 +42,16 @@ const createPositionRouter = () => {
   return router;
 };
 
+/**
+ * Creates a router for language routes
+ * @returns {Object} Express router for language routes
+ */
+const createLanguageRouter = () => {
+  const router = express.Router();
+  router.use('/', languageRoutes);
+  return router;
+};
+
 module.exports = {
   healthCheckRoutes,
   candidateRoutes,
@@ -48,4 +59,5 @@ module.exports = {
   questionRoutes: createQuestionRouter(),
   topicRoutes: createTopicRouter(),
   positionRoutes: createPositionRouter(),
+  languageRoutes: createLanguageRouter(),
 };
