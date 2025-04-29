@@ -295,7 +295,7 @@ The JSON file should have the following structure:
 Initialize positions from a JSON file:
 
 ```bash
-npm run command app:init-positions ./path/to/positions.json
+npm run command app:init-positions ./tmp/positions.json
 ```
 
 The command supports two JSON file formats:

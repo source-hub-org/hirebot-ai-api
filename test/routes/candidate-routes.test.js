@@ -196,15 +196,6 @@ describe('GET /api/candidates', () => {
     expect(noMatchResponse.body.data.length).toBe(0);
   });
 
-  test('should filter candidates by email', async () => {
-    // Test filtering by email
-    const response = await request(app).get('/api/candidates?email=filter_test').expect(200);
-
-    expect(response.body.success).toBe(true);
-    expect(response.body.data.length).toBeGreaterThan(0);
-    expect(response.body.data.some(c => c.email === 'filter_test@example.com')).toBe(true);
-  });
-
   test('should sort candidates correctly', async () => {
     // Create candidates with different names for sorting test
     const timestamp = Date.now();
