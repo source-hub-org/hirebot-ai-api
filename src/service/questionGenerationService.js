@@ -14,12 +14,12 @@ const logger = require('../utils/logger');
  * @param {string} params.topic - The topic for questions
  * @param {string} params.language - The programming language
  * @param {string} params.position - The position level
- * @returns {Promise<Array>} - Array of generated questions with metadata
+ * @returns {Promise<Array>} - Array of generated questions with pagination
  */
 const generateQuestions = async ({ topic, language, position }) => {
   const positionLowerCase = position.toLowerCase();
 
-  // Get position metadata
+  // Get position pagination
   const { difficultyText, positionInstruction, positionLevel } =
     getPositionMetadata(positionLowerCase);
 
@@ -39,10 +39,10 @@ const generateQuestions = async ({ topic, language, position }) => {
 };
 
 /**
- * Prepares questions with metadata for storage
+ * Prepares questions with pagination for storage
  * @param {Array} questions - Raw questions from AI
- * @param {Object} metadata - Metadata to add to questions
- * @returns {Array} - Questions with added metadata
+ * @param {Object} pagination - Metadata to add to questions
+ * @returns {Array} - Questions with added pagination
  */
 const prepareQuestionsWithMetadata = (questions, { topic, language, position, positionLevel }) => {
   const timestamp = new Date();
@@ -70,18 +70,18 @@ const storeQuestions = async questions => {
 /**
  * Complete process to generate and store questions
  * @param {Object} params - Parameters for question generation
- * @returns {Promise<Array>} - Generated and stored questions with metadata
+ * @returns {Promise<Array>} - Generated and stored questions with pagination
  */
 const generateAndStoreQuestions = async params => {
   const { topic, language, position } = params;
 
-  // Get position metadata
+  // Get position pagination
   const { positionLevel } = getPositionMetadata(position.toLowerCase());
 
   // Generate questions
   const questions = await generateQuestions(params);
 
-  // Prepare questions with metadata
+  // Prepare questions with pagination
   const questionsWithMetadata = prepareQuestionsWithMetadata(questions, {
     topic,
     language,

@@ -16,13 +16,13 @@ const logger = require('./logger');
 const handleApiError = (error, req, res, context = 'API') => {
   logger.error(`Error in ${context}:`, error);
 
-  // Log request metadata for easier debugging
+  // Log request pagination for easier debugging
   if (req.body) {
     const requestMetadata = {
       ...req.body,
       timestamp: new Date().toISOString(),
     };
-    logger.error('Request metadata:', requestMetadata);
+    logger.error('Request pagination:', requestMetadata);
   }
 
   // Handle specific error types

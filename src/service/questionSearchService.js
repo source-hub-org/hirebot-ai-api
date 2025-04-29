@@ -20,7 +20,7 @@ const logger = require('../utils/logger');
  * @param {number} searchParams.page_size - Number of items per page
  * @param {string} searchParams.mode - Response mode ('full', 'compact', or 'minimalist')
  * @param {string[]} searchParams.ignore_question_ids - Array of question IDs to exclude from results
- * @returns {Promise<Object>} Search results with pagination metadata
+ * @returns {Promise<Object>} Search results with pagination pagination
  */
 async function searchQuestions(searchParams) {
   try {
@@ -129,7 +129,7 @@ async function searchQuestions(searchParams) {
     // Get total count for pagination info
     const totalCount = await collection.countDocuments(filter);
 
-    // Calculate pagination metadata
+    // Calculate pagination pagination
     const totalPages = Math.ceil(totalCount / limit);
 
     // Process questions based on mode

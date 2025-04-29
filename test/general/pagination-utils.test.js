@@ -69,7 +69,7 @@ describe('Pagination Utilities', () => {
   });
 
   describe('calculatePaginationMetadata', () => {
-    test('should calculate correct pagination metadata', () => {
+    test('should calculate correct pagination pagination', () => {
       const result = calculatePaginationMetadata(100, 2, 20);
 
       expect(result.total).toBe(100);

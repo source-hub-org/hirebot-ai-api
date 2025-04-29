@@ -199,7 +199,7 @@ describe('Language Controllers', () => {
         expect(res.json).toHaveBeenCalledWith({
           status: 'success',
           data: languages,
-          metadata: {
+          pagination: {
             page: 1,
             total: totalCount,
             limit: 10,
@@ -230,7 +230,7 @@ describe('Language Controllers', () => {
         expect(res.json).toHaveBeenCalledWith({
           status: 'success',
           data: languages,
-          metadata: {
+          pagination: {
             page: 2,
             limit: 5,
             total: totalCount,

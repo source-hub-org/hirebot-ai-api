@@ -66,7 +66,7 @@ const getAllCandidates = async (req, res) => {
     // Get paginated candidates and total count
     const { candidates, total } = await getCandidateList(paginationOptions);
 
-    // Calculate pagination metadata
+    // Calculate pagination pagination
     const pagination = calculatePaginationMetadata(total, page, pageSize);
 
     // Return response with data and pagination info

@@ -34,11 +34,11 @@ function parsePaginationParams(query) {
 }
 
 /**
- * Calculate pagination metadata
+ * Calculate pagination pagination
  * @param {number} total - Total number of items
  * @param {number} page - Current page number
  * @param {number} pageSize - Number of items per page
- * @returns {Object} Pagination metadata
+ * @returns {Object} Pagination pagination
  */
 function calculatePaginationMetadata(total, page, pageSize) {
   // Calculate total pages (ceiling of total / pageSize)

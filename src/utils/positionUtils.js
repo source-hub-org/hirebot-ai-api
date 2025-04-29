@@ -19,9 +19,9 @@ const isValidPosition = position => {
 };
 
 /**
- * Gets position metadata based on the position string
+ * Gets position pagination based on the position string
  * @param {string} position - The position string
- * @returns {Object} - Position metadata including difficultyText, positionInstruction, and positionLevel
+ * @returns {Object} - Position pagination including difficultyText, positionInstruction, and positionLevel
  */
 const getPositionMetadata = position => {
   const positionLowerCase = position.toLowerCase();

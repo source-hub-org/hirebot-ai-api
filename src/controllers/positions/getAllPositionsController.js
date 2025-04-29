@@ -9,14 +9,14 @@ const logger = require('../../utils/logger');
 /**
  * Formats the response for successful positions retrieval
  * @param {Array} positions - Array of position objects
- * @param {Object} metadata - Metadata about the query results
+ * @param {Object} pagination - Metadata about the query results
  * @returns {Object} Formatted response object
  */
-const formatSuccessResponse = (positions, metadata = {}) => {
+const formatSuccessResponse = (positions, pagination = {}) => {
   return {
     status: 'success',
     data: positions,
-    metadata,
+    pagination,
   };
 };
 
@@ -43,17 +43,17 @@ const getAllPositionsController = async (req, res) => {
   try {
     const { positions, totalCount } = await getAllPositionsService(req.query);
 
-    // Calculate metadata for pagination
+    // Calculate pagination for pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const metadata = {
+    const pagination = {
       page: page,
       limit: limit,
       total: totalCount,
       total_pages: Math.ceil(totalCount / limit),
     };
 
-    return res.status(200).json(formatSuccessResponse(positions, metadata));
+    return res.status(200).json(formatSuccessResponse(positions, pagination));
   } catch (error) {
     logger.error('Error retrieving positions:', error);
     return res.status(500).json(formatErrorResponse(error));
