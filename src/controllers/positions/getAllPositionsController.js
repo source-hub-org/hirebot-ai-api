@@ -42,7 +42,7 @@ const formatErrorResponse = error => {
 const getAllPositionsController = async (req, res) => {
   try {
     const positions = await getAllPositionsService(req.query);
-    
+
     // Calculate metadata for pagination if needed
     const metadata = {};
     if (req.query.page || req.query.limit) {
@@ -50,7 +50,7 @@ const getAllPositionsController = async (req, res) => {
       metadata.limit = parseInt(req.query.limit) || 10;
       metadata.total = positions.length; // This would need to be updated for accurate count
     }
-    
+
     return res.status(200).json(formatSuccessResponse(positions, metadata));
   } catch (error) {
     logger.error('Error retrieving positions:', error);

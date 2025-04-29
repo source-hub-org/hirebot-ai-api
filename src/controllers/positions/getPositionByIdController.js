@@ -41,14 +41,14 @@ const getPositionByIdController = async (req, res) => {
   try {
     const { id } = req.params;
     const position = await getPositionByIdService(id);
-    
+
     if (!position) {
       return res.status(404).json({
         status: 'error',
         message: `Position with ID ${id} not found.`,
       });
     }
-    
+
     return res.status(200).json(formatSuccessResponse(position));
   } catch (error) {
     logger.error(`Error retrieving position with ID ${req.params.id}:`, error);

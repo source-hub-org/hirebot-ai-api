@@ -36,52 +36,53 @@ const swaggerOptions = {
             _id: {
               type: 'string',
               description: 'Position ID',
-              example: '60d21b4667d0d8992e610c85'
+              example: '60d21b4667d0d8992e610c85',
             },
             slug: {
               type: 'string',
               description: 'Unique identifier for the position',
-              example: 'senior'
+              example: 'senior',
             },
             title: {
               type: 'string',
               description: 'Position title',
-              example: 'Senior Developer'
+              example: 'Senior Developer',
             },
             description: {
               type: 'string',
               description: 'Position description',
-              example: 'Has deep knowledge of system scalability, performance, security, and maintainability.'
+              example:
+                'Has deep knowledge of system scalability, performance, security, and maintainability.',
             },
             instruction: {
               type: 'string',
               description: 'Position instruction',
-              example: 'Focus on technical leadership, problem-solving in complex environments.'
+              example: 'Focus on technical leadership, problem-solving in complex environments.',
             },
             level: {
               type: 'integer',
               description: 'Position level',
-              example: 5
+              example: 5,
             },
             is_active: {
               type: 'boolean',
               description: 'Position active status',
-              example: true
+              example: true,
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Creation timestamp'
+              description: 'Creation timestamp',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Last update timestamp'
-            }
-          }
-        }
-      }
-    }
+              description: 'Last update timestamp',
+            },
+          },
+        },
+      },
+    },
   },
   // Path to the API docs
   apis: ['./src/routes/**/*.js'], // Path to the API docs

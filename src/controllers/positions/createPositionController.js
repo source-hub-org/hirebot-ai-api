@@ -42,21 +42,22 @@ const createPositionController = async (req, res) => {
   try {
     // Validate required fields
     const { slug, title, description, instruction, level } = req.body;
-    
+
     if (!slug || !title || !description || !instruction || !level) {
       return res.status(400).json({
         status: 'error',
-        message: 'Missing required fields. Please provide slug, title, description, instruction, and level.',
+        message:
+          'Missing required fields. Please provide slug, title, description, instruction, and level.',
       });
     }
-    
+
     // Create position
     const position = await createPositionService(req.body);
-    
+
     return res.status(201).json(formatSuccessResponse(position));
   } catch (error) {
     logger.error('Error creating position:', error);
-    
+
     // Handle duplicate slug error
     if (error.message.includes('already exists')) {
       return res.status(409).json({
@@ -64,7 +65,7 @@ const createPositionController = async (req, res) => {
         message: error.message,
       });
     }
-    
+
     // Handle validation errors
     if (error.name === 'ValidationError') {
       return res.status(400).json({
@@ -73,7 +74,7 @@ const createPositionController = async (req, res) => {
         errors: Object.values(error.errors).map(err => err.message),
       });
     }
-    
+
     return res.status(500).json(formatErrorResponse(error));
   }
 };

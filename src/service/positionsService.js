@@ -24,17 +24,17 @@ const logger = require('../utils/logger');
 async function createPositionService(positionData) {
   try {
     logger.info('Creating new position in service');
-    
+
     // Check if position with the same slug already exists
     const existingPosition = await getPositionBySlug(positionData.slug);
     if (existingPosition) {
       throw new Error(`Position with slug '${positionData.slug}' already exists`);
     }
-    
+
     // Validate using Mongoose model
     const position = new Position(positionData);
     await position.validate();
-    
+
     // Create position using repository
     return await createPosition(positionData);
   } catch (error) {
@@ -53,13 +53,13 @@ async function createPositionService(positionData) {
 async function getAllPositionsService(queryParams = {}) {
   try {
     logger.info('Getting all positions in service with params:', queryParams);
-    
+
     // Build filter object from query parameters
     const filter = buildFilterFromQuery(queryParams);
-    
+
     // Build options object (sorting, pagination)
     const options = buildOptionsFromQuery(queryParams);
-    
+
     return await getAllPositions(filter, options);
   } catch (error) {
     logger.error('Error in get all positions service:', error);
@@ -95,15 +95,15 @@ async function getPositionByIdService(id) {
 async function updatePositionService(id, updateData) {
   try {
     logger.info(`Updating position in service with ID: ${id}`);
-    
+
     // Get existing position to validate the update
     const existingPosition = await getPositionById(id);
-    
+
     if (!existingPosition) {
       logger.warn(`Position with ID ${id} not found for update`);
       return null;
     }
-    
+
     // If slug is being updated, check if it already exists
     if (updateData.slug && updateData.slug !== existingPosition.slug) {
       const positionWithSlug = await getPositionBySlug(updateData.slug);
@@ -111,12 +111,12 @@ async function updatePositionService(id, updateData) {
         throw new Error(`Position with slug '${updateData.slug}' already exists`);
       }
     }
-    
+
     // Validate the updated data using Mongoose model
     const updatedPositionData = { ...existingPosition, ...updateData };
     const position = new Position(updatedPositionData);
     await position.validate();
-    
+
     // Update position using repository
     return await updatePosition(id, updateData);
   } catch (error) {
@@ -149,24 +149,24 @@ async function deletePositionService(id) {
  */
 function buildFilterFromQuery(queryParams) {
   const filter = {};
-  
+
   // Add filters based on query parameters
   if (queryParams.title) {
     filter.title = { $regex: queryParams.title, $options: 'i' };
   }
-  
+
   if (queryParams.slug) {
     filter.slug = { $regex: queryParams.slug, $options: 'i' };
   }
-  
+
   if (queryParams.level) {
     filter.level = parseInt(queryParams.level);
   }
-  
+
   if (queryParams.is_active !== undefined) {
     filter.is_active = queryParams.is_active === 'true';
   }
-  
+
   return filter;
 }
 
@@ -177,7 +177,7 @@ function buildFilterFromQuery(queryParams) {
  */
 function buildOptionsFromQuery(queryParams) {
   const options = {};
-  
+
   // Add sorting
   if (queryParams.sortBy) {
     const sortOrder = queryParams.sortOrder === 'desc' ? -1 : 1;
@@ -186,13 +186,13 @@ function buildOptionsFromQuery(queryParams) {
     // Default sort by level ascending
     options.sort = { level: 1 };
   }
-  
+
   // Add pagination
   const page = parseInt(queryParams.page) || 1;
   const limit = parseInt(queryParams.limit) || 10;
   options.skip = (page - 1) * limit;
   options.limit = limit;
-  
+
   return options;
 }
 

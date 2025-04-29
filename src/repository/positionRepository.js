@@ -11,6 +11,8 @@ const {
   findOne,
   updateOne,
   deleteOne,
+  deleteMany,
+  insertMany,
 } = require('./baseRepository');
 const logger = require('../utils/logger');
 
@@ -32,11 +34,11 @@ async function createPosition(positionData) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    
+
     if (!result.acknowledged) {
       throw new Error('Failed to create position');
     }
-    
+
     return {
       _id: result.insertedId,
       ...positionData,
@@ -75,12 +77,12 @@ async function getAllPositions(filter = {}, options = {}) {
 async function getPositionById(id) {
   try {
     logger.info(`Retrieving position with ID: ${id}`);
-    
+
     if (!ObjectId.isValid(id)) {
       logger.warn(`Invalid position ID format: ${id}`);
       return null;
     }
-    
+
     return await findOne(POSITIONS_COLLECTION, { _id: new ObjectId(id) });
   } catch (error) {
     logger.error(`Error retrieving position with ID ${id}:`, error);
@@ -116,32 +118,32 @@ async function getPositionBySlug(slug) {
 async function updatePosition(id, updateData) {
   try {
     logger.info(`Updating position with ID: ${id}`);
-    
+
     if (!ObjectId.isValid(id)) {
       logger.warn(`Invalid position ID format: ${id}`);
       return null;
     }
-    
+
     const result = await updateOne(
       POSITIONS_COLLECTION,
       { _id: new ObjectId(id) },
-      { 
+      {
         $set: {
           ...updateData,
           updatedAt: new Date(),
-        } 
+        },
       }
     );
-    
+
     if (!result.acknowledged) {
       throw new Error(`Failed to update position with ID ${id}`);
     }
-    
+
     if (result.matchedCount === 0) {
       logger.warn(`Position with ID ${id} not found`);
       return null;
     }
-    
+
     return await getPositionById(id);
   } catch (error) {
     logger.error(`Error updating position with ID ${id}:`, error);
@@ -159,23 +161,50 @@ async function updatePosition(id, updateData) {
 async function deletePosition(id) {
   try {
     logger.info(`Deleting position with ID: ${id}`);
-    
+
     if (!ObjectId.isValid(id)) {
       logger.warn(`Invalid position ID format: ${id}`);
       return false;
     }
-    
+
     const result = await deleteOne(POSITIONS_COLLECTION, { _id: new ObjectId(id) });
-    
+
     if (!result.acknowledged) {
       throw new Error(`Failed to delete position with ID ${id}`);
     }
-    
+
     return result.deletedCount > 0;
   } catch (error) {
     logger.error(`Error deleting position with ID ${id}:`, error);
     throw error;
   }
+}
+
+/**
+ * Clear all positions from the database
+ * @async
+ * @returns {Promise<import('mongodb').DeleteResult>} Result of the delete operation
+ */
+async function clearAllPositions() {
+  logger.info('Clearing all positions from the database');
+  return await deleteMany(POSITIONS_COLLECTION, {});
+}
+
+/**
+ * Insert multiple positions into the database
+ * @async
+ * @param {Array<Object>} positions - Array of position objects to insert
+ * @returns {Promise<import('mongodb').InsertManyResult|Object>} Result of the insert operation
+ */
+async function insertPositions(positions) {
+  logger.info(`Inserting ${positions.length} positions into the database`);
+
+  // Handle empty array case
+  if (!positions || positions.length === 0) {
+    return { acknowledged: true, insertedCount: 0 };
+  }
+
+  return await insertMany(POSITIONS_COLLECTION, positions);
 }
 
 module.exports = {
@@ -185,4 +214,6 @@ module.exports = {
   getPositionBySlug,
   updatePosition,
   deletePosition,
+  clearAllPositions,
+  insertPositions,
 };

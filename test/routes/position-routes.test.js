@@ -22,7 +22,7 @@ describe('Position Routes', () => {
 
   beforeEach(async () => {
     await Position.deleteMany({});
-    
+
     // Create a test position
     testPosition = await Position.create({
       slug: 'test-position',
@@ -37,7 +37,7 @@ describe('Position Routes', () => {
   describe('GET /api/positions', () => {
     it('should return all positions', async () => {
       const res = await request(app).get('/api/positions');
-      
+
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('success');
       expect(Array.isArray(res.body.data)).toBe(true);
@@ -73,7 +73,7 @@ describe('Position Routes', () => {
   describe('GET /api/positions/:id', () => {
     it('should return a position by ID', async () => {
       const res = await request(app).get(`/api/positions/${testPosition._id}`);
-      
+
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('success');
       expect(res.body.data.slug).toBe('test-position');
@@ -82,7 +82,7 @@ describe('Position Routes', () => {
 
     it('should return 404 if position not found', async () => {
       const res = await request(app).get('/api/positions/60d21b4667d0d8992e610c85');
-      
+
       expect(res.status).toBe(404);
       expect(res.body.status).toBe('error');
       expect(res.body.message).toContain('not found');
@@ -100,10 +100,8 @@ describe('Position Routes', () => {
         is_active: true,
       };
 
-      const res = await request(app)
-        .post('/api/positions')
-        .send(newPosition);
-      
+      const res = await request(app).post('/api/positions').send(newPosition);
+
       expect(res.status).toBe(201);
       expect(res.body.status).toBe('success');
       expect(res.body.data.slug).toBe('new-position');
@@ -121,10 +119,8 @@ describe('Position Routes', () => {
         // Missing required fields
       };
 
-      const res = await request(app)
-        .post('/api/positions')
-        .send(invalidPosition);
-      
+      const res = await request(app).post('/api/positions').send(invalidPosition);
+
       expect(res.status).toBe(400);
       expect(res.body.status).toBe('error');
     });
@@ -139,10 +135,8 @@ describe('Position Routes', () => {
         is_active: true,
       };
 
-      const res = await request(app)
-        .post('/api/positions')
-        .send(duplicatePosition);
-      
+      const res = await request(app).post('/api/positions').send(duplicatePosition);
+
       expect(res.status).toBe(409);
       expect(res.body.status).toBe('error');
       expect(res.body.message).toContain('already exists');
@@ -156,10 +150,8 @@ describe('Position Routes', () => {
         level: 4,
       };
 
-      const res = await request(app)
-        .put(`/api/positions/${testPosition._id}`)
-        .send(updateData);
-      
+      const res = await request(app).put(`/api/positions/${testPosition._id}`).send(updateData);
+
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('success');
       expect(res.body.data.title).toBe('Updated Position');
@@ -176,7 +168,7 @@ describe('Position Routes', () => {
       const res = await request(app)
         .put('/api/positions/60d21b4667d0d8992e610c85')
         .send({ title: 'Not Found Position' });
-      
+
       expect(res.status).toBe(404);
       expect(res.body.status).toBe('error');
       expect(res.body.message).toContain('not found');
@@ -197,7 +189,7 @@ describe('Position Routes', () => {
       const res = await request(app)
         .put(`/api/positions/${testPosition._id}`)
         .send({ slug: 'another-position' });
-      
+
       expect(res.status).toBe(409);
       expect(res.body.status).toBe('error');
       expect(res.body.message).toContain('already exists');
@@ -207,7 +199,7 @@ describe('Position Routes', () => {
   describe('DELETE /api/positions/:id', () => {
     it('should delete a position by ID', async () => {
       const res = await request(app).delete(`/api/positions/${testPosition._id}`);
-      
+
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('success');
       expect(res.body.message).toContain('deleted successfully');
@@ -219,7 +211,7 @@ describe('Position Routes', () => {
 
     it('should return 404 if position not found', async () => {
       const res = await request(app).delete('/api/positions/60d21b4667d0d8992e610c85');
-      
+
       expect(res.status).toBe(404);
       expect(res.body.status).toBe('error');
       expect(res.body.message).toContain('not found');

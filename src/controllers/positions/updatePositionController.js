@@ -41,7 +41,7 @@ const formatErrorResponse = error => {
 const updatePositionController = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // Check if request body is empty
     if (Object.keys(req.body).length === 0) {
       return res.status(400).json({
@@ -49,21 +49,21 @@ const updatePositionController = async (req, res) => {
         message: 'Update data is required.',
       });
     }
-    
+
     // Update position
     const updatedPosition = await updatePositionService(id, req.body);
-    
+
     if (!updatedPosition) {
       return res.status(404).json({
         status: 'error',
         message: `Position with ID ${id} not found.`,
       });
     }
-    
+
     return res.status(200).json(formatSuccessResponse(updatedPosition));
   } catch (error) {
     logger.error(`Error updating position with ID ${req.params.id}:`, error);
-    
+
     // Handle duplicate slug error
     if (error.message.includes('already exists')) {
       return res.status(409).json({
@@ -71,7 +71,7 @@ const updatePositionController = async (req, res) => {
         message: error.message,
       });
     }
-    
+
     // Handle validation errors
     if (error.name === 'ValidationError') {
       return res.status(400).json({
@@ -80,7 +80,7 @@ const updatePositionController = async (req, res) => {
         errors: Object.values(error.errors).map(err => err.message),
       });
     }
-    
+
     return res.status(500).json(formatErrorResponse(error));
   }
 };

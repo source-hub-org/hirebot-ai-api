@@ -40,14 +40,14 @@ const deletePositionController = async (req, res) => {
   try {
     const { id } = req.params;
     const isDeleted = await deletePositionService(id);
-    
+
     if (!isDeleted) {
       return res.status(404).json({
         status: 'error',
         message: `Position with ID ${id} not found.`,
       });
     }
-    
+
     return res.status(200).json(formatSuccessResponse());
   } catch (error) {
     logger.error(`Error deleting position with ID ${req.params.id}:`, error);
