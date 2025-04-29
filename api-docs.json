@@ -7,6 +7,57 @@
     "contact": { "name": "HireBot AI Team" }
   },
   "servers": [{ "url": "http://localhost:3000", "description": "Development server" }],
+  "components": {
+    "schemas": {
+      "Position": {
+        "type": "object",
+        "required": ["slug", "title", "description", "instruction", "level"],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Position ID",
+            "example": "60d21b4667d0d8992e610c85"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Unique identifier for the position",
+            "example": "senior"
+          },
+          "title": {
+            "type": "string",
+            "description": "Position title",
+            "example": "Senior Developer"
+          },
+          "description": {
+            "type": "string",
+            "description": "Position description",
+            "example": "Has deep knowledge of system scalability, performance, security, and maintainability."
+          },
+          "instruction": {
+            "type": "string",
+            "description": "Position instruction",
+            "example": "Focus on technical leadership, problem-solving in complex environments."
+          },
+          "level": { "type": "integer", "description": "Position level", "example": 5 },
+          "is_active": {
+            "type": "boolean",
+            "description": "Position active status",
+            "example": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        }
+      }
+    }
+  },
   "paths": {
     "/api/candidates": {
       "post": {
@@ -84,7 +135,7 @@
         }
       },
       "get": {
-        "summary": "Get all candidates with pagination",
+        "summary": "Get all candidates with pagination, filtering, and sorting",
         "tags": ["Candidates"],
         "parameters": [
           {
@@ -98,6 +149,40 @@
             "name": "page_size",
             "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 },
             "description": "Number of candidates per page"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": { "type": "string" },
+            "description": "Filter candidates by name (case-insensitive partial match)"
+          },
+          {
+            "in": "query",
+            "name": "email",
+            "schema": { "type": "string" },
+            "description": "Filter candidates by email (case-insensitive partial match)"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": { "type": "string" },
+            "description": "Filter candidates by status (exact match)"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "type": "string",
+              "enum": ["full_name", "email", "createdAt", "updatedAt"],
+              "default": "createdAt"
+            },
+            "description": "Field to sort by"
+          },
+          {
+            "in": "query",
+            "name": "sort_order",
+            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" },
+            "description": "Sort order (ascending or descending)"
           }
         ],
         "responses": {
@@ -317,6 +402,253 @@
         }
       }
     },
+    "/api/positions": {
+      "post": {
+        "summary": "Create a new position",
+        "tags": ["Positions"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["slug", "title", "description", "instruction", "level"],
+                "properties": {
+                  "slug": { "type": "string", "description": "Unique identifier for the position" },
+                  "title": { "type": "string", "description": "Position title" },
+                  "description": { "type": "string", "description": "Position description" },
+                  "instruction": { "type": "string", "description": "Position instruction" },
+                  "level": { "type": "integer", "description": "Position level" },
+                  "is_active": {
+                    "type": "boolean",
+                    "description": "Position active status",
+                    "default": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Position created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Position created successfully." },
+                    "data": { "$ref": "#/components/schemas/Position" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid input data" },
+          "409": { "description": "Position with the same slug already exists" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "get": {
+        "summary": "Retrieve a list of all positions",
+        "tags": ["Positions"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": { "type": "string" },
+            "description": "Filter positions by title (case-insensitive)"
+          },
+          {
+            "in": "query",
+            "name": "slug",
+            "schema": { "type": "string" },
+            "description": "Filter positions by slug (case-insensitive)"
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "schema": { "type": "integer" },
+            "description": "Filter positions by level"
+          },
+          {
+            "in": "query",
+            "name": "is_active",
+            "schema": { "type": "boolean" },
+            "description": "Filter positions by active status"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "default": 10 },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": { "type": "string", "default": "level" },
+            "description": "Field to sort by"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "asc" },
+            "description": "Sort order (ascending or descending)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of positions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Position" }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "page": { "type": "integer" },
+                        "limit": { "type": "integer" },
+                        "total": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/positions/{id}": {
+      "delete": {
+        "summary": "Delete a position by ID",
+        "tags": ["Positions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Position ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Position deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Position deleted successfully." }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Position not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "get": {
+        "summary": "Retrieve a specific position by ID",
+        "tags": ["Positions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Position ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A position object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/Position" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Position not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "put": {
+        "summary": "Update a position by ID",
+        "tags": ["Positions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Position ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "slug": { "type": "string", "description": "Unique identifier for the position" },
+                  "title": { "type": "string", "description": "Position title" },
+                  "description": { "type": "string", "description": "Position description" },
+                  "instruction": { "type": "string", "description": "Position instruction" },
+                  "level": { "type": "integer", "description": "Position level" },
+                  "is_active": { "type": "boolean", "description": "Position active status" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Position updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Position updated successfully." },
+                    "data": { "$ref": "#/components/schemas/Position" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid input data" },
+          "404": { "description": "Position not found" },
+          "409": { "description": "Position with the same slug already exists" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
     "/api/questions/generate": {
       "post": {
         "summary": "Generate multiple-choice questions using Gemini AI",
@@ -453,6 +785,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["position", "language"],
                 "properties": {
                   "topics": {
                     "type": "array",
@@ -463,6 +796,17 @@
                     "type": "number",
                     "description": "Maximum number of questions to generate per topic",
                     "default": 10
+                  },
+                  "position": {
+                    "type": "string",
+                    "description": "Experience level for the questions",
+                    "enum": ["intern", "fresher", "junior", "middle", "senior", "expert"],
+                    "required": true
+                  },
+                  "language": {
+                    "type": "string",
+                    "description": "Programming language for the questions",
+                    "required": true
                   }
                 }
               }
@@ -920,10 +1264,10 @@
       }
     }
   },
-  "components": {},
   "tags": [
     { "name": "Candidates", "description": "Candidate management endpoints" },
     { "name": "Health", "description": "API health check endpoints" },
+    { "name": "Positions", "description": "API endpoints for managing positions" },
     { "name": "Questions", "description": "API endpoints for generating and managing questions" },
     { "name": "Submissions", "description": "Submission management endpoints" },
     { "name": "Topics", "description": "API endpoints for managing topics" }
