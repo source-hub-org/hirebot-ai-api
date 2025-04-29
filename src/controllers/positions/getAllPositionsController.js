@@ -41,14 +41,17 @@ const formatErrorResponse = error => {
  */
 const getAllPositionsController = async (req, res) => {
   try {
-    const positions = await getAllPositionsService(req.query);
+    const { positions, totalCount } = await getAllPositionsService(req.query);
 
     // Calculate metadata for pagination if needed
     const metadata = {};
     if (req.query.page || req.query.limit) {
-      metadata.page = parseInt(req.query.page) || 1;
-      metadata.limit = parseInt(req.query.limit) || 10;
-      metadata.total = positions.length; // This would need to be updated for accurate count
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      metadata.page = page;
+      metadata.limit = limit;
+      metadata.total = totalCount;
+      metadata.total_pages = Math.ceil(totalCount / limit);
     }
 
     return res.status(200).json(formatSuccessResponse(positions, metadata));

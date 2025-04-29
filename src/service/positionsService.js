@@ -47,7 +47,7 @@ async function createPositionService(positionData) {
  * Get all positions with optional filtering
  * @async
  * @param {Object} [queryParams={}] - Query parameters for filtering
- * @returns {Promise<Array<Object>>} Array of position objects
+ * @returns {Promise<Object>} Object containing positions array and total count
  * @throws {Error} If retrieval fails
  */
 async function getAllPositionsService(queryParams = {}) {
@@ -60,7 +60,18 @@ async function getAllPositionsService(queryParams = {}) {
     // Build options object (sorting, pagination)
     const options = buildOptionsFromQuery(queryParams);
 
-    return await getAllPositions(filter, options);
+    // Get positions with pagination
+    const positions = await getAllPositions(filter, options);
+
+    // Get total count for accurate pagination
+    const { getCollection } = require('../repository/baseRepository');
+    const collection = getCollection('positions');
+    const totalCount = await collection.countDocuments(filter);
+
+    return {
+      positions,
+      totalCount,
+    };
   } catch (error) {
     logger.error('Error in get all positions service:', error);
     throw error;
