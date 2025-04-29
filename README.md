@@ -9,8 +9,8 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 - Generate technical interview questions using Google's Gemini AI
 - Store and retrieve questions from MongoDB
 - Asynchronous question generation with Redis-based job queue
-- Manage interview topics through commands and API
-- RESTful API for quiz, topic, candidate, and submission management
+- Manage interview topics and positions through commands and API
+- RESTful API for quiz, topic, position, candidate, and submission management
 - Comprehensive validation and error handling
 - Swagger API documentation
 - Extensive test coverage
@@ -108,7 +108,8 @@ hirebot-ai-api/
 ├── src/
 │   ├── commands/       # CLI commands
 │   │   ├── index.js
-│   │   └── topicCommands.js       # Topic management commands
+│   │   ├── topicCommands.js       # Topic management commands
+│   │   └── positionCommands.js    # Position management commands
 │   ├── config/         # Configuration files
 │   │   ├── question-format.json   # Question format schema
 │   │   └── swagger.js             # Swagger configuration
@@ -126,6 +127,7 @@ hirebot-ai-api/
 │   │   ├── baseRepository.js      # Base repository with common operations
 │   │   ├── candidateRepository.js # Candidate data operations
 │   │   ├── jobRepository.js       # Job queue operations
+│   │   ├── positionRepository.js  # Position data operations
 │   │   ├── submissionRepository.js # Submission data operations
 │   │   └── topicRepository.js     # Topic data operations
 │   ├── routes/         # API routes
@@ -160,6 +162,7 @@ hirebot-ai-api/
 │       ├── logger.js                   # Logging utilities
 │       ├── paginationUtils.js          # Pagination utilities
 │       ├── positionUtils.js            # Position-related utilities
+│       ├── positionValidator.js        # Position validation utilities
 │       ├── questionSearchQueryBuilder.js # Search query builder
 │       ├── questionSearchValidator.js    # Search validation
 │       ├── redisQueueHelper.js         # Redis queue utilities
@@ -184,6 +187,7 @@ hirebot-ai-api/
 │   └── redis/          # Redis Docker setup
 ├── data/               # Sample data files
 │   ├── sample-candidate.json # Sample candidate data
+│   ├── sample-positions.json # Sample positions data
 │   └── sample-topics.json    # Sample topics data
 ├── .env.example        # Example environment variables
 ├── .github/workflows/  # CI/CD configuration
@@ -214,7 +218,7 @@ The project follows a layered architecture with MVC pattern:
 
 6. **Utility Layer** (`utils/`): Provides common utilities like logging, file parsing, validation, and pagination.
 
-7. **Commands Layer** (`commands/`): Handles CLI commands for administrative tasks like initializing topics.
+7. **Commands Layer** (`commands/`): Handles CLI commands for administrative tasks like initializing topics and positions.
 
 ### Asynchronous Processing Architecture
 
@@ -285,6 +289,78 @@ The JSON file should have the following structure:
   ]
 }
 ```
+
+### Position Management
+
+Initialize positions from a JSON file:
+
+```bash
+npm run command app:init-positions ./path/to/positions.json
+```
+
+The command supports two JSON file formats:
+
+#### Format 1: Direct Array of Position Objects
+
+```json
+[
+  {
+    "slug": "intern",
+    "title": "Intern",
+    "description": "Able to understand basic programming syntax, simple data types, variables, and basic control structures such as if-else and loops. Limited or no real-world coding experience.",
+    "instruction": "Focus on verifying basic logical thinking, programming mindset, and willingness to learn. Suitable for candidates undergoing internship programs.",
+    "level": 1,
+    "is_active": true
+  },
+  {
+    "slug": "fresher",
+    "title": "Fresher",
+    "description": "Has basic knowledge of software development concepts, simple algorithms, and can complete basic coding exercises. Familiar with at least one programming language.",
+    "instruction": "Assess candidate's ability to apply theoretical knowledge to simple tasks and their potential to grow with guidance.",
+    "level": 2,
+    "is_active": true
+  }
+]
+```
+
+#### Format 2: Object with Positions Array
+
+```json
+{
+  "positions": [
+    {
+      "slug": "frontend-developer",
+      "title": "Frontend Developer",
+      "description": "Responsible for implementing visual elements that users see and interact with in a web application.",
+      "instruction": "Create responsive and user-friendly interfaces using modern frontend frameworks.",
+      "level": 4,
+      "is_active": true
+    },
+    {
+      "slug": "backend-developer",
+      "title": "Backend Developer",
+      "description": "Responsible for server-side web application logic and integration of the work front-end developers do.",
+      "instruction": "Design and implement efficient APIs and database structures.",
+      "level": 5,
+      "is_active": true
+    }
+  ]
+}
+```
+
+#### Required Fields for Position Objects
+
+Each position object must include the following fields:
+
+- `slug`: A unique identifier for the position (string)
+- `title`: The display name of the position (string)
+- `description`: A detailed description of the position (string)
+- `instruction`: Guidelines for evaluating candidates at this position level (string)
+- `level`: The numerical level/seniority of the position (number)
+
+Optional fields:
+
+- `is_active`: Whether the position is active (boolean, defaults to true)
 
 ## API Documentation
 

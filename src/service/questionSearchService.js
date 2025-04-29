@@ -80,10 +80,43 @@ async function searchQuestions(searchParams) {
 
     // Handle random sorting differently using aggregation pipeline
     if (sort_by === 'random') {
-      // Use MongoDB's aggregation with $sample for random sorting
-      const pipeline = [{ $match: filter }, { $sample: { size: limit } }, { $skip: skip }];
+      // For random sorting with pagination, we need a different approach
+      // First, get the total count of matching documents
+      const totalMatchingCount = await collection.countDocuments(filter);
 
-      questions = await collection.aggregate(pipeline).toArray();
+      // If we're requesting a page beyond what's available, return empty results
+      if (skip >= totalMatchingCount) {
+        questions = [];
+      } else {
+        // For random sorting, we'll get all matching documents and then randomly select a subset
+        // This is more efficient for smaller collections
+        if (totalMatchingCount <= 1000) {
+          // Only use this approach for reasonably sized collections
+          // Get all matching documents
+          const allMatchingDocs = await collection.find(filter).toArray();
+
+          // Shuffle the array (Fisher-Yates algorithm)
+          for (let i = allMatchingDocs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allMatchingDocs[i], allMatchingDocs[j]] = [allMatchingDocs[j], allMatchingDocs[i]];
+          }
+
+          // Apply pagination to the shuffled array
+          questions = allMatchingDocs.slice(skip, skip + limit);
+        } else {
+          // For larger collections, use the $sample aggregation but with a larger sample size
+          // and then apply pagination in memory
+          // This is less ideal but more practical for very large collections
+          const sampleSize = Math.min(limit * 10, totalMatchingCount); // Get a larger sample than needed
+          const pipeline = [{ $match: filter }, { $sample: { size: sampleSize } }];
+
+          const randomSample = await collection.aggregate(pipeline).toArray();
+
+          // Apply pagination to the random sample
+          // Note: This is not perfect pagination for random sorting but a reasonable compromise
+          questions = randomSample.slice(0, limit);
+        }
+      }
     } else {
       // Execute the standard query with pagination
       questions = await findMany('questions', filter, {

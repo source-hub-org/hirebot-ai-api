@@ -29,8 +29,39 @@ const getAllCandidates = async (req, res) => {
     // Parse and normalize pagination parameters
     const { page, pageSize } = parsePaginationParams(req.query);
 
+    // Build filter object from query parameters
+    const filter = {};
+
+    // Add name filter if provided (case-insensitive partial match)
+    if (req.query.name) {
+      filter.full_name = { $regex: new RegExp(req.query.name, 'i') };
+    }
+
+    // Add email filter if provided (case-insensitive partial match)
+    if (req.query.email) {
+      filter.email = { $regex: new RegExp(req.query.email, 'i') };
+    }
+
+    // Add status filter if provided (exact match)
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+
+    // Build sort options
+    let sort = { createdAt: -1 }; // Default sort by creation date, newest first
+
+    if (req.query.sort_by) {
+      const sortField = req.query.sort_by;
+      const sortDirection = req.query.sort_order === 'asc' ? 1 : -1;
+      sort = { [sortField]: sortDirection };
+    }
+
     // Generate MongoDB pagination options
-    const paginationOptions = generatePaginationOptions(page, pageSize);
+    const paginationOptions = {
+      ...generatePaginationOptions(page, pageSize),
+      filter,
+      sort,
+    };
 
     // Get paginated candidates and total count
     const { candidates, total } = await getCandidateList(paginationOptions);

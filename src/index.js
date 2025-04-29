@@ -10,6 +10,7 @@ const {
   submissionRoutes,
   questionRoutes,
   topicRoutes,
+  positionRoutes,
 } = require('./routes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
@@ -36,6 +37,7 @@ app.use('/api/questions', questionRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/candidates', candidateRoutes);
 app.use('/api/submissions', submissionRoutes);
+app.use('/api/positions', positionRoutes);
 
 // Initialize application
 async function initializeApp() {

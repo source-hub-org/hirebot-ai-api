@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "intern",
+    "title": "Intern",
+    "description": "Able to understand basic programming syntax, simple data types, variables, and basic control structures such as if-else and loops. Limited or no real-world coding experience.",
+    "instruction": "Focus on verifying basic logical thinking, programming mindset, and willingness to learn. Suitable for candidates undergoing internship programs.",
+    "level": 1,
+    "is_active": true
+  },
+  {
+    "slug": "fresher",
+    "title": "Fresher",
+    "description": "Has basic knowledge of software development concepts, simple algorithms, and can complete basic coding exercises. Familiar with at least one programming language.",
+    "instruction": "Assess candidate's ability to apply theoretical knowledge to simple tasks and their potential to grow with guidance.",
+    "level": 2,
+    "is_active": true
+  },
+  {
+    "slug": "junior",
+    "title": "Junior Developer",
+    "description": "Capable of building small features or modules with supervision. Understands debugging, code versioning, basic testing, and can follow coding standards. Limited exposure to production environments.",
+    "instruction": "Test for ability to work independently on well-defined tasks, and basic understanding of software development processes.",
+    "level": 3,
+    "is_active": true
+  },
+  {
+    "slug": "middle",
+    "title": "Middle Developer",
+    "description": "Can independently design, develop, and maintain mid-sized features or services. Understands system architecture, database design basics, optimization, and common design patterns.",
+    "instruction": "Evaluate candidate’s ability to solve moderate complexity problems, collaborate in teams, and apply best practices consistently.",
+    "level": 4,
+    "is_active": true
+  },
+  {
+    "slug": "senior",
+    "title": "Senior Developer",
+    "description": "Has deep knowledge of system scalability, performance, security, and maintainability. Can lead technical discussions, mentor juniors, and deliver high-quality production-level code.",
+    "instruction": "Focus on technical leadership, problem-solving in complex environments, and ability to guide and review team members' work.",
+    "level": 5,
+    "is_active": true
+  },
+  {
+    "slug": "expert",
+    "title": "Expert Developer",
+    "description": "Mastery in software architecture, system design, and scaling high-traffic systems. Can design complex solutions across multiple domains and technologies, and influence technical direction at an organizational level.",
+    "instruction": "Challenge candidate's architectural thinking, innovation capability, and ability to solve extremely complex problems with strategic solutions.",
+    "level": 6,
+    "is_active": true
+  }
+]

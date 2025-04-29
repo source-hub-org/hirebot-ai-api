@@ -48,23 +48,25 @@ async function insertCandidateToDB(candidateData) {
  * @param {Object} [options={}] - Query options including pagination
  * @param {number} [options.skip=0] - Number of documents to skip
  * @param {number} [options.limit=0] - Maximum number of documents to return
+ * @param {Object} [options.filter={}] - Filter criteria for candidates
+ * @param {Object} [options.sort={}] - Sort criteria for candidates
  * @returns {Promise<{candidates: Array<Object>, total: number}>} Array of candidates and total count
  * @throws {Error} If retrieval fails
  */
 async function getCandidateList(options = {}) {
   try {
-    const { skip = 0, limit = 0 } = options;
+    const { skip = 0, limit = 0, filter = {}, sort = { createdAt: -1 } } = options;
 
     // Get the collection
     const collection = baseRepository.getCollection(candidateModel.collectionName);
 
     // Execute queries in parallel for better performance
     const [candidates, total] = await Promise.all([
-      // Get paginated candidates
-      collection.find({}).skip(skip).limit(limit).toArray(),
+      // Get paginated candidates with sorting
+      collection.find(filter).sort(sort).skip(skip).limit(limit).toArray(),
 
-      // Get total count
-      collection.countDocuments({}),
+      // Get total count of candidates matching the filter
+      collection.countDocuments(filter),
     ]);
 
     return {
