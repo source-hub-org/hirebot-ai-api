@@ -149,7 +149,9 @@ async function updateLanguageService(id, updateData) {
     }
 
     // Validate the updated data using Mongoose model
-    const updatedLanguageData = { ...existingLanguage, ...updateData };
+    // Create a copy without _id to avoid ObjectId validation issues in tests
+    const { _id, ...existingLanguageWithoutId } = existingLanguage;
+    const updatedLanguageData = { ...existingLanguageWithoutId, ...updateData };
     const language = new Language(updatedLanguageData);
     await language.validate();
 
