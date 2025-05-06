@@ -109,7 +109,7 @@ async function getJobsByTypeAndStatus(type, status) {
       query.status = status;
     }
 
-    const jobs = await Job.find(query).sort({ created_at: -1 });
+    const jobs = await Job.find(query).sort({ createdAt: -1 });
     return jobs;
   } catch (error) {
     logger.error(`Failed to get jobs by type: ${type} and status: ${status}`, error);

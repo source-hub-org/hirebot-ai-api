@@ -68,7 +68,7 @@ jest.mock('../../src/routes/questions', () => {
             _id: job._id,
             type: job.type,
             status: job.status,
-            created_at: job.created_at,
+            createdAt: job.createdAt,
           })),
         },
       });
@@ -93,13 +93,13 @@ describe('Question Request Routes Tests (Legacy)', () => {
       _id: '507f1f77bcf86cd799439011',
       type: 'question-request',
       status: 'new',
-      created_at: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     },
     {
       _id: '507f1f77bcf86cd799439022',
       type: 'question-request',
       status: 'new',
-      created_at: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     },
   ];
 

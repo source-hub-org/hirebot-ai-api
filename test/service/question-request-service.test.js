@@ -33,8 +33,8 @@ describe('Question Request Service Tests', () => {
     type: 'question-request',
     payload: { topic_id: 'topic1', limit: 10 },
     status: 'new',
-    created_at: new Date(),
-    updated_at: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   beforeEach(() => {

@@ -66,8 +66,8 @@ describe('POST /api/candidates', () => {
     candidateId = response.body.data._id;
 
     // Check that default values are applied
-    expect(response.body.data).toHaveProperty('created_at');
-    expect(response.body.data).toHaveProperty('updated_at');
+    expect(response.body.data).toHaveProperty('createdAt');
+    expect(response.body.data).toHaveProperty('updatedAt');
     expect(response.body.data.status).toBe('');
     expect(Array.isArray(response.body.data.programming_languages)).toBe(true);
   });

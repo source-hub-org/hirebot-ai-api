@@ -261,21 +261,25 @@ The application implements an asynchronous processing architecture for question 
 The application provides a flexible search API for retrieving questions based on various criteria:
 
 1. **Flexible Filtering**:
+
    - All search parameters (topic, language, position) are optional
    - Support for multiple values in each parameter (comma-separated)
    - Case-insensitive search for all text fields
 
 2. **Search Parameters**:
+
    - `topic`: Filter by one or more topics (e.g., `JavaScript,React,Node.js`)
    - `language`: Filter by one or more programming languages (e.g., `JavaScript,TypeScript`)
    - `position`: Filter by one or more experience levels (e.g., `junior,middle,senior`)
 
 3. **Sorting and Pagination**:
+
    - `sort_by`: Field to sort by (`question`, `category`, `createdAt`, or `random`)
    - `sort_direction`: Sort direction (`asc` or `desc`)
    - `page` and `page_size`: Standard pagination parameters
 
 4. **Response Modes**:
+
    - `mode`: Controls the level of detail in the response
      - `full`: All question fields (default)
      - `compact`: Excludes correct answers and explanations
@@ -285,6 +289,7 @@ The application provides a flexible search API for retrieving questions based on
    - `ignore_question_ids`: Exclude specific questions from results
 
 Example request:
+
 ```
 GET /api/questions/search?topic=JavaScript,React&language=JavaScript&position=junior,middle&sort_by=random&page=1&page_size=10&mode=compact
 ```

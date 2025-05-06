@@ -63,8 +63,8 @@ describe('Job Repository Tests', () => {
       expect(job.type).toBe(sampleJobData.type);
       expect(job.payload).toEqual(sampleJobData.payload);
       expect(job.status).toBe(sampleJobData.status);
-      expect(job.created_at).toBeDefined();
-      expect(job.updated_at).toBeDefined();
+      expect(job.createdAt).toBeDefined();
+      expect(job.updatedAt).toBeDefined();
     });
 
     test('should throw an error if job data is invalid', async () => {

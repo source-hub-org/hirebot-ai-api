@@ -66,8 +66,8 @@ describe('Candidate Repository', () => {
       expect(result.skills).toEqual(validCandidate.skills);
 
       // Verify default values were applied
-      expect(result).toHaveProperty('created_at');
-      expect(result).toHaveProperty('updated_at');
+      expect(result).toHaveProperty('createdAt');
+      expect(result).toHaveProperty('updatedAt');
     });
 
     test('should throw an error when insertion fails', async () => {
