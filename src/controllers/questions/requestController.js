@@ -56,7 +56,7 @@ const formatJobsResponse = jobs => {
       _id: job._id,
       type: job.type,
       status: job.status,
-      created_at: job.created_at,
+      createdAt: job.createdAt,
     })),
   };
 };

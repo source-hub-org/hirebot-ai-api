@@ -105,8 +105,8 @@ describe('Submission Enricher', () => {
           options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
           topic_id: '507f1f77bcf86cd799439013',
           // Fields that should be excluded
-          created_at: '2023-01-01',
-          updated_at: '2023-01-02',
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-02',
         },
         {
           _id: new ObjectId(questionIds[1]),

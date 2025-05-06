@@ -84,11 +84,11 @@ function formatCandidateDefaults(candidateData) {
   }
 
   // Set timestamps if not provided
-  if (!formattedCandidate.created_at) {
-    formattedCandidate.created_at = new Date().toISOString();
+  if (!formattedCandidate.createdAt) {
+    formattedCandidate.createdAt = new Date().toISOString();
   }
 
-  formattedCandidate.updated_at = new Date().toISOString();
+  formattedCandidate.updatedAt = new Date().toISOString();
 
   return formattedCandidate;
 }
@@ -101,11 +101,11 @@ function formatCandidateDefaults(candidateData) {
 function sanitizeUpdateData(updateData) {
   const sanitized = { ...updateData };
 
-  // Don't allow updating created_at
-  delete sanitized.created_at;
+  // Don't allow updating createdAt
+  delete sanitized.createdAt;
 
-  // Always update the updated_at timestamp
-  sanitized.updated_at = new Date().toISOString();
+  // Always update the updatedAt timestamp
+  sanitized.updatedAt = new Date().toISOString();
 
   return sanitized;
 }

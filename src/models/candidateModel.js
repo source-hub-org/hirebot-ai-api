@@ -29,8 +29,8 @@
  * @property {string} [portfolio_url=''] - URL to the candidate's portfolio
  * @property {string} [linkedin_url=''] - URL to the candidate's LinkedIn profile
  * @property {string} [status=''] - Current status of the candidate
- * @property {string} [created_at=''] - Creation timestamp
- * @property {string} [updated_at=''] - Last update timestamp
+ * @property {string} [createdAt=''] - Creation timestamp
+ * @property {string} [updatedAt=''] - Last update timestamp
  */
 
 /**
@@ -57,8 +57,8 @@ const defaultValues = {
   portfolio_url: '',
   linkedin_url: '',
   status: '',
-  created_at: '',
-  updated_at: '',
+  createdAt: '',
+  updatedAt: '',
 };
 
 /**

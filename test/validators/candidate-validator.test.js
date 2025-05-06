@@ -201,8 +201,8 @@ describe('Candidate Validator', () => {
       expect(formatted.years_of_experience).toBe(0);
 
       // Check that timestamps are added
-      expect(formatted).toHaveProperty('created_at');
-      expect(formatted).toHaveProperty('updated_at');
+      expect(formatted).toHaveProperty('createdAt');
+      expect(formatted).toHaveProperty('updatedAt');
     });
 
     test('should not override provided values with defaults', () => {
@@ -217,7 +217,7 @@ describe('Candidate Validator', () => {
         skills: ['JavaScript', 'React'],
         programming_languages: ['JavaScript'],
         years_of_experience: 5,
-        created_at: '2023-01-01T00:00:00.000Z',
+        createdAt: '2023-01-01T00:00:00.000Z',
       };
 
       const formatted = formatCandidateDefaults(fullCandidate);
@@ -229,10 +229,10 @@ describe('Candidate Validator', () => {
       expect(formatted.skills).toEqual(['JavaScript', 'React']);
       expect(formatted.programming_languages).toEqual(['JavaScript']);
       expect(formatted.years_of_experience).toBe(5);
-      expect(formatted.created_at).toBe('2023-01-01T00:00:00.000Z');
+      expect(formatted.createdAt).toBe('2023-01-01T00:00:00.000Z');
 
-      // Check that updated_at is always set
-      expect(formatted).toHaveProperty('updated_at');
+      // Check that updatedAt is always set
+      expect(formatted).toHaveProperty('updatedAt');
     });
 
     test('should set timestamps if not provided', () => {
@@ -248,8 +248,8 @@ describe('Candidate Validator', () => {
       const after = new Date().getTime();
 
       // Check that timestamps are added and are recent
-      const createdTime = new Date(formatted.created_at).getTime();
-      const updatedTime = new Date(formatted.updated_at).getTime();
+      const createdTime = new Date(formatted.createdAt).getTime();
+      const updatedTime = new Date(formatted.updatedAt).getTime();
 
       expect(createdTime).toBeGreaterThanOrEqual(before);
       expect(createdTime).toBeLessThanOrEqual(after);
@@ -259,19 +259,19 @@ describe('Candidate Validator', () => {
   });
 
   describe('sanitizeUpdateData', () => {
-    test('should remove created_at from update data', () => {
+    test('should remove createdAt from update data', () => {
       const updateData = {
         full_name: 'Updated Name',
         email: 'updated@example.com',
-        created_at: '2023-01-01T00:00:00.000Z',
+        createdAt: '2023-01-01T00:00:00.000Z',
       };
 
       const sanitized = sanitizeUpdateData(updateData);
 
-      expect(sanitized).not.toHaveProperty('created_at');
+      expect(sanitized).not.toHaveProperty('createdAt');
     });
 
-    test('should add updated_at to update data', () => {
+    test('should add updatedAt to update data', () => {
       const updateData = {
         full_name: 'Updated Name',
         email: 'updated@example.com',
@@ -281,23 +281,23 @@ describe('Candidate Validator', () => {
       const sanitized = sanitizeUpdateData(updateData);
       const after = new Date().getTime();
 
-      expect(sanitized).toHaveProperty('updated_at');
+      expect(sanitized).toHaveProperty('updatedAt');
 
-      const updatedTime = new Date(sanitized.updated_at).getTime();
+      const updatedTime = new Date(sanitized.updatedAt).getTime();
       expect(updatedTime).toBeGreaterThanOrEqual(before);
       expect(updatedTime).toBeLessThanOrEqual(after);
     });
 
-    test('should override existing updated_at in update data', () => {
+    test('should override existing updatedAt in update data', () => {
       const updateData = {
         full_name: 'Updated Name',
         email: 'updated@example.com',
-        updated_at: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z',
       };
 
       const sanitized = sanitizeUpdateData(updateData);
 
-      expect(sanitized.updated_at).not.toBe('2023-01-01T00:00:00.000Z');
+      expect(sanitized.updatedAt).not.toBe('2023-01-01T00:00:00.000Z');
     });
 
     test('should not modify other fields', () => {
