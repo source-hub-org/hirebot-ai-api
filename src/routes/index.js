@@ -11,6 +11,8 @@ const questionRoutes = require('./questions');
 const topicRoutes = require('./topics');
 const positionRoutes = require('./positions');
 const languageRoutes = require('./languages');
+const instrumentTagRoutes = require('./instrument-tags');
+const instrumentRoutes = require('./instruments');
 
 /**
  * Creates a router for question routes
@@ -52,6 +54,26 @@ const createLanguageRouter = () => {
   return router;
 };
 
+/**
+ * Creates a router for instrument tag routes
+ * @returns {Object} Express router for instrument tag routes
+ */
+const createInstrumentTagRouter = () => {
+  const router = express.Router();
+  router.use('/', instrumentTagRoutes);
+  return router;
+};
+
+/**
+ * Creates a router for instrument routes
+ * @returns {Object} Express router for instrument routes
+ */
+const createInstrumentRouter = () => {
+  const router = express.Router();
+  router.use('/', instrumentRoutes);
+  return router;
+};
+
 module.exports = {
   healthCheckRoutes,
   candidateRoutes,
@@ -60,4 +82,6 @@ module.exports = {
   topicRoutes: createTopicRouter(),
   positionRoutes: createPositionRouter(),
   languageRoutes: createLanguageRouter(),
+  instrumentTagRoutes: createInstrumentTagRouter(),
+  instrumentRoutes: createInstrumentRouter(),
 };

@@ -12,6 +12,8 @@ const {
   topicRoutes,
   positionRoutes,
   languageRoutes,
+  instrumentTagRoutes,
+  instrumentRoutes,
 } = require('./routes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
@@ -45,6 +47,8 @@ app.use('/api/candidates', candidateRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/positions', positionRoutes);
 app.use('/api/languages', languageRoutes);
+app.use('/api/instrument-tags', instrumentTagRoutes);
+app.use('/api/instruments', instrumentRoutes);
 
 // Initialize application
 async function initializeApp() {
