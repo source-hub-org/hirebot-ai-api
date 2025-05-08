@@ -8,6 +8,7 @@ const generateRoutes = require('./generateRoutes');
 const searchRoutes = require('./searchRoutes');
 const requestRoutes = require('./requestRoutes');
 const analyzeRoutes = require('./analyzeRoutes');
+const questionRoutes = require('./questionRoutes');
 
 const router = express.Router();
 
@@ -23,5 +24,6 @@ router.use(generateRoutes);
 router.use(searchRoutes);
 router.use(requestRoutes);
 router.use(analyzeRoutes);
+router.use(questionRoutes);
 
 module.exports = router;
