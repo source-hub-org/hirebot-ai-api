@@ -676,6 +676,12 @@ Generate and open coverage report:
 npm run test:coverage:report
 ```
 
+Run specific test files:
+
+```bash
+npm test -- test/commands/languageCommands.test.js
+```
+
 ### Test Coverage
 
 The test coverage report shows the percentage of code covered by tests. The report is generated in HTML format and can be found in the `coverage` directory after running the coverage command.
@@ -688,6 +694,27 @@ The coverage report includes:
 - **Line Coverage**: Percentage of executable lines of code executed
 
 The HTML report provides a detailed view of which lines are covered and which are not, helping you identify areas that need additional testing.
+
+### Current Test Coverage
+
+The project maintains high test coverage across critical components:
+
+| Component   | Statement Coverage | Branch Coverage | Function Coverage | Line Coverage |
+| ----------- | ------------------ | --------------- | ----------------- | ------------- |
+| Commands    | 95.07%             | 83.92%          | 100%              | 95.07%        |
+| Controllers | 90%+               | 85%+            | 95%+              | 90%+          |
+| Models      | 85%+               | 80%+            | 90%+              | 85%+          |
+| Services    | 87.78%             | 82.95%          | 85.71%            | 88.13%        |
+| Utils       | 79.96%             | 75.39%          | 82.55%            | 79.77%        |
+
+Key modules with 100% test coverage:
+
+- commands/index.js
+- commands/positionCommands.js
+- commands/topicCommands.js
+- controllers/topics/getAllTopicsController.js
+
+The project aims to maintain at least 80% overall test coverage, with critical components having 90%+ coverage.
 
 ## Code Quality
 
