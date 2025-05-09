@@ -29,12 +29,12 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
-        description: 'Development server',
-      },
-      {
         url: `${SWAGGER_URL}`,
         description: 'Nginx reverse proxy server',
+      },
+      {
+        url: `http://localhost:${PORT}`,
+        description: 'Development server',
       },
     ],
     components: {

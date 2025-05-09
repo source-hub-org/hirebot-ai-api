@@ -34,15 +34,15 @@ services:
       dockerfile: Dockerfile
     container_name: hirebot_nodejs
     restart: always
-    depends_on:
-      - redis
-      - mongodb
     networks:
       - hirebot_network
     env_file:
       - .env
     environment:
       - NODE_ENV=production
+    volumes:
+      - .:/app
+      - /app/node_modules
 
   # Nginx service
   nginx:

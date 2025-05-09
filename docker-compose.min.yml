@@ -12,6 +12,9 @@ services:
       - .env
     environment:
       - NODE_ENV=production
+    volumes:
+      - .:/app
+      - /app/node_modules
 
   # Nginx service
   nginx:
@@ -26,7 +29,6 @@ services:
       - nodejs_app
     networks:
       - hirebot_network
-
 networks:
   hirebot_network:
     driver: bridge

@@ -29,6 +29,18 @@ function isValidAnswerValue(answer) {
 }
 
 /**
+ * Validates if an instrument answer value is within the allowed range
+ * @param {number|null} answer - Instrument answer value to validate
+ * @returns {boolean} True if answer is valid, false otherwise
+ */
+function isValidInstrumentValue(answer) {
+  if (answer === null) return true;
+
+  const { min, max } = submissionModel.instrumentValueRange;
+  return Number.isInteger(answer) && answer >= min && answer <= max;
+}
+
+/**
  * Validates if is_skip is a valid boolean value (0 or 1)
  * @param {number} isSkip - Value to validate
  * @returns {boolean} True if is_skip is valid, false otherwise
@@ -38,13 +50,23 @@ function isValidIsSkip(isSkip) {
 }
 
 /**
+ * Validates if a point value is valid
+ * @param {number} point - Point value to validate
+ * @returns {boolean} True if point is valid, false otherwise
+ */
+function isValidPoint(point) {
+  if (point === undefined) return true;
+  return Number.isFinite(point) && point >= 0;
+}
+
+/**
  * Validates submission input data
  * @param {Object} submissionData - Submission data to validate
  * @returns {Object} Validation result with isValid flag and errors array
  */
 function validateSubmissionInput(submissionData) {
   const errors = [];
-  const { requiredFields, requiredAnswerFields } = submissionModel;
+  const { requiredFields, requiredAnswerFields, requiredInstrumentFields } = submissionModel;
 
   // Check required fields
   for (const field of requiredFields) {
@@ -88,6 +110,54 @@ function validateSubmissionInput(submissionData) {
         if (answer.is_skip !== undefined && !isValidIsSkip(answer.is_skip)) {
           errors.push(`Invalid is_skip value in answers[${index}]. Must be 0 or 1`);
         }
+
+        // Validate point if present
+        if (answer.point !== undefined && !isValidPoint(answer.point)) {
+          errors.push(
+            `Invalid point value in answers[${index}]. Must be a number greater than or equal to 0`
+          );
+        }
+      });
+    }
+  }
+
+  // Validate instruments array if present
+  if (submissionData.instruments) {
+    if (!Array.isArray(submissionData.instruments)) {
+      errors.push('Field instruments must be an array');
+    } else {
+      // Validate each instrument in the array
+      submissionData.instruments.forEach((instrument, index) => {
+        // Check required fields for each instrument
+        for (const field of requiredInstrumentFields) {
+          if (!instrument[field]) {
+            errors.push(`Missing required field: ${field} in instruments[${index}]`);
+          }
+        }
+
+        // Validate instrument_id is a valid ObjectId
+        if (instrument.instrument_id && !isValidObjectId(instrument.instrument_id)) {
+          errors.push(`Invalid instrument_id format in instruments[${index}]`);
+        }
+
+        // Validate answer value if present
+        if (instrument.answer !== undefined && !isValidInstrumentValue(instrument.answer)) {
+          errors.push(
+            `Invalid answer value in instruments[${index}]. Must be an integer between 0 and 4 or null`
+          );
+        }
+
+        // Validate is_skip if present
+        if (instrument.is_skip !== undefined && !isValidIsSkip(instrument.is_skip)) {
+          errors.push(`Invalid is_skip value in instruments[${index}]. Must be 0 or 1`);
+        }
+
+        // Validate point if present
+        if (instrument.point !== undefined && !isValidPoint(instrument.point)) {
+          errors.push(
+            `Invalid point value in instruments[${index}]. Must be a number greater than or equal to 0`
+          );
+        }
       });
     }
   }
@@ -127,6 +197,11 @@ function formatSubmissionDefaults(submissionData) {
     formattedSubmission.answers = defaultValues.answers;
   }
 
+  // Apply default values for instruments if missing
+  if (formattedSubmission.instruments === undefined) {
+    formattedSubmission.instruments = defaultValues.instruments;
+  }
+
   // Apply default values for essay if missing
   if (formattedSubmission.essay === undefined) {
     formattedSubmission.essay = defaultValues.essay;
@@ -149,12 +224,23 @@ function formatSubmissionDefaults(submissionData) {
     };
   }
 
-  // Apply default is_skip value to each answer if missing
+  // Apply default values to each answer if missing
   if (Array.isArray(formattedSubmission.answers)) {
     formattedSubmission.answers = formattedSubmission.answers.map(answer => ({
       ...answer,
       is_skip: answer.is_skip !== undefined ? answer.is_skip : 0,
       other: answer.other !== undefined ? answer.other : '',
+      point: answer.point !== undefined ? answer.point : 0,
+    }));
+  }
+
+  // Apply default values to each instrument if missing
+  if (Array.isArray(formattedSubmission.instruments)) {
+    formattedSubmission.instruments = formattedSubmission.instruments.map(instrument => ({
+      ...instrument,
+      is_skip: instrument.is_skip !== undefined ? instrument.is_skip : 0,
+      other: instrument.other !== undefined ? instrument.other : '',
+      point: instrument.point !== undefined ? instrument.point : 0,
     }));
   }
 
@@ -177,5 +263,7 @@ module.exports = {
   sanitizeUpdateData,
   isValidObjectId,
   isValidAnswerValue,
+  isValidInstrumentValue,
   isValidIsSkip,
+  isValidPoint,
 };

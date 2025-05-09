@@ -1,5 +1,4 @@
 FROM node:22
-
 # Install PM2 globally
 RUN npm install pm2 -g
 
@@ -11,9 +10,6 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
-
-# Copy application source code
-COPY . .
 
 # Expose the application port
 EXPOSE 3000
