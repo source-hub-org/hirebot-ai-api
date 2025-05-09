@@ -37,18 +37,18 @@ const router = express.Router();
  *           enum: [scale, multiple-choice, open-ended, boolean]
  *         description: Filter by instrument type
  *       - in: query
- *         name: sortBy
+ *         name: sort_by
  *         schema:
  *           type: string
  *           enum: [createdAt, updatedAt, questionId, questionText, random]
  *         description: Field to sort by. Use 'random' for random sorting.
  *       - in: query
- *         name: sortOrder
+ *         name: sort_direction
  *         schema:
  *           type: string
  *           enum: [asc, desc]
  *           default: desc
- *         description: Sort order (ascending or descending)
+ *         description: Sort direction (ascending or descending)
  *       - in: query
  *         name: instrument_tags
  *         schema:

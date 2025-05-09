@@ -37,18 +37,18 @@ const router = express.Router();
  *           default: 10
  *         description: Number of items per page
  *       - in: query
- *         name: sortBy
+ *         name: sort_by
  *         schema:
  *           type: string
  *           enum: [createdAt, updatedAt, questionId, questionText]
  *         description: Field to sort by
  *       - in: query
- *         name: sortOrder
+ *         name: sort_direction
  *         schema:
  *           type: string
  *           enum: [asc, desc]
  *           default: desc
- *         description: Sort order (ascending or descending)
+ *         description: Sort direction (ascending or descending)
  *     responses:
  *       200:
  *         description: A list of instruments with pagination info

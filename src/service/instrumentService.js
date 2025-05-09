@@ -241,7 +241,7 @@ async function getAllInstrumentItems(queryParams = {}) {
     let sort = {};
 
     // Handle random sorting
-    if (queryParams.sortBy === 'random') {
+    if (queryParams.sort_by === 'random') {
       const collection = getCollection('instruments');
 
       // Get total count for pagination
@@ -290,8 +290,8 @@ async function getAllInstrumentItems(queryParams = {}) {
       }
     } else {
       // Extract sort parameters
-      if (queryParams.sortBy) {
-        sort[queryParams.sortBy] = queryParams.sortOrder === 'asc' ? 1 : -1;
+      if (queryParams.sort_by) {
+        sort[queryParams.sort_by] = queryParams.sort_direction === 'asc' ? 1 : -1;
       } else {
         sort.createdAt = -1; // Default sort by creation date, newest first
       }
@@ -502,8 +502,8 @@ async function getInstrumentItemsByTagId(tagId, queryParams = {}) {
 
     // Extract sort parameters
     const sort = {};
-    if (queryParams.sortBy) {
-      sort[queryParams.sortBy] = queryParams.sortOrder === 'desc' ? -1 : 1;
+    if (queryParams.sort_by) {
+      sort[queryParams.sort_by] = queryParams.sort_direction === 'desc' ? -1 : 1;
     } else {
       sort.createdAt = -1; // Default sort by creation date, newest first
     }

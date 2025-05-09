@@ -52,7 +52,7 @@ const getAllCandidates = async (req, res) => {
 
     if (req.query.sort_by) {
       const sortField = req.query.sort_by;
-      const sortDirection = req.query.sort_order === 'asc' ? 1 : -1;
+      const sortDirection = req.query.sort_direction === 'asc' ? 1 : -1;
       sort = { [sortField]: sortDirection };
     }
 

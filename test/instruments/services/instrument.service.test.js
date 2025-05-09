@@ -295,8 +295,8 @@ describe('Instrument Service', () => {
           type: 'scale',
           page: '2',
           limit: '5',
-          sortBy: 'questionId',
-          sortOrder: 'asc',
+          sort_by: 'questionId',
+          sort_direction: 'asc',
         };
 
         const instruments = [{ ...sampleInstrument, tags: [sampleTag] }];
@@ -473,8 +473,8 @@ describe('Instrument Service', () => {
         const query = {
           page: '2',
           limit: '5',
-          sortBy: 'questionId',
-          sortOrder: 'asc',
+          sort_by: 'questionId',
+          sort_direction: 'asc',
         };
 
         const instruments = [{ ...sampleInstrument, tags: [sampleTag] }];

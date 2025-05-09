@@ -220,7 +220,7 @@ describe('GET /api/candidates', () => {
 
     // Test sorting by name ascending
     const ascResponse = await request(app)
-      .get('/api/candidates?sort_by=full_name&sort_order=asc')
+      .get('/api/candidates?sort_by=full_name&sort_direction=asc')
       .expect(200);
 
     expect(ascResponse.body.success).toBe(true);
@@ -231,7 +231,7 @@ describe('GET /api/candidates', () => {
 
     // Test sorting by name descending
     const descResponse = await request(app)
-      .get('/api/candidates?sort_by=full_name&sort_order=desc')
+      .get('/api/candidates?sort_by=full_name&sort_direction=desc')
       .expect(200);
 
     expect(descResponse.body.success).toBe(true);
