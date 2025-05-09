@@ -50,15 +50,15 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
    MONGODB_URI=mongodb://mongodb:27017
    DB_NAME=hirebot_db
    JWT_SECRET=secret
-   
+
    SWAGGER_URL=http://localhost:8000
-   
+
    # Redis Configuration
    REDIS_HOST=redis
    REDIS_PORT=6379
    REDIS_PASSWORD=
    JOB_POLLING_INTERVAL=5000
-   
+
    # Gemini AI Configuration
    GEMINI_API_KEY=your_api_key_here
    GEMINI_MODEL=gemini-2.0-flash
@@ -321,6 +321,7 @@ docker-compose up -d
 ```
 
 This will start:
+
 - MongoDB container
 - Redis container
 - Node.js application container
@@ -329,11 +330,13 @@ This will start:
 The application will be accessible at `http://localhost:8000` (or the port specified in your `.env` file as `APP_PORT`).
 
 To view logs:
+
 ```bash
 docker-compose logs -f
 ```
 
 To stop all services:
+
 ```bash
 docker-compose down
 ```
