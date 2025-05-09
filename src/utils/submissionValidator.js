@@ -50,6 +50,16 @@ function isValidIsSkip(isSkip) {
 }
 
 /**
+ * Validates if a point value is valid
+ * @param {number} point - Point value to validate
+ * @returns {boolean} True if point is valid, false otherwise
+ */
+function isValidPoint(point) {
+  if (point === undefined) return true;
+  return Number.isFinite(point) && point >= 0;
+}
+
+/**
  * Validates submission input data
  * @param {Object} submissionData - Submission data to validate
  * @returns {Object} Validation result with isValid flag and errors array
@@ -100,6 +110,13 @@ function validateSubmissionInput(submissionData) {
         if (answer.is_skip !== undefined && !isValidIsSkip(answer.is_skip)) {
           errors.push(`Invalid is_skip value in answers[${index}]. Must be 0 or 1`);
         }
+
+        // Validate point if present
+        if (answer.point !== undefined && !isValidPoint(answer.point)) {
+          errors.push(
+            `Invalid point value in answers[${index}]. Must be a number greater than or equal to 0`
+          );
+        }
       });
     }
   }
@@ -133,6 +150,13 @@ function validateSubmissionInput(submissionData) {
         // Validate is_skip if present
         if (instrument.is_skip !== undefined && !isValidIsSkip(instrument.is_skip)) {
           errors.push(`Invalid is_skip value in instruments[${index}]. Must be 0 or 1`);
+        }
+
+        // Validate point if present
+        if (instrument.point !== undefined && !isValidPoint(instrument.point)) {
+          errors.push(
+            `Invalid point value in instruments[${index}]. Must be a number greater than or equal to 0`
+          );
         }
       });
     }
@@ -200,21 +224,23 @@ function formatSubmissionDefaults(submissionData) {
     };
   }
 
-  // Apply default is_skip value to each answer if missing
+  // Apply default values to each answer if missing
   if (Array.isArray(formattedSubmission.answers)) {
     formattedSubmission.answers = formattedSubmission.answers.map(answer => ({
       ...answer,
       is_skip: answer.is_skip !== undefined ? answer.is_skip : 0,
       other: answer.other !== undefined ? answer.other : '',
+      point: answer.point !== undefined ? answer.point : 0,
     }));
   }
 
-  // Apply default is_skip value to each instrument if missing
+  // Apply default values to each instrument if missing
   if (Array.isArray(formattedSubmission.instruments)) {
     formattedSubmission.instruments = formattedSubmission.instruments.map(instrument => ({
       ...instrument,
       is_skip: instrument.is_skip !== undefined ? instrument.is_skip : 0,
       other: instrument.other !== undefined ? instrument.other : '',
+      point: instrument.point !== undefined ? instrument.point : 0,
     }));
   }
 
@@ -239,4 +265,5 @@ module.exports = {
   isValidAnswerValue,
   isValidInstrumentValue,
   isValidIsSkip,
+  isValidPoint,
 };

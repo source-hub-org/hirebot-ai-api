@@ -59,6 +59,9 @@ const {
  *                             type: integer
  *                           other:
  *                             type: string
+ *                           point:
+ *                             type: number
+ *                             description: Score given to the instrument response
  *                           is_skip:
  *                             type: integer
  *                           instrument:

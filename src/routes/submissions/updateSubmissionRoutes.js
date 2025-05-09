@@ -46,6 +46,11 @@ const { updateSubmission } = require('../../controllers/submissions/updateSubmis
  *                     other:
  *                       type: string
  *                       description: Additional text for the answer
+ *                     point:
+ *                       type: number
+ *                       minimum: 0
+ *                       default: 0
+ *                       description: Score given to the answer
  *                     is_skip:
  *                       type: integer
  *                       enum: [0, 1]
@@ -69,6 +74,11 @@ const { updateSubmission } = require('../../controllers/submissions/updateSubmis
  *                     other:
  *                       type: string
  *                       description: Additional text for the instrument response
+ *                     point:
+ *                       type: number
+ *                       minimum: 0
+ *                       default: 0
+ *                       description: Score given to the instrument response
  *                     is_skip:
  *                       type: integer
  *                       enum: [0, 1]

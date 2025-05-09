@@ -11,11 +11,13 @@
  * @property {string} answers[].question_id - ID of the question (required)
  * @property {number|null} [answers[].answer=null] - Selected answer (0-3 or null)
  * @property {string} [answers[].other=''] - Additional text for the answer
+ * @property {number} [answers[].point=0] - Score given to the answer
  * @property {number} [answers[].is_skip=0] - Whether the question was skipped (0 or 1)
  * @property {Array<Object>} [instruments=[]] - Array of instrument responses
  * @property {string} instruments[].instrument_id - ID of the instrument (required)
  * @property {number|null} [instruments[].answer=null] - Selected answer (0-4 or null)
  * @property {string} [instruments[].other=''] - Additional text for the instrument response
+ * @property {number} [instruments[].point=0] - Score given to the instrument response
  * @property {number} [instruments[].is_skip=0] - Whether the instrument was skipped (0 or 1)
  * @property {Object} [essay={}] - Essay information
  * @property {string} [essay.question=''] - Essay question
