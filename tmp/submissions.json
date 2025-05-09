@@ -5,19 +5,15 @@
       "question_id": "663045dffbd1c9097f64f2a4",
       "answer": 2,
       "other": "Em chọn vì thấy ngắn gọn và dễ hiểu nhất.",
+      "point": 5,
       "is_skip": 0
-    },
-    {
-      "question_id": "66304629fbd1c9097f64f2a7",
-      "answer": null,
-      "other": "",
-      "is_skip": 1
     }
   ],
   "instruments": [
     {
       "question_id": "66301c9097f64f2a445dffbd",
       "answer": 0,
+      "point": 3,
       "other": "",
       "is_skip": 0
     }
