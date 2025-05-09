@@ -1,30 +1,32 @@
 /**
- * Create Submission Routes
- * @module routes/submissions/createSubmissionRoutes
+ * Update Submission Routes
+ * @module routes/submissions/updateSubmissionRoutes
  */
 
 const express = require('express');
 const router = express.Router();
-const { createSubmission } = require('../../controllers/submissions/createSubmissionController');
+const { updateSubmission } = require('../../controllers/submissions/updateSubmissionController');
 
 /**
  * @swagger
- * /api/submissions:
- *   post:
- *     summary: Create a new submission
+ * /api/submissions/{id}:
+ *   put:
+ *     summary: Update a submission by ID
  *     tags: [Submissions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the submission to update
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - candidate_id
  *             properties:
- *               candidate_id:
- *                 type: string
- *                 description: ID of the candidate
  *               answers:
  *                 type: array
  *                 items:
@@ -104,15 +106,15 @@ const { createSubmission } = require('../../controllers/submissions/createSubmis
  *                     type: string
  *                     description: Review status
  *     responses:
- *       201:
- *         description: Submission created successfully
+ *       200:
+ *         description: Submission updated successfully
  *       400:
  *         description: Invalid input data
  *       404:
- *         description: Candidate, question, or instrument not found
+ *         description: Submission, question, or instrument not found
  *       500:
  *         description: Server error
  */
-router.post('/', createSubmission);
+router.put('/:id', updateSubmission);
 
 module.exports = router;

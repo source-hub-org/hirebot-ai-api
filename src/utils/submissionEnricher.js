@@ -95,7 +95,56 @@ async function fetchQuestionsByIds(questionIds) {
 }
 
 /**
- * Enrich a single submission with candidate and question data
+ * Fetch instruments by array of IDs
+ * @async
+ * @param {Array<string>} instrumentIds - Array of instrument IDs
+ * @returns {Promise<Object>} Map of instrument IDs to instrument data
+ */
+async function fetchInstrumentsByIds(instrumentIds) {
+  try {
+    if (!instrumentIds || !Array.isArray(instrumentIds) || instrumentIds.length === 0) {
+      return {};
+    }
+
+    // Filter valid ObjectIds
+    const validInstrumentIds = instrumentIds.filter(id => ObjectId.isValid(id));
+
+    if (validInstrumentIds.length === 0) {
+      return {};
+    }
+
+    const objectIds = validInstrumentIds.map(id => new ObjectId(id));
+
+    // Select only necessary fields from instruments
+    const instruments = await baseRepository.findMany(
+      'instruments',
+      { _id: { $in: objectIds } },
+      {
+        projection: {
+          questionId: 1,
+          questionText: 1,
+          type: 1,
+          options: 1,
+          tags: 1,
+        },
+      }
+    );
+
+    // Convert array to map for easier lookup
+    const instrumentMap = {};
+    instruments.forEach(instrument => {
+      instrumentMap[instrument._id.toString()] = instrument;
+    });
+
+    return instrumentMap;
+  } catch (error) {
+    logger.error('Error fetching instruments:', error);
+    return {};
+  }
+}
+
+/**
+ * Enrich a single submission with candidate, question, and instrument data
  * @async
  * @param {Object} submission - Submission to enrich
  * @returns {Promise<Object>} Enriched submission
@@ -137,6 +186,27 @@ async function enrichSubmission(submission) {
       });
     }
 
+    // Extract instrument IDs from instruments
+    const instrumentIds =
+      submission.instruments && Array.isArray(submission.instruments)
+        ? submission.instruments.map(instrument => instrument.instrument_id)
+        : [];
+
+    // Fetch instruments data
+    const instrumentMap = await fetchInstrumentsByIds(instrumentIds);
+
+    // Enrich instruments with instrument data
+    if (enrichedSubmission.instruments && Array.isArray(enrichedSubmission.instruments)) {
+      enrichedSubmission.instruments = enrichedSubmission.instruments.map(instrument => {
+        const instrumentId = instrument.instrument_id;
+        return {
+          ...instrument,
+          instrument:
+            instrumentId && instrumentMap[instrumentId] ? instrumentMap[instrumentId] : null,
+        };
+      });
+    }
+
     return enrichedSubmission;
   } catch (error) {
     logger.error(`Error enriching submission:`, error);
@@ -171,6 +241,7 @@ async function enrichSubmissions(submissions) {
 module.exports = {
   fetchCandidateById,
   fetchQuestionsByIds,
+  fetchInstrumentsByIds,
   enrichSubmission,
   enrichSubmissions,
 };

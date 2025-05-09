@@ -10,6 +10,7 @@ const {
   isValidObjectId,
   isValidAnswerValue,
   isValidIsSkip,
+  isValidPoint,
 } = require('../../src/utils/submissionValidator');
 
 // Mock ObjectId.isValid
@@ -76,6 +77,22 @@ describe('Submission Validator', () => {
     });
   });
 
+  describe('isValidPoint', () => {
+    test('should return true for valid point values', () => {
+      expect(isValidPoint(0)).toBe(true);
+      expect(isValidPoint(5)).toBe(true);
+      expect(isValidPoint(10.5)).toBe(true);
+      expect(isValidPoint(undefined)).toBe(true);
+    });
+
+    test('should return false for invalid point values', () => {
+      expect(isValidPoint(-1)).toBe(false);
+      expect(isValidPoint('5')).toBe(false);
+      expect(isValidPoint(null)).toBe(false);
+      expect(isValidPoint({})).toBe(false);
+    });
+  });
+
   describe('validateSubmissionInput', () => {
     beforeEach(() => {
       ObjectId.isValid.mockImplementation(id => {
@@ -83,7 +100,7 @@ describe('Submission Validator', () => {
       });
     });
 
-    test('should validate a valid submission', () => {
+    test('should validate a valid submission with point fields', () => {
       const validSubmission = {
         candidate_id: '507f1f77bcf86cd799439011',
         answers: [
@@ -91,6 +108,16 @@ describe('Submission Validator', () => {
             question_id: '507f1f77bcf86cd799439012',
             answer: 2,
             other: 'Some explanation',
+            point: 5,
+            is_skip: 0,
+          },
+        ],
+        instruments: [
+          {
+            instrument_id: '507f1f77bcf86cd799439013',
+            answer: 3,
+            other: 'Instrument explanation',
+            point: 7.5,
             is_skip: 0,
           },
         ],
@@ -235,6 +262,44 @@ describe('Submission Validator', () => {
       expect(result.errors).toContain('Invalid is_skip value in answers[0]. Must be 0 or 1');
     });
 
+    test('should reject a submission with invalid point value in answers', () => {
+      const invalidSubmission = {
+        candidate_id: '507f1f77bcf86cd799439011',
+        answers: [
+          {
+            question_id: '507f1f77bcf86cd799439012',
+            answer: 2,
+            point: -5,
+          },
+        ],
+      };
+
+      const result = validateSubmissionInput(invalidSubmission);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        'Invalid point value in answers[0]. Must be a number greater than or equal to 0'
+      );
+    });
+
+    test('should reject a submission with invalid point value in instruments', () => {
+      const invalidSubmission = {
+        candidate_id: '507f1f77bcf86cd799439011',
+        instruments: [
+          {
+            instrument_id: '507f1f77bcf86cd799439013',
+            answer: 3,
+            point: 'invalid',
+          },
+        ],
+      };
+
+      const result = validateSubmissionInput(invalidSubmission);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        'Invalid point value in instruments[0]. Must be a number greater than or equal to 0'
+      );
+    });
+
     test('should reject a submission with invalid essay format', () => {
       const invalidSubmission = {
         candidate_id: '507f1f77bcf86cd799439011',
@@ -314,7 +379,7 @@ describe('Submission Validator', () => {
       expect(formatted.review).toHaveProperty('status', 'submitted');
     });
 
-    test('should apply default is_skip value to answers', () => {
+    test('should apply default values to answers', () => {
       const submissionData = {
         candidate_id: '507f1f77bcf86cd799439011',
         answers: [
@@ -328,6 +393,24 @@ describe('Submission Validator', () => {
       const formatted = formatSubmissionDefaults(submissionData);
       expect(formatted.answers[0]).toHaveProperty('is_skip', 0);
       expect(formatted.answers[0]).toHaveProperty('other', '');
+      expect(formatted.answers[0]).toHaveProperty('point', 0);
+    });
+
+    test('should apply default values to instruments', () => {
+      const submissionData = {
+        candidate_id: '507f1f77bcf86cd799439011',
+        instruments: [
+          {
+            instrument_id: '507f1f77bcf86cd799439013',
+            answer: 3,
+          },
+        ],
+      };
+
+      const formatted = formatSubmissionDefaults(submissionData);
+      expect(formatted.instruments[0]).toHaveProperty('is_skip', 0);
+      expect(formatted.instruments[0]).toHaveProperty('other', '');
+      expect(formatted.instruments[0]).toHaveProperty('point', 0);
     });
 
     test('should preserve existing values', () => {
@@ -338,7 +421,17 @@ describe('Submission Validator', () => {
             question_id: '507f1f77bcf86cd799439012',
             answer: 2,
             other: 'Some explanation',
+            point: 8,
             is_skip: 1,
+          },
+        ],
+        instruments: [
+          {
+            instrument_id: '507f1f77bcf86cd799439013',
+            answer: 3,
+            other: 'Instrument explanation',
+            point: 6.5,
+            is_skip: 0,
           },
         ],
         essay: {

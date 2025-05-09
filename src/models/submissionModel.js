@@ -11,7 +11,14 @@
  * @property {string} answers[].question_id - ID of the question (required)
  * @property {number|null} [answers[].answer=null] - Selected answer (0-3 or null)
  * @property {string} [answers[].other=''] - Additional text for the answer
+ * @property {number} [answers[].point=0] - Score given to the answer
  * @property {number} [answers[].is_skip=0] - Whether the question was skipped (0 or 1)
+ * @property {Array<Object>} [instruments=[]] - Array of instrument responses
+ * @property {string} instruments[].instrument_id - ID of the instrument (required)
+ * @property {number|null} [instruments[].answer=null] - Selected answer (0-4 or null)
+ * @property {string} [instruments[].other=''] - Additional text for the instrument response
+ * @property {number} [instruments[].point=0] - Score given to the instrument response
+ * @property {number} [instruments[].is_skip=0] - Whether the instrument was skipped (0 or 1)
  * @property {Object} [essay={}] - Essay information
  * @property {string} [essay.question=''] - Essay question
  * @property {string} [essay.answer=''] - Essay answer
@@ -27,6 +34,7 @@
  */
 const defaultValues = {
   answers: [],
+  instruments: [],
   essay: {
     question: null,
     answer: null,
@@ -51,16 +59,27 @@ const requiredFields = ['candidate_id'];
 const requiredAnswerFields = ['question_id'];
 
 /**
+ * Required fields for each instrument in the instruments array
+ * @type {Array<string>}
+ */
+const requiredInstrumentFields = ['instrument_id'];
+
+/**
  * Submission model definition
  */
 const submissionModel = {
   collectionName: 'submissions',
   requiredFields,
   requiredAnswerFields,
+  requiredInstrumentFields,
   defaultValues,
   answerValueRange: {
     min: 0,
     max: 3,
+  },
+  instrumentValueRange: {
+    min: 0,
+    max: 4,
   },
 };
 

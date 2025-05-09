@@ -17,6 +17,10 @@ describe('Submission Model', () => {
     expect(submissionModel.requiredAnswerFields).toContain('question_id');
   });
 
+  test('should have the required instrument fields defined', () => {
+    expect(submissionModel.requiredInstrumentFields).toContain('instrument_id');
+  });
+
   test('should have default values defined', () => {
     expect(submissionModel.defaultValues).toHaveProperty('answers');
     expect(submissionModel.defaultValues).toHaveProperty('essay');
@@ -30,5 +34,10 @@ describe('Submission Model', () => {
   test('should have answer value range defined', () => {
     expect(submissionModel.answerValueRange).toHaveProperty('min', 0);
     expect(submissionModel.answerValueRange).toHaveProperty('max', 3);
+  });
+
+  test('should have instrument value range defined', () => {
+    expect(submissionModel.instrumentValueRange).toHaveProperty('min', 0);
+    expect(submissionModel.instrumentValueRange).toHaveProperty('max', 4);
   });
 });

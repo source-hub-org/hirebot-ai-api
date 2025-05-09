@@ -2,27 +2,28 @@
 
 # HireBot AI API
 
-The backend service of HireBot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js, using Express for RESTful APIs, MongoDB for data storage, and Redis for job queue management.
+The backend service of HireBot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js (v18+), using Express (v5.1.0) for RESTful APIs, MongoDB (v6.16.0) for data storage, and Redis for job queue management. Supports containerized deployment with Docker and Nginx.
 
 ## Features
 
 - Generate technical interview questions using Google's Gemini AI
-- Store and retrieve questions from MongoDB
+- Store and retrieve questions from MongoDB (v6.16.0)
 - Asynchronous question generation with Redis-based job queue
 - Manage interview topics and positions through commands and API
 - RESTful API for quiz, topic, position, language, candidate, and submission management
 - Flexible question search API with support for multiple topics, languages, and positions
 - Comprehensive validation and error handling
 - Swagger API documentation
-- Extensive test coverage
+- Extensive test coverage with Jest (v29.7.0)
 - Pagination support for listing resources
+- Docker and Docker Compose support for easy deployment
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- MongoDB (local or Atlas)
+- Node.js (v18 or higher)
+- MongoDB (v6.16.0 or higher)
 - Redis (for job queue management)
 - Google Gemini API key (see [Getting a Gemini API Key](#getting-a-gemini-api-key))
 
@@ -31,7 +32,7 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/hirebot-ai-api.git
+   git clone https://github.com/thangtran3112/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 
@@ -44,17 +45,20 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 3. Create a `.env` file in the root directory based on the `.env.example` file:
 
    ```
+   APP_PORT=8000
    PORT=3000
-   MONGODB_URI=mongodb://localhost:27017
+   MONGODB_URI=mongodb://mongodb:27017
    DB_NAME=hirebot_db
    JWT_SECRET=secret
-
+   
+   SWAGGER_URL=http://localhost:8000
+   
    # Redis Configuration
-   REDIS_HOST=localhost
+   REDIS_HOST=redis
    REDIS_PORT=6379
    REDIS_PASSWORD=
    JOB_POLLING_INTERVAL=5000
-
+   
    # Gemini AI Configuration
    GEMINI_API_KEY=your_api_key_here
    GEMINI_MODEL=gemini-2.0-flash
@@ -65,7 +69,14 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
    PAGE_SIZE_EXISTING_QUESTIONS=1000
    ```
 
-4. Start MongoDB and Redis using Docker (optional):
+4. Start all services using Docker Compose (recommended):
+
+   ```bash
+   # Start all services (MongoDB, Redis, Node.js app, and Nginx)
+   docker-compose up -d
+   ```
+
+   Alternatively, you can start only MongoDB and Redis:
 
    ```bash
    # Start MongoDB
@@ -206,6 +217,9 @@ hirebot-ai-api/
 ├── .env.example        # Example environment variables
 ├── .github/workflows/  # CI/CD configuration
 ├── assets/             # Project assets
+├── docker-compose.yml  # Docker Compose configuration
+├── Dockerfile          # Docker build configuration
+├── nginx.conf          # Nginx configuration for Docker
 ├── jest.config.js      # Jest test configuration
 └── package.json        # Project metadata and dependencies
 ```
@@ -292,6 +306,36 @@ Example request:
 
 ```
 GET /api/questions/search?topic=JavaScript,React&language=JavaScript&position=junior,middle&sort_by=random&page=1&page_size=10&mode=compact
+```
+
+### Docker Deployment
+
+The application can be deployed using Docker and Docker Compose:
+
+1. Make sure Docker and Docker Compose are installed on your system
+2. Configure your `.env` file with appropriate settings
+3. Build and start all services:
+
+```bash
+docker-compose up -d
+```
+
+This will start:
+- MongoDB container
+- Redis container
+- Node.js application container
+- Nginx container (serving as a reverse proxy)
+
+The application will be accessible at `http://localhost:8000` (or the port specified in your `.env` file as `APP_PORT`).
+
+To view logs:
+```bash
+docker-compose logs -f
+```
+
+To stop all services:
+```bash
+docker-compose down
 ```
 
 ### Quiz Generation Module
