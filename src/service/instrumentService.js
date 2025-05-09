@@ -12,6 +12,7 @@ const {
   deleteInstrument,
   countInstruments,
   countInstrumentsByTagId,
+  getCollection,
 } = require('../repository/instrumentRepository');
 const {
   getInstrumentTagsByIds,
@@ -198,21 +199,111 @@ async function getAllInstrumentItems(queryParams = {}) {
       filter.type = queryParams.type;
     }
 
-    // Extract sort parameters
-    const sort = {};
-    if (queryParams.sortBy) {
-      sort[queryParams.sortBy] = queryParams.sortOrder === 'desc' ? -1 : 1;
-    } else {
-      sort.createdAt = -1; // Default sort by creation date, newest first
+    // Handle instrument_tags parameter (filter by tag IDs)
+    if (queryParams.instrument_tags) {
+      try {
+        const { ObjectId } = require('mongoose').Types;
+        const tagIds = queryParams.instrument_tags
+          .split(',')
+          .map(id => id.trim())
+          .filter(id => ObjectId.isValid(id))
+          .map(id => new ObjectId(id));
+
+        if (tagIds.length > 0) {
+          filter.tags = { $in: tagIds };
+        }
+      } catch (error) {
+        logger.warn('Error processing instrument_tags parameter:', error);
+        // Continue without this filter if there's an error
+      }
     }
 
-    // Get instruments with pagination
-    const instruments = await getAllInstruments(filter, {
-      populate: ['tags'],
-      limit,
-      skip,
-      sort,
-    });
+    // Handle ignore_instrument_ids parameter (exclude specific instrument IDs)
+    if (queryParams.ignore_instrument_ids) {
+      try {
+        const { ObjectId } = require('mongoose').Types;
+        const ignoreIds = queryParams.ignore_instrument_ids
+          .split(',')
+          .map(id => id.trim())
+          .filter(id => ObjectId.isValid(id))
+          .map(id => new ObjectId(id));
+
+        if (ignoreIds.length > 0) {
+          filter._id = { $nin: ignoreIds };
+        }
+      } catch (error) {
+        logger.warn('Error processing ignore_instrument_ids parameter:', error);
+        // Continue without this filter if there's an error
+      }
+    }
+
+    let instruments;
+    let sort = {};
+
+    // Handle random sorting
+    if (queryParams.sortBy === 'random') {
+      const collection = getCollection('instruments');
+
+      // Get total count for pagination
+      const totalCount = await countInstruments(filter);
+
+      // If we're requesting a page beyond what's available, return empty results
+      if (skip >= totalCount) {
+        instruments = [];
+      } else {
+        // For random sorting with smaller collections (up to 1000 documents)
+        if (totalCount <= 1000) {
+          // Get all matching documents
+          const allMatchingDocs = await getAllInstruments(filter, {
+            populate: ['tags'],
+          });
+
+          // Shuffle the array (Fisher-Yates algorithm)
+          for (let i = allMatchingDocs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allMatchingDocs[i], allMatchingDocs[j]] = [allMatchingDocs[j], allMatchingDocs[i]];
+          }
+
+          // Apply pagination to the shuffled array
+          instruments = allMatchingDocs.slice(skip, skip + limit);
+        } else {
+          // For larger collections, use the $sample aggregation
+          const sampleSize = Math.min(limit * 10, totalCount);
+          const pipeline = [
+            { $match: filter },
+            { $sample: { size: sampleSize } },
+            { $limit: limit },
+          ];
+
+          // Add lookup to populate tags
+          pipeline.push({
+            $lookup: {
+              from: 'instrument_tags',
+              localField: 'tags',
+              foreignField: '_id',
+              as: 'tags',
+            },
+          });
+
+          instruments = await collection.aggregate(pipeline).toArray();
+        }
+      }
+    } else {
+      // Extract sort parameters
+      if (queryParams.sortBy) {
+        sort[queryParams.sortBy] = queryParams.sortOrder === 'asc' ? 1 : -1;
+      } else {
+        sort.createdAt = -1; // Default sort by creation date, newest first
+      }
+
+      // Standard sorting
+      instruments = await getAllInstruments(filter, {
+        populate: ['tags'],
+        limit,
+        skip,
+        sort,
+      });
+    }
 
     // Get total count for pagination
     const totalCount = await countInstruments(filter);

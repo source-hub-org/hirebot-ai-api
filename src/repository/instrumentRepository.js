@@ -4,7 +4,16 @@
  */
 
 const Instrument = require('../models/instrumentModel');
+const mongoose = require('mongoose');
 const logger = require('../utils/logger');
+
+/**
+ * Get the MongoDB collection for instruments
+ * @returns {Object} MongoDB collection
+ */
+function getCollection(collectionName = 'instruments') {
+  return mongoose.connection.db.collection(collectionName);
+}
 
 /**
  * Create a new instrument
@@ -142,6 +151,17 @@ async function countInstruments(filter = {}) {
   return await Instrument.countDocuments(filter);
 }
 
+/**
+ * Count instruments by tag ID
+ * @async
+ * @param {string} tagId - Tag ID
+ * @returns {Promise<number>} Count of instruments with the specified tag
+ */
+async function countInstrumentsByTagId(tagId) {
+  logger.info(`Counting instruments with tag ID: ${tagId}`);
+  return await Instrument.countDocuments({ tags: tagId });
+}
+
 module.exports = {
   createInstrument,
   getAllInstruments,
@@ -150,4 +170,6 @@ module.exports = {
   updateInstrument,
   deleteInstrument,
   countInstruments,
+  countInstrumentsByTagId,
+  getCollection,
 };

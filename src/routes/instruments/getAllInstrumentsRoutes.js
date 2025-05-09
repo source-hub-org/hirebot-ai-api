@@ -40,8 +40,8 @@ const router = express.Router();
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [createdAt, updatedAt, questionId, questionText]
- *         description: Field to sort by
+ *           enum: [createdAt, updatedAt, questionId, questionText, random]
+ *         description: Field to sort by. Use 'random' for random sorting.
  *       - in: query
  *         name: sortOrder
  *         schema:
@@ -49,6 +49,18 @@ const router = express.Router();
  *           enum: [asc, desc]
  *           default: desc
  *         description: Sort order (ascending or descending)
+ *       - in: query
+ *         name: instrument_tags
+ *         schema:
+ *           type: string
+ *         description: Comma-separated list of tag IDs to filter instruments by. Only instruments associated with any of these tags will be returned.
+ *         example: "681ac4cd6e5dc98b8d660917,c98b8d660917681ac4cd6e5d"
+ *       - in: query
+ *         name: ignore_instrument_ids
+ *         schema:
+ *           type: string
+ *         description: Comma-separated list of instrument IDs to exclude from the results
+ *         example: "681ac4cd6e5dc98b8d660917,c98b8d660917681ac4cd6e5d"
  *     responses:
  *       200:
  *         description: A list of instruments with pagination info
