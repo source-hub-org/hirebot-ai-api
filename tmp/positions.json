@@ -2,48 +2,48 @@
   {
     "slug": "intern",
     "title": "Intern",
-    "description": "Able to understand basic programming syntax, simple data types, variables, and basic control structures such as if-else and loops. Limited or no real-world coding experience.",
-    "instruction": "Focus on verifying basic logical thinking, programming mindset, and willingness to learn. Suitable for candidates undergoing internship programs.",
+    "description": "Kiểm tra khả năng nhận biết và sử dụng đúng cú pháp lập trình nền tảng (khai báo biến, kiểu dữ liệu cơ bản, toán tử), và các cấu trúc điều khiển luồng đơn giản (if-else, vòng lặp for/while cơ bản). Đánh giá hiểu biết về khái niệm biến và phạm vi của biến ở mức sơ Khai. Chưa yêu cầu kinh nghiệm thực tế.",
+    "instruction": "Xây dựng câu hỏi trắc nghiệm tập trung vào: nhận diện lỗi cú pháp cơ bản, dự đoán kết quả của đoạn mã ngắn sử dụng vòng lặp và điều kiện đơn giản, chọn kiểu dữ liệu phù hợp cho các giá trị cụ thể, và các câu hỏi về tư duy thuật toán ở mức nhập môn (ví dụ: các bước để giải một bài toán đơn giản).",
     "level": 1,
     "is_active": true
   },
   {
     "slug": "fresher",
     "title": "Fresher",
-    "description": "Has basic knowledge of software development concepts, simple algorithms, and can complete basic coding exercises. Familiar with at least one programming language.",
-    "instruction": "Assess candidate's ability to apply theoretical knowledge to simple tasks and their potential to grow with guidance.",
+    "description": "Đánh giá khả năng áp dụng kiến thức về một ngôn ngữ lập trình cụ thể để giải quyết các bài toán nhỏ, hoàn chỉnh. Kiểm tra hiểu biết về các cấu trúc dữ liệu cơ bản (mảng, danh sách, chuỗi) và thuật toán tìm kiếm/sắp xếp cơ bản (tìm kiếm tuyến tính, sắp xếp nổi bọt). Có khả năng viết và hiểu các hàm/phương thức đơn giản.",
+    "instruction": "Tạo câu hỏi yêu cầu: viết hoặc sửa một hàm nhỏ để thực hiện một tác vụ cụ thể (ví dụ: đảo ngược chuỗi, tính tổng các phần tử mảng), phân tích độ phức tạp thời gian ở mức rất cơ bản cho các đoạn mã ngắn, lựa chọn cấu trúc dữ liệu phù hợp cho kịch bản đơn giản, và các câu hỏi về khái niệm cơ bản của lập trình hướng đối tượng (lớp, đối tượng).",
     "level": 2,
     "is_active": true
   },
   {
     "slug": "junior",
     "title": "Junior Developer",
-    "description": "Capable of building small features or modules with supervision. Understands debugging, code versioning, basic testing, and can follow coding standards. Limited exposure to production environments.",
-    "instruction": "Test for ability to work independently on well-defined tasks, and basic understanding of software development processes.",
+    "description": "Đánh giá khả năng xây dựng các thành phần phần mềm nhỏ, có thể hoạt động độc lập hoặc tích hợp vào hệ thống lớn hơn (dưới sự giám sát). Kiểm tra kỹ năng gỡ lỗi (debugging) mã nguồn, hiểu và sử dụng hệ thống quản lý phiên bản (ví dụ: Git ở mức cơ bản: commit, push, pull, branch), viết các bài kiểm thử đơn vị (unit test) cơ bản và tuân thủ các quy ước viết mã (coding conventions).",
+    "instruction": "Thiết kế câu hỏi tình huống về: xác định lỗi logic trong một đoạn mã phức tạp hơn, các lệnh Git cơ bản thường dùng, cách viết một unit test đơn giản cho một hàm cụ thể, và nhận diện các vi phạm coding convention phổ biến. Bao gồm câu hỏi về cách xử lý lỗi (exception handling) cơ bản.",
     "level": 3,
     "is_active": true
   },
   {
     "slug": "middle",
     "title": "Middle Developer",
-    "description": "Can independently design, develop, and maintain mid-sized features or services. Understands system architecture, database design basics, optimization, and common design patterns.",
-    "instruction": "Evaluate candidate’s ability to solve moderate complexity problems, collaborate in teams, and apply best practices consistently.",
+    "description": "Đánh giá năng lực tự chủ trong việc thiết kế, phát triển và bảo trì các tính năng hoặc dịch vụ hoàn chỉnh với độ phức tạp trung bình. Kiểm tra hiểu biết về các nguyên tắc thiết kế phần mềm (ví dụ: SOLID ở mức nhận biết và áp dụng cơ bản), kiến trúc hệ thống tổng quan, các khái niệm thiết kế cơ sở dữ liệu (quan hệ, ràng buộc, chỉ mục cơ bản), kỹ thuật tối ưu hóa mã nguồn cơ bản và khả năng nhận biết, áp dụng một số mẫu thiết kế (design patterns) phổ biến (ví dụ: Singleton, Factory).",
+    "instruction": "Xây dựng các câu hỏi yêu cầu: phân tích một yêu cầu và đề xuất giải pháp thiết kế ở mức thành phần, lựa chọn mẫu thiết kế phù hợp cho một vấn đề cụ thể, xác định các điểm nghẽn hiệu năng tiềm ẩn trong đoạn mã hoặc truy vấn CSDL đơn giản, và các câu hỏi về tương tác API cơ bản. Đánh giá khả năng viết mã sạch, dễ hiểu và có khả năng tái sử dụng.",
     "level": 4,
     "is_active": true
   },
   {
     "slug": "senior",
     "title": "Senior Developer",
-    "description": "Has deep knowledge of system scalability, performance, security, and maintainability. Can lead technical discussions, mentor juniors, and deliver high-quality production-level code.",
-    "instruction": "Focus on technical leadership, problem-solving in complex environments, and ability to guide and review team members' work.",
+    "description": "Đánh giá kiến thức chuyên sâu và kinh nghiệm thực tiễn về thiết kế hệ thống có khả năng mở rộng (scalability), hiệu năng cao (performance), an toàn (security) và dễ bảo trì (maintainability). Kiểm tra khả năng đưa ra quyết định kỹ thuật quan trọng, đánh giá các giải pháp công nghệ khác nhau, tối ưu hóa hệ thống ở nhiều lớp, và thiết kế các API mạnh mẽ, an toàn. Có khả năng dẫn dắt kỹ thuật và đánh giá chất lượng mã nguồn.",
+    "instruction": "Tạo các câu hỏi tình huống phức tạp liên quan đến: lựa chọn kiến trúc phù hợp cho một hệ thống với các yêu cầu cụ thể về tải, bảo mật; phân tích và giải quyết các vấn đề hiệu năng ở cấp độ hệ thống; đề xuất các biện pháp bảo mật cho một ứng dụng; đánh giá ưu nhược điểm của các công nghệ hoặc phương pháp tiếp cận khác nhau để giải quyết một bài toán. Câu hỏi có thể liên quan đến việc review mã nguồn để tìm ra các vấn đề tiềm ẩn về thiết kế, hiệu năng hoặc bảo mật.",
     "level": 5,
     "is_active": true
   },
   {
     "slug": "expert",
     "title": "Expert Developer",
-    "description": "Mastery in software architecture, system design, and scaling high-traffic systems. Can design complex solutions across multiple domains and technologies, and influence technical direction at an organizational level.",
-    "instruction": "Challenge candidate's architectural thinking, innovation capability, and ability to solve extremely complex problems with strategic solutions.",
+    "description": "Đánh giá trình độ bậc thầy về kiến trúc phần mềm phức tạp, thiết kế và vận hành các hệ thống quy mô lớn, chịu tải cao, có tính sẵn sàng cao. Kiểm tra khả năng đổi mới, đề xuất và bảo vệ các giải pháp kiến trúc chiến lược, giải quyết các vấn đề kỹ thuật đa nền tảng, đa lĩnh vực và có tầm ảnh hưởng sâu rộng đến định hướng công nghệ của tổ chức. Am hiểu sâu sắc các xu hướng công nghệ mới và có khả năng đánh giá tác động của chúng.",
+    "instruction": "Đặt ra các câu hỏi mang tính chiến lược và trừu tượng cao, yêu cầu: thiết kế kiến trúc tổng thể cho một hệ thống hoàn toàn mới với các ràng buộc phi chức năng (non-functional requirements) khắt khe (ví dụ: độ trễ cực thấp, khả năng chịu lỗi cao); phân tích rủi ro và lợi ích của việc áp dụng một công nghệ đột phá vào một hệ thống lớn; giải quyết các xung đột hoặc đánh đổi (trade-offs) phức tạp trong thiết kế hệ thống ở quy mô lớn; hoặc đề xuất chiến lược kỹ thuật dài hạn cho một sản phẩm hoặc tổ chức. Câu hỏi nên tập trung vào khả năng tư duy hệ thống, tầm nhìn và khả năng đưa ra quyết định kiến trúc ở cấp độ cao nhất.",
     "level": 6,
     "is_active": true
   }
