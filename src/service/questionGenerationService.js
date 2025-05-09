@@ -19,9 +19,9 @@ const logger = require('../utils/logger');
 const generateQuestions = async ({ topic, language, position }) => {
   const positionLowerCase = position.toLowerCase();
 
-  // Get position pagination
+  // Get position pagination (now async)
   const { difficultyText, positionInstruction, positionLevel } =
-    getPositionMetadata(positionLowerCase);
+    await getPositionMetadata(positionLowerCase);
 
   // Call the AI question generation service
   const { questions } = await generateQuizQuestions({
@@ -75,8 +75,8 @@ const storeQuestions = async questions => {
 const generateAndStoreQuestions = async params => {
   const { topic, language, position } = params;
 
-  // Get position pagination
-  const { positionLevel } = getPositionMetadata(position.toLowerCase());
+  // Get position pagination (now async)
+  const { positionLevel } = await getPositionMetadata(position.toLowerCase());
 
   // Generate questions
   const questions = await generateQuestions(params);
