@@ -29,6 +29,18 @@ function isValidAnswerValue(answer) {
 }
 
 /**
+ * Validates if an instrument answer value is within the allowed range
+ * @param {number|null} answer - Instrument answer value to validate
+ * @returns {boolean} True if answer is valid, false otherwise
+ */
+function isValidInstrumentValue(answer) {
+  if (answer === null) return true;
+
+  const { min, max } = submissionModel.instrumentValueRange;
+  return Number.isInteger(answer) && answer >= min && answer <= max;
+}
+
+/**
  * Validates if is_skip is a valid boolean value (0 or 1)
  * @param {number} isSkip - Value to validate
  * @returns {boolean} True if is_skip is valid, false otherwise
@@ -44,7 +56,7 @@ function isValidIsSkip(isSkip) {
  */
 function validateSubmissionInput(submissionData) {
   const errors = [];
-  const { requiredFields, requiredAnswerFields } = submissionModel;
+  const { requiredFields, requiredAnswerFields, requiredInstrumentFields } = submissionModel;
 
   // Check required fields
   for (const field of requiredFields) {
@@ -92,6 +104,40 @@ function validateSubmissionInput(submissionData) {
     }
   }
 
+  // Validate instruments array if present
+  if (submissionData.instruments) {
+    if (!Array.isArray(submissionData.instruments)) {
+      errors.push('Field instruments must be an array');
+    } else {
+      // Validate each instrument in the array
+      submissionData.instruments.forEach((instrument, index) => {
+        // Check required fields for each instrument
+        for (const field of requiredInstrumentFields) {
+          if (!instrument[field]) {
+            errors.push(`Missing required field: ${field} in instruments[${index}]`);
+          }
+        }
+
+        // Validate instrument_id is a valid ObjectId
+        if (instrument.instrument_id && !isValidObjectId(instrument.instrument_id)) {
+          errors.push(`Invalid instrument_id format in instruments[${index}]`);
+        }
+
+        // Validate answer value if present
+        if (instrument.answer !== undefined && !isValidInstrumentValue(instrument.answer)) {
+          errors.push(
+            `Invalid answer value in instruments[${index}]. Must be an integer between 0 and 4 or null`
+          );
+        }
+
+        // Validate is_skip if present
+        if (instrument.is_skip !== undefined && !isValidIsSkip(instrument.is_skip)) {
+          errors.push(`Invalid is_skip value in instruments[${index}]. Must be 0 or 1`);
+        }
+      });
+    }
+  }
+
   // Validate essay if present
   if (submissionData.essay) {
     if (typeof submissionData.essay !== 'object') {
@@ -127,6 +173,11 @@ function formatSubmissionDefaults(submissionData) {
     formattedSubmission.answers = defaultValues.answers;
   }
 
+  // Apply default values for instruments if missing
+  if (formattedSubmission.instruments === undefined) {
+    formattedSubmission.instruments = defaultValues.instruments;
+  }
+
   // Apply default values for essay if missing
   if (formattedSubmission.essay === undefined) {
     formattedSubmission.essay = defaultValues.essay;
@@ -158,6 +209,15 @@ function formatSubmissionDefaults(submissionData) {
     }));
   }
 
+  // Apply default is_skip value to each instrument if missing
+  if (Array.isArray(formattedSubmission.instruments)) {
+    formattedSubmission.instruments = formattedSubmission.instruments.map(instrument => ({
+      ...instrument,
+      is_skip: instrument.is_skip !== undefined ? instrument.is_skip : 0,
+      other: instrument.other !== undefined ? instrument.other : '',
+    }));
+  }
+
   return formattedSubmission;
 }
 
@@ -177,5 +237,6 @@ module.exports = {
   sanitizeUpdateData,
   isValidObjectId,
   isValidAnswerValue,
+  isValidInstrumentValue,
   isValidIsSkip,
 };

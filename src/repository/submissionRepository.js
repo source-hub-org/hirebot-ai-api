@@ -169,10 +169,51 @@ async function questionsExist(questionIds) {
   }
 }
 
+/**
+ * Check if instruments exist in the database
+ * @async
+ * @param {Array<string>} instrumentIds - Array of instrument IDs to check
+ * @returns {Promise<{exists: boolean, missingIds: Array<string>}>} Result with exists flag and array of missing IDs
+ */
+async function instrumentsExist(instrumentIds) {
+  try {
+    if (!instrumentIds || !Array.isArray(instrumentIds) || instrumentIds.length === 0) {
+      return { exists: true, missingIds: [] };
+    }
+
+    const validInstrumentIds = instrumentIds.filter(id => ObjectId.isValid(id));
+
+    if (validInstrumentIds.length === 0) {
+      return {
+        exists: false,
+        missingIds: instrumentIds,
+      };
+    }
+
+    const objectIds = validInstrumentIds.map(id => new ObjectId(id));
+
+    const instruments = await baseRepository.findMany('instruments', {
+      _id: { $in: objectIds },
+    });
+
+    const foundIds = instruments.map(i => i._id.toString());
+    const missingIds = validInstrumentIds.filter(id => !foundIds.includes(id));
+
+    return {
+      exists: missingIds.length === 0,
+      missingIds,
+    };
+  } catch (error) {
+    logger.error(`Error checking instruments existence:`, error);
+    throw error;
+  }
+}
+
 module.exports = {
   insertSubmissionToDB,
   getSubmissionById,
   getSubmissionsByCandidateId,
   candidateExists,
   questionsExist,
+  instrumentsExist,
 };

@@ -14,6 +14,14 @@
       "is_skip": 1
     }
   ],
+  "instruments": [
+    {
+      "question_id": "66301c9097f64f2a445dffbd",
+      "answer": 0,
+      "other": "",
+      "is_skip": 0
+    }
+  ],
   "essay": {
     "question": "Bạn hãy trình bày cách bạn tiếp cận giải một bài toán thuật toán khó.",
     "answer": "Em sẽ phân tích input, tìm quy luật, sau đó thử brute-force trước khi tối ưu bằng quy hoạch động hoặc greedy.",

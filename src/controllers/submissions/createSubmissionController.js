@@ -8,6 +8,7 @@ const {
   insertSubmissionToDB,
   candidateExists,
   questionsExist,
+  instrumentsExist,
 } = require('../../repository/submissionRepository');
 const logger = require('../../utils/logger');
 
@@ -39,12 +40,32 @@ const extractQuestionIds = answers => {
 };
 
 /**
+ * Extract instrument IDs from instruments
+ * @param {Array} instruments - Array of instrument objects
+ * @returns {Array} Array of instrument IDs
+ */
+const extractInstrumentIds = instruments => {
+  return instruments && Array.isArray(instruments)
+    ? instruments.map(instrument => instrument.instrument_id)
+    : [];
+};
+
+/**
  * Check if all questions exist
  * @param {Array} questionIds - Array of question IDs
  * @returns {Promise<Object>} Object with exists flag and missing IDs
  */
 const checkQuestionsExist = async questionIds => {
   return await questionsExist(questionIds);
+};
+
+/**
+ * Check if all instruments exist
+ * @param {Array} instrumentIds - Array of instrument IDs
+ * @returns {Promise<Object>} Object with exists flag and missing IDs
+ */
+const checkInstrumentsExist = async instrumentIds => {
+  return await instrumentsExist(instrumentIds);
 };
 
 /**
@@ -90,6 +111,22 @@ const createSubmission = async (req, res) => {
           success: false,
           error: 'Questions not found',
           details: `The following question IDs do not exist: ${missingIds.join(', ')}`,
+        });
+      }
+    }
+
+    // Extract instrument IDs from instruments
+    const instrumentIds = extractInstrumentIds(req.body.instruments);
+
+    // Check if all instruments exist
+    if (instrumentIds.length > 0) {
+      const { exists, missingIds } = await checkInstrumentsExist(instrumentIds);
+
+      if (!exists) {
+        return res.status(404).json({
+          success: false,
+          error: 'Instruments not found',
+          details: `The following instrument IDs do not exist: ${missingIds.join(', ')}`,
         });
       }
     }
