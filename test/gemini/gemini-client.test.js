@@ -62,7 +62,7 @@ describe('Gemini Client Tests', () => {
       // Check that the module uses the default values
       expect(geminiClient.DEFAULT_MODEL).toBe('gemini-2.0-flash');
       expect(geminiClient.DEFAULT_TEMPERATURE).toBe(0.7);
-      expect(geminiClient.DEFAULT_MAX_TOKENS).toBe(8192);
+      expect(geminiClient.DEFAULT_MAX_TOKENS).toBe(4096);
     });
   });
 

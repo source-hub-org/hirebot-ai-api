@@ -18,6 +18,14 @@ jest.mock('../../src/service/gemini/quizQuestionCreator', () => {
   };
 });
 
+// Mock the question generation service
+jest.mock('../../src/service/questionGenerationService', () => {
+  return {
+    generateAndStoreQuestions: jest.fn(),
+    generateQuestions: jest.fn(),
+  };
+});
+
 // Mock the repository module
 jest.mock('../../src/repository/baseRepository', () => {
   const originalModule = jest.requireActual('../../src/repository/baseRepository');
@@ -25,6 +33,56 @@ jest.mock('../../src/repository/baseRepository', () => {
   return {
     ...originalModule,
     insertMany: jest.fn(),
+  };
+});
+
+// Mock the position utils module
+jest.mock('../../src/utils/positionUtils', () => {
+  const originalModule = jest.requireActual('../../src/utils/positionUtils');
+  
+  return {
+    ...originalModule,
+    getPositionMetadata: jest.fn().mockImplementation(async (position) => {
+      // Return test values that match what the tests expect
+      const positionMap = {
+        'intern': {
+          difficultyText: 'basic understanding of programming concepts',
+          positionInstruction: 'suitable for an intern-level candidate',
+          positionLevel: 1
+        },
+        'fresher': {
+          difficultyText: 'fundamental programming knowledge',
+          positionInstruction: 'appropriate for a fresher with limited experience',
+          positionLevel: 2
+        },
+        'junior': {
+          difficultyText: 'practical application of programming concepts',
+          positionInstruction: 'targeted at a junior developer with some experience',
+          positionLevel: 3
+        },
+        'middle': {
+          difficultyText: 'intermediate understanding of software development',
+          positionInstruction: 'designed for a mid-level developer with solid experience',
+          positionLevel: 4
+        },
+        'senior': {
+          difficultyText: 'deep understanding of scalable systems and best practices',
+          positionInstruction: 'targeted at a senior developer with extensive experience',
+          positionLevel: 5
+        },
+        'expert': {
+          difficultyText: 'advanced architectural thinking and system design expertise',
+          positionInstruction: 'challenging for expert-level developers and architects',
+          positionLevel: 6
+        }
+      };
+      
+      return positionMap[position] || {
+        difficultyText: 'various difficulty levels',
+        positionInstruction: 'suitable for developers of different experience levels',
+        positionLevel: 3
+      };
+    })
   };
 });
 
@@ -42,6 +100,7 @@ jest.mock('fs', () => {
 
 // Import the mocked modules
 const { generateQuizQuestions } = require('../../src/service/gemini/quizQuestionCreator');
+const { generateAndStoreQuestions } = require('../../src/service/questionGenerationService');
 const { insertMany } = require('../../src/repository/baseRepository');
 
 describe('Question Routes', () => {
@@ -91,6 +150,32 @@ describe('Question Routes', () => {
 
     // Default success response for appendFile
     require('fs').promises.appendFile.mockResolvedValue(undefined);
+    
+    // Default mock implementation for generateAndStoreQuestions
+    generateAndStoreQuestions.mockImplementation(async (params) => {
+      const { position } = params;
+      const positionLevel = position === 'intern' ? 1 : 
+                           position === 'fresher' ? 2 : 
+                           position === 'junior' ? 3 : 
+                           position === 'middle' ? 4 : 
+                           position === 'senior' ? 5 : 
+                           position === 'expert' ? 6 : 3;
+      
+      const formattedPosition = position.charAt(0).toUpperCase() + position.slice(1);
+      
+      return [
+        {
+          question: `Sample ${position} question`,
+          options: ['Option A', 'Option B', 'Option C', 'Option D'],
+          correctAnswer: 0,
+          explanation: 'Sample explanation',
+          difficulty: 'medium',
+          category: 'Sample Category',
+          position: formattedPosition,
+          positionLevel: positionLevel
+        }
+      ];
+    });
   });
 
   describe('POST /api/questions/generate', () => {
@@ -272,10 +357,10 @@ describe('Question Routes', () => {
         expect(questionData.positionLevel).toBe(level);
         expect(questionData.position).toBe(position.charAt(0).toUpperCase() + position.slice(1));
 
-        // Verify the mock was called with correct difficulty text
-        expect(generateQuizQuestions).toHaveBeenCalledWith(
+        // Verify the mock was called with correct parameters
+        expect(generateAndStoreQuestions).toHaveBeenCalledWith(
           expect.objectContaining({
-            difficultyText: difficultyText,
+            position: position,
           })
         );
       });
@@ -283,7 +368,7 @@ describe('Question Routes', () => {
 
     // Test for successful question generation
     it('should generate questions successfully', async () => {
-      // Mock the generateQuizQuestions function to return sample questions
+      // Mock the generateAndStoreQuestions function to return sample questions
       const mockQuestions = [
         {
           question: 'What method is used to add elements to the end of an array in JavaScript?',
@@ -293,6 +378,11 @@ describe('Question Routes', () => {
             'The push() method adds one or more elements to the end of an array and returns the new length of the array.',
           difficulty: 'easy',
           category: 'JavaScript Arrays',
+          topic: 'JavaScript Arrays',
+          language: 'JavaScript',
+          position: 'Junior',
+          positionLevel: 3,
+          createdAt: new Date()
         },
         {
           question: 'Which array method removes the last element from an array?',
@@ -302,14 +392,16 @@ describe('Question Routes', () => {
             'The pop() method removes the last element from an array and returns that element.',
           difficulty: 'easy',
           category: 'JavaScript Arrays',
+          topic: 'JavaScript Arrays',
+          language: 'JavaScript',
+          position: 'Junior',
+          positionLevel: 3,
+          createdAt: new Date()
         },
       ];
 
       // Setup the mock to return our sample questions
-      generateQuizQuestions.mockResolvedValue({
-        questions: mockQuestions,
-        filePath: path.join(tempDir, 'test-questions.json'),
-      });
+      generateAndStoreQuestions.mockResolvedValue(mockQuestions);
 
       // Make the request
       const response = await request(app).post('/api/questions/generate').send({
@@ -319,13 +411,11 @@ describe('Question Routes', () => {
       });
 
       // Verify the mock was called with correct parameters
-      expect(generateQuizQuestions).toHaveBeenCalledWith(
+      expect(generateAndStoreQuestions).toHaveBeenCalledWith(
         expect.objectContaining({
           topic: 'JavaScript Arrays',
           language: 'JavaScript',
-          position: 'junior',
-          difficultyText: 'practical application of programming concepts',
-          positionInstruction: 'targeted at a junior developer with some experience',
+          position: 'junior'
         })
       );
 
@@ -352,14 +442,14 @@ describe('Question Routes', () => {
       expect(firstQuestion).toHaveProperty('positionLevel');
       expect(firstQuestion).toHaveProperty('createdAt');
 
-      // Verify database insertion was called
-      expect(insertMany).toHaveBeenCalledWith('questions', expect.any(Array));
+      // We don't need to verify database insertion here since it's handled inside generateAndStoreQuestions
+      // which we've already mocked
     });
 
     // Test for AI service errors
     it('should handle AI service errors', async () => {
-      // Mock the generateQuizQuestions function to throw an error
-      generateQuizQuestions.mockRejectedValue(
+      // Mock the generateAndStoreQuestions function to throw an error
+      generateAndStoreQuestions.mockRejectedValue(
         new Error('Failed to generate content from Gemini API: API error')
       );
 
@@ -382,8 +472,8 @@ describe('Question Routes', () => {
 
     // Test for JSON parsing errors
     it('should handle JSON parsing errors', async () => {
-      // Mock the generateQuizQuestions function to throw a parsing error
-      generateQuizQuestions.mockRejectedValue(
+      // Mock the generateAndStoreQuestions function to throw a parsing error
+      generateAndStoreQuestions.mockRejectedValue(
         new Error('Invalid generated content: Failed to parse JSON')
       );
 
@@ -406,26 +496,9 @@ describe('Question Routes', () => {
 
     // Test for database errors
     it('should handle database errors', async () => {
-      // Mock successful AI response
-      const mockQuestions = [
-        {
-          question: 'Sample question?',
-          options: ['A', 'B', 'C', 'D'],
-          correctAnswer: 0,
-          explanation: 'Sample explanation',
-          difficulty: 'easy',
-          category: 'Sample Category',
-        },
-      ];
-
-      generateQuizQuestions.mockResolvedValue({
-        questions: mockQuestions,
-        filePath: path.join(tempDir, 'test-questions.json'),
-      });
-
-      // Mock database error
-      insertMany.mockRejectedValue(
-        new Error('MongoDB connection error: Failed to insert documents')
+      // Mock generateAndStoreQuestions to throw a database error
+      generateAndStoreQuestions.mockRejectedValue(
+        new Error('Database error: MongoDB connection error: Failed to insert documents')
       );
 
       // Make the request
@@ -447,7 +520,7 @@ describe('Question Routes', () => {
 
     // Test for file append errors
     it('should continue execution even if file append fails', async () => {
-      // Mock successful AI response
+      // Mock successful question generation
       const mockQuestions = [
         {
           question: 'Sample question?',
@@ -456,13 +529,15 @@ describe('Question Routes', () => {
           explanation: 'Sample explanation',
           difficulty: 'easy',
           category: 'Sample Category',
+          topic: 'JavaScript Arrays',
+          language: 'JavaScript',
+          position: 'Junior',
+          positionLevel: 3,
+          createdAt: new Date()
         },
       ];
 
-      generateQuizQuestions.mockResolvedValue({
-        questions: mockQuestions,
-        filePath: path.join(tempDir, 'test-questions.json'),
-      });
+      generateAndStoreQuestions.mockResolvedValue(mockQuestions);
 
       // Mock file append error
       require('fs').promises.appendFile.mockRejectedValue(new Error('Failed to write to file'));
@@ -483,9 +558,9 @@ describe('Question Routes', () => {
     // Test for generic unexpected errors
     it('should handle generic unexpected errors', async () => {
       // Mock an unexpected error that doesn't match any specific error type
-      generateQuizQuestions.mockImplementation(() => {
-        throw new Error('Unexpected error occurred');
-      });
+      generateAndStoreQuestions.mockRejectedValue(
+        new Error('Unexpected error occurred')
+      );
 
       // Make the request
       const response = await request(app).post('/api/questions/generate').send({
