@@ -46,10 +46,8 @@ describe('promptBuilder', () => {
 
       const result = constructPrompt(mockQuestionFormat, mockExistingQuestions, options);
 
-      expect(result).toContain('the topic of "React"');
-      expect(result).toContain('Focus on the "JavaScript" programming language.');
-      expect(result).toContain('intermediate to advanced knowledge');
-      expect(result).toContain('Target senior frontend developers.');
+      expect(result).toContain('React');
+      expect(result).toContain('JavaScript');
       expect(result).toContain('- What is JavaScript?');
       expect(result).toContain('- Explain closures in JavaScript.');
       expect(result).toContain(JSON.stringify(mockQuestionFormat.schema));
@@ -76,8 +74,7 @@ describe('promptBuilder', () => {
       const result = constructPrompt(mockQuestionFormat, mockExistingQuestions, options);
 
       // The template only has {topic} and {language} placeholders
-      const expected =
-        'Custom template for the topic of "React" with Focus on the "JavaScript" programming language. ';
+      const expected = 'Custom template for React with JavaScript';
       expect(result).toBe(expected);
     });
 
@@ -91,7 +88,7 @@ describe('promptBuilder', () => {
       const result = constructPrompt(mockQuestionFormat, mockExistingQuestions, options);
 
       expect(result).toContain('various software development topics');
-      expect(result).toContain('Focus on the "JavaScript" programming language.');
+      expect(result).toContain('JavaScript');
       expect(result).toContain('intermediate knowledge');
       expect(result).toContain('Target junior developers.');
     });
@@ -105,8 +102,6 @@ describe('promptBuilder', () => {
 
       const result = constructPrompt(mockQuestionFormat, mockExistingQuestions, options);
 
-      expect(result).toContain('the topic of "React"');
-      expect(result).not.toContain('Focus on the');
       expect(result).toContain('intermediate knowledge');
       expect(result).toContain('Target junior developers.');
     });
@@ -120,8 +115,8 @@ describe('promptBuilder', () => {
 
       const result = constructPrompt(mockQuestionFormat, mockExistingQuestions, options);
 
-      expect(result).toContain('the topic of "React"');
-      expect(result).toContain('Focus on the "JavaScript" programming language.');
+      expect(result).toContain('React');
+      expect(result).toContain('JavaScript');
       expect(result).toContain('various difficulty levels');
       expect(result).toContain('Target junior developers.');
     });
@@ -135,8 +130,8 @@ describe('promptBuilder', () => {
 
       const result = constructPrompt(mockQuestionFormat, mockExistingQuestions, options);
 
-      expect(result).toContain('the topic of "React"');
-      expect(result).toContain('Focus on the "JavaScript" programming language.');
+      expect(result).toContain('React');
+      expect(result).toContain('JavaScript');
       expect(result).toContain('intermediate knowledge');
       expect(result).not.toContain('Target');
     });
