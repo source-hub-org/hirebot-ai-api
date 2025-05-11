@@ -10,8 +10,9 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 - Store and retrieve questions from MongoDB (v6.16.0)
 - Asynchronous question generation with Redis-based job queue
 - Manage interview topics and positions through commands and API
-- RESTful API for quiz, topic, position, language, candidate, and submission management
+- RESTful API for quiz, topic, position, language, candidate, submission, and instrument management
 - Flexible question search API with support for multiple topics, languages, and positions
+- Assessment instruments for personality and skill evaluation
 - Comprehensive validation and error handling
 - Swagger API documentation
 - Extensive test coverage with Jest (v29.7.0)
@@ -129,6 +130,8 @@ hirebot-ai-api/
 │   ├── controllers/    # Request handlers
 │   │   ├── candidates/            # Candidate controllers
 │   │   ├── health-check/          # Health check controllers
+│   │   ├── instrument-tags/       # Instrument tag controllers
+│   │   ├── instruments/           # Instrument controllers
 │   │   ├── languages/             # Language controllers
 │   │   ├── positions/             # Position controllers
 │   │   ├── questions/             # Question controllers
@@ -136,6 +139,8 @@ hirebot-ai-api/
 │   │   └── topics/                # Topic controllers
 │   ├── models/         # Data models
 │   │   ├── candidateModel.js      # Candidate schema and validation
+│   │   ├── instrumentModel.js     # Instrument schema and validation
+│   │   ├── instrumentTagModel.js  # Instrument tag schema and validation
 │   │   ├── jobModel.js            # Job queue schema
 │   │   ├── languageModel.js       # Language schema and validation
 │   │   ├── positionModel.js       # Position schema and validation
@@ -143,6 +148,8 @@ hirebot-ai-api/
 │   ├── repository/     # Data access layer
 │   │   ├── baseRepository.js      # Base repository with common operations
 │   │   ├── candidateRepository.js # Candidate data operations
+│   │   ├── instrumentRepository.js # Instrument data operations
+│   │   ├── instrumentTagRepository.js # Instrument tag data operations
 │   │   ├── jobRepository.js       # Job queue operations
 │   │   ├── languageRepository.js  # Language data operations
 │   │   ├── positionRepository.js  # Position data operations
@@ -151,6 +158,8 @@ hirebot-ai-api/
 │   ├── routes/         # API routes
 │   │   ├── candidates/            # Candidate API endpoints
 │   │   ├── health-check/          # Health check endpoints
+│   │   ├── instrument-tags/       # Instrument tag API endpoints
+│   │   ├── instruments/           # Instrument API endpoints
 │   │   ├── languages/             # Language API endpoints
 │   │   ├── positions/             # Position API endpoints
 │   │   ├── questions/             # Question generation endpoints
@@ -168,6 +177,8 @@ hirebot-ai-api/
 │   │   │       ├── parsers.js          # JSON parsing utilities
 │   │   │       ├── promptBuilder.js    # AI prompt construction
 │   │   │       └── validators.js       # Question validation utilities
+│   │   ├── instrumentService.js        # Instrument service
+│   │   ├── instrumentTagService.js     # Instrument tag service
 │   │   ├── jobProcessorService.js      # Background job processor
 │   │   ├── languageService.js          # Language service
 │   │   ├── positionsService.js         # Positions service
@@ -181,6 +192,7 @@ hirebot-ai-api/
 │       ├── errorResponseHandler.js     # Error handling utilities
 │       ├── fileParser.js               # File reading utilities
 │       ├── generateRequestValidator.js # Request validation
+│       ├── instrumentQueryBuilder.js   # Instrument query builder
 │       ├── languageValidator.js        # Language validation utilities
 │       ├── logger.js                   # Logging utilities
 │       ├── paginationUtils.js          # Pagination utilities
@@ -197,6 +209,8 @@ hirebot-ai-api/
 │   ├── files/          # File operation tests
 │   ├── gemini/         # Gemini integration tests
 │   ├── general/        # General utility tests
+│   ├── instruments/    # Instrument tests
+│   ├── languages/      # Language tests
 │   ├── questions/      # Question generation tests
 │   ├── repositories/   # Repository tests
 │   ├── routes/         # API route tests
@@ -593,6 +607,23 @@ http://localhost:3000/api-docs
 - `GET /api/submissions/{id}` - Get a submission by ID
 - `GET /api/submissions/candidate/{candidateId}` - Get submissions by candidate ID
 
+#### Instruments API
+
+- `GET /api/instruments` - Get all instruments with pagination
+- `GET /api/instruments/:id` - Get an instrument by ID
+- `GET /api/instruments/tag/:tagId` - Get instruments by tag ID
+- `POST /api/instruments` - Create a new instrument
+- `PUT /api/instruments/:id` - Update an instrument
+- `DELETE /api/instruments/:id` - Delete an instrument
+
+#### Instrument Tags API
+
+- `GET /api/instrument-tags` - Get all instrument tags with pagination
+- `GET /api/instrument-tags/:id` - Get an instrument tag by ID
+- `POST /api/instrument-tags` - Create a new instrument tag
+- `PUT /api/instrument-tags/:id` - Update an instrument tag
+- `DELETE /api/instrument-tags/:id` - Delete an instrument tag
+
 #### Health Check API
 
 - `GET /api/health` - Check basic API health status
@@ -651,6 +682,22 @@ The submission model defines the structure for storing candidate quiz submission
 - Required fields: `candidate_id`
 - Contains arrays of answers to questions, essay responses, and review information
 - Each answer includes the question ID, selected option, and skip status
+
+### Instrument Model
+
+The instrument model defines the structure for storing assessment instruments:
+
+- Required fields: `questionId`, `questionText`, `type`, `tags`
+- Supports multiple instrument types: `scale`, `multiple-choice`, `open-ended`, `boolean`
+- Options are required for scale and multiple-choice types
+- Each instrument is associated with one or more instrument tags
+
+### Instrument Tag Model
+
+The instrument tag model defines categories for assessment instruments:
+
+- Required fields: `name`, `description`
+- Used to organize and filter instruments by category (e.g., personality, technical skills)
 
 ## Testing
 
