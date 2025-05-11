@@ -26,12 +26,12 @@ Generate 10 unique multiple-choice technical interview questions for software de
 function constructPrompt(questionFormat, existingQuestions, options = {}) {
   // Get topic instruction
   const topicInstruction = options.topic
-    ? `the topic of "${options.topic}"`
+    ? `${options.topic}`
     : 'various software development topics';
 
   // Get language instruction
   const languageInstruction = options.language
-    ? `Focus on the "${options.language}" programming language. `
+    ? `${options.language}`
     : '';
 
   // Get difficulty text and position instruction
