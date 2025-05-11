@@ -30,9 +30,7 @@ function constructPrompt(questionFormat, existingQuestions, options = {}) {
     : 'various software development topics';
 
   // Get language instruction
-  const languageInstruction = options.language
-    ? `${options.language}`
-    : '';
+  const languageInstruction = options.language ? `${options.language}` : '';
 
   // Get difficulty text and position instruction
   const difficultyText = options.difficultyText || 'various difficulty levels';

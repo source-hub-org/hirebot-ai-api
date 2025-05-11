@@ -39,50 +39,52 @@ jest.mock('../../src/repository/baseRepository', () => {
 // Mock the position utils module
 jest.mock('../../src/utils/positionUtils', () => {
   const originalModule = jest.requireActual('../../src/utils/positionUtils');
-  
+
   return {
     ...originalModule,
-    getPositionMetadata: jest.fn().mockImplementation(async (position) => {
+    getPositionMetadata: jest.fn().mockImplementation(async position => {
       // Return test values that match what the tests expect
       const positionMap = {
-        'intern': {
+        intern: {
           difficultyText: 'basic understanding of programming concepts',
           positionInstruction: 'suitable for an intern-level candidate',
-          positionLevel: 1
+          positionLevel: 1,
         },
-        'fresher': {
+        fresher: {
           difficultyText: 'fundamental programming knowledge',
           positionInstruction: 'appropriate for a fresher with limited experience',
-          positionLevel: 2
+          positionLevel: 2,
         },
-        'junior': {
+        junior: {
           difficultyText: 'practical application of programming concepts',
           positionInstruction: 'targeted at a junior developer with some experience',
-          positionLevel: 3
+          positionLevel: 3,
         },
-        'middle': {
+        middle: {
           difficultyText: 'intermediate understanding of software development',
           positionInstruction: 'designed for a mid-level developer with solid experience',
-          positionLevel: 4
+          positionLevel: 4,
         },
-        'senior': {
+        senior: {
           difficultyText: 'deep understanding of scalable systems and best practices',
           positionInstruction: 'targeted at a senior developer with extensive experience',
-          positionLevel: 5
+          positionLevel: 5,
         },
-        'expert': {
+        expert: {
           difficultyText: 'advanced architectural thinking and system design expertise',
           positionInstruction: 'challenging for expert-level developers and architects',
-          positionLevel: 6
+          positionLevel: 6,
+        },
+      };
+
+      return (
+        positionMap[position] || {
+          difficultyText: 'various difficulty levels',
+          positionInstruction: 'suitable for developers of different experience levels',
+          positionLevel: 3,
         }
-      };
-      
-      return positionMap[position] || {
-        difficultyText: 'various difficulty levels',
-        positionInstruction: 'suitable for developers of different experience levels',
-        positionLevel: 3
-      };
-    })
+      );
+    }),
   };
 });
 
@@ -150,19 +152,27 @@ describe('Question Routes', () => {
 
     // Default success response for appendFile
     require('fs').promises.appendFile.mockResolvedValue(undefined);
-    
+
     // Default mock implementation for generateAndStoreQuestions
-    generateAndStoreQuestions.mockImplementation(async (params) => {
+    generateAndStoreQuestions.mockImplementation(async params => {
       const { position } = params;
-      const positionLevel = position === 'intern' ? 1 : 
-                           position === 'fresher' ? 2 : 
-                           position === 'junior' ? 3 : 
-                           position === 'middle' ? 4 : 
-                           position === 'senior' ? 5 : 
-                           position === 'expert' ? 6 : 3;
-      
+      const positionLevel =
+        position === 'intern'
+          ? 1
+          : position === 'fresher'
+            ? 2
+            : position === 'junior'
+              ? 3
+              : position === 'middle'
+                ? 4
+                : position === 'senior'
+                  ? 5
+                  : position === 'expert'
+                    ? 6
+                    : 3;
+
       const formattedPosition = position.charAt(0).toUpperCase() + position.slice(1);
-      
+
       return [
         {
           question: `Sample ${position} question`,
@@ -172,8 +182,8 @@ describe('Question Routes', () => {
           difficulty: 'medium',
           category: 'Sample Category',
           position: formattedPosition,
-          positionLevel: positionLevel
-        }
+          positionLevel: positionLevel,
+        },
       ];
     });
   });
@@ -321,7 +331,7 @@ describe('Question Routes', () => {
       },
     ];
 
-    positionTests.forEach(({ position, level, difficultyText }) => {
+    positionTests.forEach(({ position, level }) => {
       it(`should handle ${position} position correctly`, async () => {
         // Mock the generateQuizQuestions function to return sample questions
         const mockQuestions = [
@@ -382,7 +392,7 @@ describe('Question Routes', () => {
           language: 'JavaScript',
           position: 'Junior',
           positionLevel: 3,
-          createdAt: new Date()
+          createdAt: new Date(),
         },
         {
           question: 'Which array method removes the last element from an array?',
@@ -396,7 +406,7 @@ describe('Question Routes', () => {
           language: 'JavaScript',
           position: 'Junior',
           positionLevel: 3,
-          createdAt: new Date()
+          createdAt: new Date(),
         },
       ];
 
@@ -415,7 +425,7 @@ describe('Question Routes', () => {
         expect.objectContaining({
           topic: 'JavaScript Arrays',
           language: 'JavaScript',
-          position: 'junior'
+          position: 'junior',
         })
       );
 
@@ -533,7 +543,7 @@ describe('Question Routes', () => {
           language: 'JavaScript',
           position: 'Junior',
           positionLevel: 3,
-          createdAt: new Date()
+          createdAt: new Date(),
         },
       ];
 
@@ -558,9 +568,7 @@ describe('Question Routes', () => {
     // Test for generic unexpected errors
     it('should handle generic unexpected errors', async () => {
       // Mock an unexpected error that doesn't match any specific error type
-      generateAndStoreQuestions.mockRejectedValue(
-        new Error('Unexpected error occurred')
-      );
+      generateAndStoreQuestions.mockRejectedValue(new Error('Unexpected error occurred'));
 
       // Make the request
       const response = await request(app).post('/api/questions/generate').send({
