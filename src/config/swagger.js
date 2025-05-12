@@ -680,6 +680,328 @@ const swaggerOptions = {
             },
           },
         },
+        Instrument: {
+          type: 'object',
+          required: ['questionId', 'questionText', 'type', 'tags'],
+          properties: {
+            _id: {
+              type: 'string',
+              description: 'Instrument ID',
+              example: '60d21b4667d0d8992e610c85',
+            },
+            questionId: {
+              type: 'string',
+              description: 'Unique question identifier',
+              example: 'INST-001',
+            },
+            questionText: {
+              type: 'string',
+              description: 'Question text',
+              example: 'How comfortable are you working in a team environment?',
+            },
+            type: {
+              type: 'string',
+              description: 'Question type',
+              enum: ['scale', 'multiple-choice', 'open-ended', 'boolean'],
+              example: 'scale',
+            },
+            options: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+              description: 'Answer options (required for scale and multiple-choice types)',
+              example: ['Not comfortable', 'Somewhat comfortable', 'Very comfortable'],
+            },
+            tags: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+              description: 'Tag IDs associated with this instrument',
+              example: ['60d21b4667d0d8992e610c85', '60d21b4667d0d8992e610c86'],
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Creation timestamp',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Last update timestamp',
+            },
+          },
+        },
+        InstrumentList: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'string',
+              example: 'success',
+            },
+            data: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/Instrument',
+              },
+            },
+            pagination: {
+              $ref: '#/components/schemas/Pagination',
+            },
+          },
+        },
+        InstrumentTag: {
+          type: 'object',
+          required: ['name', 'description'],
+          properties: {
+            _id: {
+              type: 'string',
+              description: 'Instrument Tag ID',
+              example: '60d21b4667d0d8992e610c85',
+            },
+            name: {
+              type: 'string',
+              description: 'Tag name',
+              example: 'Teamwork',
+            },
+            description: {
+              type: 'string',
+              description: 'Tag description',
+              example: 'Questions related to teamwork and collaboration skills',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Creation timestamp',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Last update timestamp',
+            },
+          },
+        },
+        InstrumentTagList: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'string',
+              example: 'success',
+            },
+            data: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/InstrumentTag',
+              },
+            },
+            pagination: {
+              $ref: '#/components/schemas/Pagination',
+            },
+          },
+        },
+        LogicTag: {
+          type: 'object',
+          required: ['name', 'slug'],
+          properties: {
+            _id: {
+              type: 'string',
+              description: 'Logic Tag ID',
+              example: '60d21b4667d0d8992e610c85',
+            },
+            name: {
+              type: 'string',
+              description: 'Tag name',
+              example: 'Algorithms',
+            },
+            slug: {
+              type: 'string',
+              description: 'URL-friendly identifier',
+              example: 'algorithms',
+            },
+            description: {
+              type: 'string',
+              description: 'Tag description',
+              example: 'Questions related to algorithmic problem-solving',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Creation timestamp',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Last update timestamp',
+            },
+          },
+        },
+        LogicTagList: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'string',
+              example: 'success',
+            },
+            data: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/LogicTag',
+              },
+            },
+            pagination: {
+              $ref: '#/components/schemas/Pagination',
+            },
+          },
+        },
+        Choice: {
+          type: 'object',
+          required: ['text', 'is_correct'],
+          properties: {
+            text: {
+              type: 'string',
+              description: 'Choice text',
+              example: 'O(n log n)',
+            },
+            is_correct: {
+              type: 'boolean',
+              description: 'Whether this choice is correct',
+              example: true,
+            },
+          },
+        },
+        LogicQuestion: {
+          type: 'object',
+          required: ['question', 'level', 'tag_ids', 'type', 'answer_explanation'],
+          properties: {
+            _id: {
+              type: 'string',
+              description: 'Logic Question ID',
+              example: '60d21b4667d0d8992e610c85',
+            },
+            question: {
+              type: 'string',
+              description: 'Question text',
+              example: 'What is the time complexity of the merge sort algorithm?',
+            },
+            level: {
+              type: 'integer',
+              description: 'Difficulty level (1-6)',
+              example: 3,
+              minimum: 1,
+              maximum: 6,
+            },
+            tag_ids: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+              description: 'Tag IDs associated with this question',
+              example: ['60d21b4667d0d8992e610c85', '60d21b4667d0d8992e610c86'],
+            },
+            type: {
+              type: 'string',
+              description: 'Question type',
+              enum: ['multiple_choice', 'open_question'],
+              example: 'multiple_choice',
+            },
+            choices: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/Choice',
+              },
+              description: 'Answer choices (required for multiple_choice type)',
+            },
+            answer_explanation: {
+              type: 'string',
+              description: 'Explanation of the correct answer',
+              example:
+                'Merge sort has a time complexity of O(n log n) because it divides the array in half at each step (log n) and then performs a linear-time merge operation (n).',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Creation timestamp',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Last update timestamp',
+            },
+          },
+        },
+        LogicQuestionList: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'string',
+              example: 'success',
+            },
+            data: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/LogicQuestion',
+              },
+            },
+            pagination: {
+              $ref: '#/components/schemas/Pagination',
+            },
+          },
+        },
+        Job: {
+          type: 'object',
+          required: ['type', 'payload'],
+          properties: {
+            _id: {
+              type: 'string',
+              description: 'Job ID',
+              example: '60d21b4667d0d8992e610c85',
+            },
+            type: {
+              type: 'string',
+              description: 'Job type',
+              example: 'question_generation',
+            },
+            payload: {
+              type: 'object',
+              description: 'Job payload data',
+            },
+            status: {
+              type: 'string',
+              description: 'Job status',
+              enum: ['new', 'pending', 'processing', 'done', 'failed'],
+              example: 'pending',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Creation timestamp',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Last update timestamp',
+            },
+          },
+        },
+        JobList: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'string',
+              example: 'success',
+            },
+            data: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/Job',
+              },
+            },
+            pagination: {
+              $ref: '#/components/schemas/Pagination',
+            },
+          },
+        },
       },
     },
   },

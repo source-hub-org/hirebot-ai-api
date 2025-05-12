@@ -13,8 +13,10 @@ The backend service of HireBot AI, responsible for generating, storing, and mana
 - RESTful API for quiz, topic, position, language, candidate, submission, and instrument management
 - Flexible question search API with support for multiple topics, languages, and positions
 - Assessment instruments for personality and skill evaluation
+- Logic questions with multiple-choice and open-ended formats
+- Tagging system for organizing questions by category
 - Comprehensive validation and error handling
-- Swagger API documentation
+- Swagger API documentation with complete schema definitions
 - Extensive test coverage with Jest (v29.7.0)
 - Pagination support for listing resources
 - Docker and Docker Compose support for easy deployment
@@ -143,7 +145,10 @@ hirebot-ai-api/
 │   │   ├── instrumentTagModel.js  # Instrument tag schema and validation
 │   │   ├── jobModel.js            # Job queue schema
 │   │   ├── languageModel.js       # Language schema and validation
+│   │   ├── logicQuestionModel.js  # Logic question schema and validation
+│   │   ├── logicTagModel.js       # Logic tag schema and validation
 │   │   ├── positionModel.js       # Position schema and validation
+│   │   ├── questionModel.js       # Question schema and validation
 │   │   └── submissionModel.js     # Submission schema and validation
 │   ├── repository/     # Data access layer
 │   │   ├── baseRepository.js      # Base repository with common operations
@@ -152,7 +157,10 @@ hirebot-ai-api/
 │   │   ├── instrumentTagRepository.js # Instrument tag data operations
 │   │   ├── jobRepository.js       # Job queue operations
 │   │   ├── languageRepository.js  # Language data operations
+│   │   ├── logicQuestionRepository.js # Logic question data operations
+│   │   ├── logicTagRepository.js  # Logic tag data operations
 │   │   ├── positionRepository.js  # Position data operations
+│   │   ├── questionRepository.js  # Question data operations
 │   │   ├── submissionRepository.js # Submission data operations
 │   │   └── topicRepository.js     # Topic data operations
 │   ├── routes/         # API routes
@@ -161,6 +169,8 @@ hirebot-ai-api/
 │   │   ├── instrument-tags/       # Instrument tag API endpoints
 │   │   ├── instruments/           # Instrument API endpoints
 │   │   ├── languages/             # Language API endpoints
+│   │   ├── logic-questions/       # Logic question API endpoints
+│   │   ├── logic-tags/            # Logic tag API endpoints
 │   │   ├── positions/             # Position API endpoints
 │   │   ├── questions/             # Question generation endpoints
 │   │   ├── submissions/           # Submission API endpoints
@@ -181,6 +191,10 @@ hirebot-ai-api/
 │   │   ├── instrumentTagService.js     # Instrument tag service
 │   │   ├── jobProcessorService.js      # Background job processor
 │   │   ├── languageService.js          # Language service
+│   │   ├── logicQuestionGetService.js  # Logic question retrieval service
+│   │   ├── logicQuestionQueryService.js # Logic question query service
+│   │   ├── logicQuestionService.js     # Logic question management service
+│   │   ├── logicTagService.js          # Logic tag service
 │   │   ├── positionsService.js         # Positions service
 │   │   ├── questionGenerationService.js # Question generation service
 │   │   ├── questionRequestService.js   # Async question request service
@@ -191,19 +205,24 @@ hirebot-ai-api/
 │       ├── ensureDirectories.js        # Directory creation utilities
 │       ├── errorResponseHandler.js     # Error handling utilities
 │       ├── fileParser.js               # File reading utilities
+│       ├── formatSlug.js               # Slug formatting utilities
 │       ├── generateRequestValidator.js # Request validation
 │       ├── instrumentQueryBuilder.js   # Instrument query builder
 │       ├── languageValidator.js        # Language validation utilities
 │       ├── logger.js                   # Logging utilities
+│       ├── logicQuestionQueryBuilder.js # Logic question query builder
 │       ├── paginationUtils.js          # Pagination utilities
 │       ├── positionUtils.js            # Position-related utilities
 │       ├── positionValidator.js        # Position validation utilities
 │       ├── questionSearchQueryBuilder.js # Search query builder
 │       ├── questionSearchValidator.js    # Search validation
+│       ├── questionValidator.js        # Question validation utilities
+│       ├── randomSortingUtils.js       # Random sorting utilities
 │       ├── redisQueueHelper.js         # Redis queue utilities
 │       ├── submissionEnricher.js       # Submission data enrichment
 │       ├── submissionValidator.js      # Submission validation utilities
-│       └── topicValidator.js           # Topic validation utilities
+│       ├── topicValidator.js           # Topic validation utilities
+│       └── validateObjectId.js         # MongoDB ObjectId validation
 ├── test/               # Test files
 │   ├── candidates/     # Candidate tests
 │   ├── files/          # File operation tests
@@ -573,6 +592,23 @@ http://localhost:3000/api-docs
 - `POST /api/questions/request` - Request asynchronous question generation
 - `GET /api/questions/search` - Search for questions
 
+#### Logic Questions API
+
+- `GET /api/logic-questions` - Get all logic questions with pagination
+- `GET /api/logic-questions/{id}` - Get a logic question by ID
+- `POST /api/logic-questions` - Create a new logic question
+- `PUT /api/logic-questions/{id}` - Update a logic question
+- `DELETE /api/logic-questions/{id}` - Delete a logic question
+- `GET /api/logic-questions/tag/{tagId}` - Get logic questions by tag ID
+
+#### Logic Tags API
+
+- `GET /api/logic-tags` - Get all logic tags with pagination
+- `GET /api/logic-tags/{id}` - Get a logic tag by ID
+- `POST /api/logic-tags` - Create a new logic tag
+- `PUT /api/logic-tags/{id}` - Update a logic tag
+- `DELETE /api/logic-tags/{id}` - Delete a logic tag
+
 #### Topics API
 
 - `GET /api/topics` - Get all available topics
@@ -683,6 +719,33 @@ The submission model defines the structure for storing candidate quiz submission
 - Contains arrays of answers to questions, essay responses, and review information
 - Each answer includes the question ID, selected option, and skip status
 
+### Question Model
+
+The question model defines the structure for storing quiz questions:
+
+- Required fields: `question`, `options`, `correct_answer`, `explanation`, `topic`, `difficulty`
+- Supports multiple-choice questions with single or multiple correct answers
+- Includes detailed explanations for correct answers
+- Associated with specific topics and difficulty levels
+
+### Logic Question Model
+
+The logic question model defines the structure for storing logical reasoning questions:
+
+- Required fields: `question`, `level`, `tag_ids`, `type`, `answer_explanation`
+- Supports two question types: `multiple_choice` and `open_question`
+- For multiple-choice questions, includes an array of choices with correctness flags
+- Associated with one or more logic tags for categorization
+- Includes difficulty level (1-6) and detailed answer explanations
+
+### Logic Tag Model
+
+The logic tag model defines categories for logic questions:
+
+- Required fields: `name`, `slug`
+- Optional field: `description`
+- Used to organize and filter logic questions by category (e.g., algorithms, data structures)
+
 ### Instrument Model
 
 The instrument model defines the structure for storing assessment instruments:
@@ -698,6 +761,14 @@ The instrument tag model defines categories for assessment instruments:
 
 - Required fields: `name`, `description`
 - Used to organize and filter instruments by category (e.g., personality, technical skills)
+
+### Job Model
+
+The job model defines the structure for asynchronous job processing:
+
+- Required fields: `type`, `payload`
+- Tracks job status through states: `new`, `pending`, `processing`, `done`, `failed`
+- Used for background processing of resource-intensive operations like question generation
 
 ## Testing
 
