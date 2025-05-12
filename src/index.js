@@ -14,6 +14,8 @@ const {
   languageRoutes,
   instrumentTagRoutes,
   instrumentRoutes,
+  logicTagRoutes,
+  logicQuestionRoutes,
 } = require('./routes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
@@ -49,6 +51,8 @@ app.use('/api/positions', positionRoutes);
 app.use('/api/languages', languageRoutes);
 app.use('/api/instrument-tags', instrumentTagRoutes);
 app.use('/api/instruments', instrumentRoutes);
+app.use('/api/logic-tags', logicTagRoutes);
+app.use('/api/logic-questions', logicQuestionRoutes);
 
 // Initialize application
 async function initializeApp() {

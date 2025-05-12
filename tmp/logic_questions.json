@@ -1,0 +1,362 @@
+[
+  {
+    "_id": "665dbc010000000000000001",
+    "question": "Chuỗi số sau tuân theo quy luật nào: 3, 6, 12, 24, ?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000001"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "36", "is_correct": false },
+      { "text": "48", "is_correct": true },
+      { "text": "60", "is_correct": false }
+    ],
+    "answer_explanation": "Chuỗi số 3, 6, 12, 24 có quy luật mỗi số được nhân đôi để ra số tiếp theo.\n3 × 2 = 6.\n6 × 2 = 12.\n12 × 2 = 24.\nDo đó, 24 × 2 = 48 là số tiếp theo.\nCác lựa chọn khác không phù hợp với quy luật này.\nQuy luật nhân đôi là một mẫu đơn giản, thường gặp trong các bài toán nhận diện mẫu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000002",
+    "question": "Hình tiếp theo trong chuỗi hình vuông, tam giác, hình tròn, hình vuông, ? là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000001"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Tam giác", "is_correct": true },
+      { "text": "Hình tròn", "is_correct": false },
+      { "text": "Hình vuông", "is_correct": false }
+    ],
+    "answer_explanation": "Chuỗi hình vuông, tam giác, hình tròn, hình vuông có quy luật lặp lại.\nBa hình đầu (vuông, tam giác, tròn) tạo thành một chu kỳ.\nHình thứ tư (vuông) bắt đầu chu kỳ mới.\nDo đó, hình tiếp theo là tam giác (theo thứ tự chu kỳ).\nCác lựa chọn khác không phù hợp với mẫu lặp lại này.\nNhận diện mẫu dựa trên thứ tự lặp lại là kỹ năng quan trọng trong bài toán này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000003",
+    "question": "Chuỗi chữ cái A, C, I, I, ? có chữ cái tiếp theo là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000001"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "I", "is_correct": false },
+      { "text": "A", "is_correct": true },
+      { "text": "C", "is_correct": false }
+    ],
+    "answer_explanation": "Chuỗi A, C, I, I có quy luật lặp lại sau bốn phần tử.\nA là chữ cái thứ 1, C là thứ 3, I là thứ 9 trong bảng chữ cái.\nVị trí thứ tư lặp lại I.\nChu kỳ bốn phần tử là A, C, I, I.\nDo đó, phần tử tiếp theo là A (bắt đầu chu kỳ mới).\nCác lựa chọn khác không phù hợp với mẫu này.\nNhận diện mẫu chữ cái yêu cầu chú ý đến thứ tự và chu kỳ lặp lại.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000004",
+    "question": "Chuỗi 1, 4, 9, 16, ? có số tiếp theo là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000001"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "25", "is_correct": true },
+      { "text": "20", "is_correct": false },
+      { "text": "36", "is_correct": false }
+    ],
+    "answer_explanation": "Chuỗi 1, 4, 9, 16 là các số bình phương: 1², 2², 3², 4².\nSố tiếp theo là 5² = 25.\nQuy luật là bình phương của các số tự nhiên liên tiếp.\nLựa chọn 20 và 36 không phải là số bình phương của số tự nhiên nào.\nNhận diện mẫu số học yêu cầu hiểu các dạng toán học cơ bản như bình phương.\nViệc kiểm tra các số tiếp theo giúp xác nhận quy luật.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000005",
+    "question": "Chuỗi màu sắc đỏ, xanh, vàng, đỏ, ? có màu tiếp theo là gì?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000001"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Xanh", "is_correct": true },
+      { "text": "Vàng", "is_correct": false },
+      { "text": "Đỏ", "is_correct": false }
+    ],
+    "answer_explanation": "Chuỗi đỏ, xanh, vàng, đỏ có quy luật lặp lại sau ba màu.\nBa màu đầu (đỏ, xanh, vàng) tạo thành một chu kỳ.\nMàu thứ tư (đỏ) bắt đầu chu kỳ mới.\nDo đó, màu tiếp theo là xanh (theo thứ tự chu kỳ).\nCác lựa chọn khác không phù hợp với mẫu lặp lại này.\nNhận diện mẫu màu sắc dựa trên chu kỳ lặp là bài toán đơn giản nhưng cần chú ý.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000006",
+    "question": "Số tiếp theo trong dãy 5, 10, 20, 35, ? là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000002"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "50", "is_correct": true },
+      { "text": "45", "is_correct": false },
+      { "text": "60", "is_correct": false }
+    ],
+    "answer_explanation": "Dãy 5, 10, 20, 35 có quy luật: mỗi số được tính bằng số trước cộng với một số tăng dần.\n5 + 5 = 10.\n10 + 10 = 20.\n20 + 15 = 35.\nSố cộng thêm lần lượt là 5, 10, 15, tăng 5 mỗi lần.\nSố tiếp theo là 35 + 20 = 50.\nCác lựa chọn khác không phù hợp với quy luật này.\nPhân tích dãy số yêu cầu nhận diện mẫu số cộng thêm và dự đoán số tiếp theo.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000007",
+    "question": "Số tiếp theo trong dãy 2, 5, 11, 23, ? là gì?",
+    "level": 4,
+    "tag_ids": ["665dbc000000000000000002"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "44", "is_correct": true },
+      { "text": "48", "is_correct": false },
+      { "text": "50", "is_correct": false }
+    ],
+    "answer_explanation": "Dãy 2, 5, 11, 23 có quy luật: mỗi số được nhân đôi rồi cộng thêm 1.\n2 × 2 + 1 = 5.\n5 × 2 + 1 = 11.\n11 × 2 + 1 = 23.\nDo đó, 23 × 2 + 1 = 44 là số tiếp theo.\nCác lựa chọn khác không tuân theo quy luật này.\nPhân tích dãy số phức tạp hơn này yêu cầu nhận diện cả phép nhân và cộng.\nKiểm tra từng bước giúp xác nhận quy luật chính xác.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000008",
+    "question": "Dãy 1, 3, 6, 10, ? có số tiếp theo là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000002"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "15", "is_correct": true },
+      { "text": "12", "is_correct": false },
+      { "text": "18", "is_correct": false }
+    ],
+    "answer_explanation": "Dãy 1, 3, 6, 10 là dãy số tam giác, tính bằng công thức n(n+1)/2.\nSố thứ nhất: 1(1+1)/2 = 1.\nSố thứ hai: 2(2+1)/2 = 3.\nSố thứ ba: 3(3+1)/2 = 6.\nSố thứ tư: 4(4+1a = 6.\nSố thứ năm: 5(5+1)/2 = 15.\nCác lựa chọn khác không phù hợp.\nDãy số tam giác là một dạng dãy số phổ biến trong bài toán logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000009",
+    "question": "Số tiếp theo trong dãy 4, 7, 11, 16, ? là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000002"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "22", "is_correct": true },
+      { "text": "20", "is_correct": false },
+      { "text": "25", "is_correct": false }
+    ],
+    "answer_explanation": "Dãy 4, 7, 11, 16 có quy luật: mỗi số được cộng thêm một số tăng dần.\n4 + 3 = 7.\n7 + 4 = 11.\n11 + 5 = 16.\nSố cộng thêm tăng 1 mỗi lần (3, 4, 5).\nDo đó, 16 + 6 = 22 là số tiếp theo.\nCác lựa chọn khác không phù hợp với quy luật.\nPhân tích dãy số yêu cầu nhận diện mẫu số cộng thêm và dự đoán số tiếp theo.\nKiểm tra kỹ giúp tránh nhầm lẫn với các mẫu khác.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc01000000000000000a",
+    "question": "Số tiếp theo trong dãy 1, 2, 4, 7, ? là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000002"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "11", "is_correct": true },
+      { "text": "10", "is_correct": false },
+      { "text": "13", "is_correct": false }
+    ],
+    "answer_explanation": "Dãy 1, 2, 4, 7 có quy luật: mỗi số được cộng thêm một số tăng dần.\n1 + 1 = 2.\n2 + 2 = 4.\n4 + 3 = 7.\nSố cộng thêm tăng 1 mỗi lần (1, 2, 3).\nDo đó, 7 + 4 = 11 là số tiếp theo.\nCác lựa chọn khác không phù hợp với quy luật.\nPhân tích dãy số yêu cầu nhận diện mẫu số cộng thêm và dự đoán chính xác.\nKiểm tra từng bước đảm bảo độ chính xác của quy luật.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc01000000000000000b",
+    "question": "Mèo : Mèo con :: Chó : ?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000003"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Chó con", "is_correct": true },
+      { "text": "Chó lớn", "is_correct": false },
+      { "text": "Mèo con", "is_correct": false }
+    ],
+    "answer_explanation": "Tương đồng Mèo : Mèo con là mối quan hệ mẹ-con.\nMèo là mẹ, mèo con là con.\nTương tự, Chó là mẹ, chó con là con.\nDo đó, đáp án đúng là Chó con.\nCác lựa chọn khác không thể hiện mối quan hệ mẹ-con.\nTương đồng yêu cầu nhận diện mối quan hệ logic giữa các cặp từ.\nKiểm tra mối quan hệ giúp xác định đáp án chính xác.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc01000000000000000c",
+    "question": "Bút : Viết :: Dao : ?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000003"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Recall", "is_correct": true },
+      { "text": "Focus", "is_correct": false },
+      { "text": "Logic", "is_correct": false }
+    ],
+    "answer_explanation": "Tương đồng Concentration : Attention là mối quan hệ khái niệm-kỹ năng.\nConcentration (tập trung) liên quan đến kỹ năng attention (chú ý).\nTương tự, Memory (trí nhớ) liên quan đến kỹ năng recall (hồi tưởng).\nDo đó, đáp án đúng là Recall.\nCác lựa chọn khác không thể hiện mối quan hệ tương tự.\nTương đồng yêu cầu nhận diện mối quan hệ giữa khái niệm và kỹ năng.\nKiểm tra ý nghĩa của từng từ giúp xác định đáp án chính xác.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc01000000000000000e",
+    "question": "Cây : Lá :: Nhà : ?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000003"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Mái", "is_correct": true },
+      { "text": "Cửa", "is_correct": false },
+      { "text": "Tường", "is_correct": false }
+    ],
+    "answer_explanation": "Tương đồng Cây : Lá là mối quan hệ tổng thể-phần.\nLá là một phần quan trọng của cây.\nTương tự, mái là một phần quan trọng của nhà.\nDo đó, đáp án đúng là Mái.\nCác lựa chọn khác tuy là phần của nhà nhưng không mang tính đại diện như mái.\nTương đồng yêu cầu nhận diện mối quan hệ tổng thể-phần.\nKiểm tra vai trò của từng phần giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc01000000000000000f",
+    "question": "Sông : Nước :: Đường : ?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000003"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Xe", "is_correct": true },
+      { "text": "Cây", "is_correct": false },
+      { "text": "Đá", "is_correct": false }
+    ],
+    "answer_explanation": "Tương đồng Sông : Nước là mối quan hệ môi trường-yếu tố chính.\nSông chứa nước.\nTương tự, đường là nơi xe di chuyển.\nDo đó, đáp án đúng là Xe.\nCác lựa chọn khác không phải yếu tố chính trên đường.\nTương đồng yêu cầu nhận diện mối quan hệ giữa môi trường và yếu tố chính.\nKiểm tra yếu tố chính của môi trường giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000010",
+    "question": "Tất cả chim đều có cánh. Tất cả đại bàng là chim. Kết luận là gì?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000004"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Tất cả đại bàng có cánh", "is_correct": true },
+      { "text": "Tất cả đại bàng không có cánh", "is_correct": false },
+      { "text": "Một số đại bàng có cánh", "is_correct": false }
+    ],
+    "answer_explanation": "Tiền đề 1 od: Tất cả chim đều có cánh.\nTiền đề 2: Tất cả đại bàng là chim.\nTừ tiền đề 1, ta biết mọi chim đều có cánh.\nTừ tiền đề 2, đại bàng thuộc nhóm chim.\nDo đó, suy luận diễn dịch cho thấy tất cả đại bàng có cánh.\nLựa chọn khác mâu thuẫn với tiền đề.\nSuy luận diễn dịch yêu cầu rút ra kết luận logic từ các tiền đề.\nKiểm tra tính hợp lệ của kết luận đảm bảo đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000011",
+    "question": "Nếu trời mưa, đường ướt. Trời không mưa. Đường có ướt không?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000004"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Không đủ thông tin", "is_correct": true },
+      { "text": "Đường ướt", "is_correct": false },
+      { "text": "Đường không ướt", "is_correct": false }
+    ],
+    "answer_explanation": "Tiền đề: Nếu trời mưa, đường ướt.\nTiền đề 2: Trời không mưa.\nTiền đề chỉ nói đường ướt khi trời mưa, nhưng không loại trừ các nguyên nhân khác (như tưới nước).\nDo đó, không thể kết luận đường ướt hay không ướt.\nĐáp án đúng là Không đủ thông tin.\nSuy luận diễn dịch yêu cầu chỉ rút ra kết luận từ thông tin đã cho.\nKiểm tra các khả năng khác giúp tránh kết luận sai.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000012",
+    "question": "Tất cả cá đều bơi. Một số sinh vật biển không phải cá. Kết luận là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000004"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Một số sinh vật biển không bơi", "is_correct": true },
+      { "text": "Tất cả sinh vật biển bơi", "is_correct": false },
+      { "text": "Không có sinh vật biển nào bơi", "is_correct": false }
+    ],
+    "answer_explanation": "Tiền đề 1: Tất cả cá đều bơi.\nTiền đề 2: Một số sinh vật biển không phải cá.\nVì một số sinh vật biển không phải cá, và tiền đề 1 chỉ áp dụng cho cá, nên có thể tồn tại sinh vật biển không bơi.\nDo đó, kết luận là Một số sinh vật biển không bơi.\nCác lựa chọn khác mâu thuẫn hoặc không suy ra từ tiền đề.\nSuy luận diễn dịch yêu cầu kết luận dựa trên thông tin đã cho.\nKiểm tra tính logic đảm bảo kết luận chính xác.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000013",
+    "question": "Nếu A thì B. Không có B. Có A không?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000004"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Không có A", "is_correct": true },
+      { "text": "Có A", "is_correct": false },
+      { "text": "Không đủ thông tin", "is_correct": false }
+    ],
+    "answer_explanation": "Tiền đề 1: Nếu A thì B (A → B).\nTiền đề 2: Không có B (¬B).\nTheo logic, nếu A đúng, thì B phải đúng (từ A → B).\nNhưng vì không có B, nên A không thể đúng.\nDo đó, kết luận là Không có A.\nCác lựa chọn khác không phù hợp với suy luận logic.\nSuy luận diễn dịch yêu cầu áp dụng luật logic như modus tollens.\nKiểm tra từng bước đảm bảo kết luận đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000014",
+    "question": "Tất cả học sinh giỏi đều chăm chỉ. Một số học sinh không chăm chỉ. Kết luận là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000004"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Một số học sinh không giỏi", "is_correct": true },
+      { "text": "Tất cả học sinh giỏi", "is_correct": false },
+      { "text": "Không có học sinh nào giỏi", "is_correct": false }
+    ],
+    "answer_explanation": "Tiền đề 1: Tất cả học sinh giỏi đều chăm chỉ.\nTiền đề 2: Một số học sinh không chăm chỉ.\nVì học sinh giỏi phải chăm chỉ, nên học sinh không chăm chỉ không thể giỏi.\nDo đó, một số học sinh không giỏi.\nCác lựa chọn khác mâu thuẫn hoặc không suy ra từ tiền đề.\nSuy luận diễn dịch yêu cầu rút ra kết luận logic từ các tiền đề.\nKiểm tra tính hợp lệ của kết luận đảm bảo đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000015",
+    "question": "Quan sát: 5 ngày đầu tháng, trời mưa vào buổi chiều. Dự đoán hôm nay trời có mưa không?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000005"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Trời sẽ mưa vào buổi chiều", "is_correct": true },
+      { "text": "Trời không mưa", "is_correct": false },
+      { "text": "Không thể dự đoán", "is_correct": false }
+    ],
+    "answer_explanation": "Quan sát: 5 ngày đầu tháng, trời mưa vào buổi chiều.\nSuy luận quy nạp dựa trên mẫu: các ngày trước đều mưa vào buổi chiều.\nDo đó, có khả năng hôm nay cũng mưa vào buổi chiều.\nTuy nhiên, suy luận quy nạp không chắc chắn tuyệt đối.\nLựa chọn khác không dựa trên mẫu quan sát được.\nSuy luận quy nạp yêu cầu khái quát hóa từ các ví dụ cụ thể.\nKiểm tra mẫu giúp đưa ra dự đoán hợp lý.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000016",
+    "question": "Mèo nhà A, B, C đều thích cá. Dự đoán mèo nhà D thích gì?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000005"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Cá", "is_correct": true },
+      { "text": "Sữa", "is_correct": false },
+      { "text": "Thịt", "is_correct": false }
+    ],
+    "answer_explanation": "Quan sát: Mèo nhà A, B, C đều thích cá.\nSuy luận quy nạp: Nếu nhiều mèo thích cá, mèo nhà D có thể cũng thích cá.\nDự đoán dựa trên mẫu quan sát được từ các mèo khác.\nLựa chọn khác không dựa trên thông tin đã cho.\nSuy luận quy nạp yêu cầu tổng quát hóa từ ví dụ cụ thể.\nKiểm tra tính nhất quán của mẫu giúp đưa ra dự đoán.\nDự đoán này không đảm bảo chắc chắn nhưng hợp lý.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000018",
+    "question": "Cây A, B, C đều ra hoa vào mùa xuân. Dự đoán cây D ra hoa khi nào?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000005"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Mùa xuân", "is_correct": true },
+      { "text": "Mùa hè", "is_correct": false },
+      { "text": "Mùa thu", "is_correct": false }
+    ],
+    "answer_explanation": "Quan sát: Cây A, B, C đều ra hoa vào mùa xuân.\nSuy luận quy nạp: Nếu nhiều cây ra hoa vào mùa xuân, cây D có thể cũng vậy.\nDự đoán dựa trên mẫu quan sát được từ các cây khác.\nLựa chọn khác không dựa trên thông tin đã cho.\nSuy luận quy nạp yêu cầu tổng quát hóa từ ví dụ cụ thể.\nKiểm tra tính nhất quán của mẫu giúp đưa ra dự đoán.\nDự đoán này không đảm bảo chắc chắn nhưng hợp lý.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc010000000000000019",
+    "question": "Học sinh A, B, C đều giỏi toán. Dự đoán học sinh D có giỏi toán không?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000005"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Giỏi toán", "is_correct": true },
+      { "text": "Không giỏi toán", "is_correct": false },
+      { "text": "Không thể dự đoán", "is_correct": false }
+    ],
+    "answer_explanation": "Quan sát: Học sinh A, B, C đều giỏi toán.\nSuy luận quy nạp: Nếu nhiều học sinh giỏi toán, học sinh D có thể cũng giỏi toán.\nDự đoán dựa trên mẫu quan sát được từ các học sinh khác.\nLựa chọn khác không dựa trên thông tin đã cho.\nSuy luận quy nạp yêu cầu tổng quát hóa từ ví dụ cụ thể.\nKiểm tra tính nhất quán của mẫu giúp đưa ra dự đoán.\nDự đoán này không đảm bảo chắc chắn nhưng hợp lý.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc01000000000000001a",
+    "question": "Một khối lập phương được cắt thành 8 khối lập phương nhỏ bằng nhau. Số mặt được sơn màu của mỗi khối nhỏ là bao nhiêu?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000006"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "3", "is_correct": true },
+      { "text": "2", "is_correct": false },
+      { "text": "4", "is_correct": false }
+    ],
+    "answer_explanation": "Khối lập phương lớn được cắt thành 8 khối nhỏ (2x2x2).\nMỗi khối nhỏ là một khối lập phương có 6 mặt.\nChỉ các mặt ngoài của khối lớn được sơn màu.\nMỗi khối nhỏ ở góc có 3 mặt tiếp xúc với bên ngoài, nên có 3 mặt được sơn.\nCác khối nhỏ khác có ít mặt được sơn hơn, nhưng câu hỏi ngụ ý khối ở góc.\nDo đó, đáp án là 3 mặt.\nTư duy không gian yêu cầu hình dung cách chia khối lập phương.\nKiểm tra vị trí các khối nhỏ giúp xác định số mặt được sơn.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  }
+]
