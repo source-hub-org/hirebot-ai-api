@@ -9,6 +9,7 @@ const {
   getSubmissionById,
   questionsExist,
   instrumentsExist,
+  logicQuestionsExist,
 } = require('../../repository/submissionRepository');
 const baseRepository = require('../../repository/baseRepository');
 const submissionModel = require('../../models/submissionModel');
@@ -35,6 +36,17 @@ const extractInstrumentIds = instruments => {
 };
 
 /**
+ * Extract logic question IDs from logic questions
+ * @param {Array} logicQuestions - Array of logic question objects
+ * @returns {Array} Array of logic question IDs
+ */
+const extractLogicQuestionIds = logicQuestions => {
+  return logicQuestions && Array.isArray(logicQuestions)
+    ? logicQuestions.map(logicQuestion => logicQuestion.logic_question_id)
+    : [];
+};
+
+/**
  * Check if all questions exist
  * @param {Array} questionIds - Array of question IDs
  * @returns {Promise<Object>} Object with exists flag and missing IDs
@@ -50,6 +62,15 @@ const checkQuestionsExist = async questionIds => {
  */
 const checkInstrumentsExist = async instrumentIds => {
   return await instrumentsExist(instrumentIds);
+};
+
+/**
+ * Check if all logic questions exist
+ * @param {Array} logicQuestionIds - Array of logic question IDs
+ * @returns {Promise<Object>} Object with exists flag and missing IDs
+ */
+const checkLogicQuestionsExist = async logicQuestionIds => {
+  return await logicQuestionsExist(logicQuestionIds);
 };
 
 /**
@@ -120,6 +141,21 @@ const updateSubmission = async (req, res) => {
             success: false,
             error: 'Instruments not found',
             details: `The following instrument IDs do not exist: ${missingIds.join(', ')}`,
+          });
+        }
+      }
+    }
+
+    // Check if all logic questions exist
+    if (updateData.logic_questions) {
+      const logicQuestionIds = extractLogicQuestionIds(updateData.logic_questions);
+      if (logicQuestionIds.length > 0) {
+        const { exists, missingIds } = await checkLogicQuestionsExist(logicQuestionIds);
+        if (!exists) {
+          return res.status(404).json({
+            success: false,
+            error: 'Logic questions not found',
+            details: `The following logic question IDs do not exist: ${missingIds.join(', ')}`,
           });
         }
       }

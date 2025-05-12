@@ -733,5 +733,305 @@
     "answer_explanation": "Có 5 ngôi nhà (1-5), mỗi nhà một màu: đỏ, xanh, vàng, trắng, đen.\nManh mối: Nhà đỏ ở vị trí 1, nhà vàng ở vị trí 3, nhà xanh không ở cạnh nhà đỏ (không ở 2).\nNhà 1: đỏ, nhà 3: vàng.\nNhà xanh chỉ có thể ở vị trí 4 hoặc 5 (vì không ở 2).\nGiả sử nhà xanh ở 4, nhà trắng và đen ở 2 và 5 (hoặc ngược lại).\nManh mối không nêu người cụ thể, nhưng giả sử người D ở nhà xanh (phù hợp với lựa chọn).\nCác trường hợp khác không mâu thuẫn với người D ở nhà xanh.\nCâu đố logic yêu cầu phân tích vị trí dựa trên manh mối.\nKiểm tra điều kiện màu sắc giúp xác định đáp án.\nNgười D là đáp án đúng cho nhà xanh.",
     "createdAt": "2025-05-12T10:00:00Z",
     "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000001",
+    "question": "Nguyên nhân: Nhà máy xả thải ra sông. Kết quả hợp lý là gì?",
+    "level": 1,
+    "tag_ids": ["665dbc00000000000000000b"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Nước sông bị ô nhiễm", "is_correct": true },
+      { "text": "Cá trong sông tăng số lượng", "is_correct": false },
+      { "text": "Sông chảy nhanh hơn", "is_correct": false }
+    ],
+    "answer_explanation": "Nguyên nhân: Nhà máy xả thải ra sông.\nXả thải thường chứa chất độc hại, dẫn đến ô nhiễm nguồn nước.\nKết quả hợp lý là nước sông bị ô nhiễm.\nTăng số lượng cá không hợp lý vì ô nhiễm thường gây hại cho hệ sinh thái.\nSông chảy nhanh hơn không liên quan đến xả thải.\nNguyên nhân - kết quả yêu cầu xác định hậu quả trực tiếp từ hành động.\nKiểm tra tác động của xả thải giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000002",
+    "question": "Nguyên nhân: Học sinh học bài kỹ trước kỳ thi. Kết quả là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc00000000000000000b"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Điểm thi cao", "is_correct": true },
+      { "text": "Điểm thi thấp", "is_correct": false },
+      { "text": "Không đi thi", "is_correct": false }
+    ],
+    "answer_explanation": "Nguyên nhân: Học sinh học bài kỹ trước kỳ thi.\nHọc kỹ thường cải thiện sự hiểu biết và chuẩn bị, dẫn đến kết quả tốt.\nKết quả hợp lý là điểm thi cao.\nĐiểm thi thấp không hợp lý vì học kỹ thường mang lại kết quả tích cực.\nKhông đi thi không liên quan đến việc học kỹ.\nNguyên nhân - kết quả yêu cầu dự đoán hậu quả từ hành động.\nKiểm tra mối liên hệ giữa học và kết quả thi giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000003",
+    "question": "Sự kiện: (1) Trời mưa, (2) Đường ướt, (3) Xe trượt. Trình tự logic là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc00000000000000000c"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "1 → 2 → 3", "is_correct": true },
+      { "text": "2 → 1 → 3", "is_correct": false },
+      { "text": "3 → 2 → 1", "is_correct": false }
+    ],
+    "answer_explanation": "Sự kiện: (1) Trời mưa, (2) Đường ướt, (3) Xe trượt.\nTrời mưa khiến đường ướt, và đường ướt làm xe trượt.\nTrình tự logic là: mưa (1) → đường ướt (2) → xe trượt (3).\nCác trình tự khác không hợp lý vì đường không ướt trước khi mưa, và xe không trượt trước khi đường ướt.\nChuỗi logic yêu cầu xác định thứ tự nhân quả của các sự kiện.\nKiểm tra mối quan hệ giữa các sự kiện giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000004",
+    "question": "Phát biểu: (A) Anh ấy học giỏi, (B) Anh ấy chăm chỉ, (C) Anh ấy được khen. Trình tự logic là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc00000000000000000c"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "B → A → C", "is_correct": true },
+      { "text": "A → B → C", "is_correct": false },
+      { "text": "C → A → B", "is_correct": false }
+    ],
+    "answer_explanation": "Phát biểu: (A) Học giỏi, (B) Chăm chỉ, (C) Được khen.\nChăm chỉ dẫn đến học giỏi, và học giỏi dẫn đến được khen.\nTrình tự logic: chăm chỉ (B) → học giỏi (A) → được khen (C).\nCác trình tự khác không hợp lý vì học giỏi không khiến chăm chỉ, và được khen không dẫn đến học giỏi.\nChuỗi logic yêu cầu xác định thứ tự nhân quả của các phát biểu.\nKiểm tra mối quan hệ giữa các yếu tố giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000005",
+    "question": "Một đội cần hoàn thành 12 nhiệm vụ trong 4 ngày, mỗi ngày làm 3 nhiệm vụ. Nếu ngày đầu chỉ làm được 1 nhiệm vụ, đội cần làm bao nhiêu nhiệm vụ mỗi ngày còn lại?",
+    "level": 3,
+    "tag_ids": ["665dbc00000000000000000d"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "4", "is_correct": true },
+      { "text": "3", "is_correct": false },
+      { "text": "5", "is_correct": false }
+    ],
+    "answer_explanation": "Tổng cộng 12 nhiệm vụ cần hoàn thành trong 4 ngày.\nKế hoạch ban đầu: 3 nhiệm vụ/ngày × 4 ngày = 12 nhiệm vụ.\nNgày đầu chỉ làm 1 nhiệm vụ, còn lại 12 - 1 = 11 nhiệm vụ.\n11 nhiệm vụ phải hoàn thành trong 3 ngày còn lại.\nSố nhiệm vụ mỗi ngày: 11 ÷ 3 ≈ 4 (làm tròn vì phải chia đều).\nDo đó, đội cần làm 4 nhiệm vụ mỗi ngày.\nGiải quyết vấn đề yêu cầu phân tích và tính toán logic.\nKiểm tra số nhiệm vụ còn lại giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000006",
+    "question": "Một bể nước đầy sau 6 giờ nếu mở vòi A, hoặc 8 giờ nếu mở vòi B. Nếu mở cả hai vòi, bể đầy trong bao lâu?",
+    "level": 4,
+    "tag_ids": ["665dbc00000000000000000d"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "3.43 giờ", "is_correct": true },
+      { "text": "4 giờ", "is_correct": false },
+      { "text": "7 giờ", "is_correct": false }
+    ],
+    "answer_explanation": "Vòi A đầy bể trong 6 giờ, tốc độ 1/6 bể/giờ.\nVòi B đầy bể trong 8 giờ, tốc độ 1/8 bể/giờ.\nCả hai vòi cùng mở: tốc độ tổng = 1/6 + 1/8 = 4/24 + 3/24 = 7/24 bể/giờ.\nThời gian đầy bể: 1 ÷ (7/24) = 24/7 ≈ 3.43 giờ.\nCác lựa chọn khác không phù hợp với tính toán.\nGiải quyết vấn đề yêu cầu áp dụng logic toán học để tính thời gian.\nKiểm tra tốc độ và công thức giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000007",
+    "question": "Phát biểu: 'Nếu học chăm chỉ, bạn sẽ giỏi toán.' Bạn không giỏi toán. Phát biểu có đúng không?",
+    "level": 3,
+    "tag_ids": ["665dbc00000000000000000e"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Bạn không học chăm chỉ", "is_correct": true },
+      { "text": "Bạn học chăm chỉ", "is_correct": false },
+      { "text": "Không đủ thông tin", "is_correct": false }
+    ],
+    "answer_explanation": "Phát biểu: Nếu học chăm chỉ (A) thì giỏi toán (B), tức A → B.\nBạn không giỏi toán (¬B).\nTheo logic, nếu A → B và ¬B, thì ¬A (modus tollens).\nDo đó, bạn không học chăm chỉ.\nLựa chọn 'học chăm chỉ' mâu thuẫn với phát biểu.\n'Không đủ thông tin' không đúng vì logic cho kết luận rõ.\nPhân tích phát biểu yêu cầu áp dụng luật logic.\nKiểm tra điều kiện và kết luận giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000008",
+    "question": "Phát biểu: 'Tất cả mèo đều thích cá.' Một con mèo không thích cá. Phát biểu này đúng hay sai?",
+    "level": 2,
+    "tag_ids": ["665dbc00000000000000000e"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Sai", "is_correct": true },
+      { "text": "Đúng", "is_correct": false },
+      { "text": "Không xác định", "is_correct": false }
+    ],
+    "answer_explanation": "Phát biểu: 'Tất cả mèo đều thích cá.'\nMột con mèo không thích cá, tức tồn tại mèo không thỏa mãn phát biểu.\nPhát biểu 'tất cả' yêu cầu mọi mèo đều thích cá, nhưng ví dụ phản chứng cho thấy điều này sai.\nDo đó, phát biểu là sai.\nLựa chọn 'đúng' mâu thuẫn với dữ kiện.\n'Không xác định' không đúng vì có bằng chứng rõ ràng.\nPhân tích phát biểu yêu cầu kiểm tra tính đúng sai.\nKiểm tra ví dụ phản chứng giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000009",
+    "question": "Tiền đề: Tất cả chim đều bay. Tất cả chim sẻ là chim. Kết luận là gì?",
+    "level": 1,
+    "tag_ids": ["665dbc00000000000000000f"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Tất cả chim sẻ đều bay", "is_correct": true },
+      { "text": "Một số chim sẻ không bay", "is_correct": false },
+      { "text": "Chim sẻ không phải chim", "is_correct": false }
+    ],
+    "answer_explanation": "Tiền đề 1: Tất cả chim đều bay.\nTiền đề 2: Tất cả chim sẻ là chim.\nTừ tiền đề 1, mọi chim đều bay.\nTừ tiền đề 2, chim sẻ thuộc nhóm chim.\nDo đó, tất cả chim sẻ đều bay.\nLựa chọn 'một số chim sẻ không bay' mâu thuẫn với tiền đề.\n'Chim sẻ không phải chim' sai vì tiền đề 2.\nTam đoạn luận yêu cầu suy luận logic từ hai tiền đề.\nKiểm tra tính hợp lệ của kết luận giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc05000000000000000a",
+    "question": "Tiền đề: Tất cả học sinh giỏi đều chăm chỉ. Một số học sinh không chăm chỉ. Kết luận là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc00000000000000000f"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Một số học sinh không giỏi", "is_correct": true },
+      { "text": "Tất cả học sinh đều giỏi", "is_correct": false },
+      { "text": "Không có học sinh nào giỏi", "is_correct": false }
+    ],
+    "answer_explanation": "Tiền đề 1: Tất cả học sinh giỏi đều chăm chỉ.\nTiền đề 2: Một số học sinh không chăm chỉ.\nHọc sinh giỏi phải chăm chỉ (từ tiền đề 1).\nVì một số học sinh không chăm chỉ (tiền đề 2), họ không thể giỏi.\nDo đó, một số học sinh không giỏi.\nLựa chọn 'tất cả học sinh giỏi' mâu thuẫn với tiền đề 2.\n'Không có học sinh giỏi' không suy ra từ tiền đề.\nTam đoạn luận yêu cầu rút ra kết luận logic.\nKiểm tra điều kiện giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc05000000000000000b",
+    "question": "Tập A: Người thích bóng đá. Tập B: Người thích bóng rổ. Một số người thích cả hai. Ai chắc chắn thuộc cả A và B?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000010"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Người thích cả bóng đá và bóng rổ", "is_correct": true },
+      { "text": "Người chỉ thích bóng đá", "is_correct": false },
+      { "text": "Người không thích môn nào", "is_correct": false }
+    ],
+    "answer_explanation": "Tập A: Người thích bóng đá. Tập B: Người thích bóng rổ.\nBiểu đồ Venn: A và B giao nhau tại những người thích cả hai.\nNgười thích cả bóng đá và bóng rổ thuộc vùng giao của A và B.\nNgười chỉ thích bóng đá thuộc A nhưng không thuộc B.\nNgười không thích môn nào không thuộc A hay B.\nBiểu đồ Venn yêu cầu phân tích mối quan hệ tập hợp.\nKiểm tra vùng giao của các tập giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc05000000000000000c",
+    "question": "Tập X: Học sinh học toán. Tập Y: Học sinh học lý. Tất cả học sinh học lý đều học toán. Ai thuộc X nhưng không thuộc Y?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000010"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Học sinh chỉ học toán", "is_correct": true },
+      { "text": "Học sinh học cả toán và lý", "is_correct": false },
+      { "text": "Học sinh không học môn nào", "is_correct": false }
+    ],
+    "answer_explanation": "Tập X: Học toán. Tập Y: Học lý.\nTất cả học sinh học lý đều học toán, nên Y nằm trong X (Y ⊆ X).\nHọc sinh chỉ học toán thuộc X nhưng không thuộc Y (vùng X ngoài Y).\nHọc sinh học cả toán và lý thuộc cả X và Y.\nHọc sinh không học môn nào không thuộc X hay Y.\nBiểu đồ Venn yêu cầu phân tích vùng của các tập hợp.\nKiểm tra mối quan hệ giữa X và Y giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc05000000000000000d",
+    "question": "Phát biểu: 'Nếu trời nắng, tôi đi dạo. Trời không nắng.' Phát biểu này đúng hay sai?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000011"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Không xác định", "is_correct": true },
+      { "text": "Đúng", "is_correct": false },
+      { "text": "Sai", "is_correct": false }
+    ],
+    "answer_explanation": "Phát biểu: Nếu trời nắng (A) thì đi dạo (B), tức A → B.\nTrời không nắng (¬A).\nTrong logic, nếu A → B và ¬A, không thể xác định B (đi dạo hay không).\nPhát biểu không nói gì về trường hợp trời không nắng.\nDo đó, không xác định được phát biểu đúng hay sai.\nLogic đúng/sai yêu cầu đánh giá giá trị logic của phát biểu.\nKiểm tra các trường hợp của A → B giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc05000000000000000e",
+    "question": "Phát biểu: 'Tất cả học sinh đều thích học.' Có một học sinh không thích học. Phát biểu đúng hay sai?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000011"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Sai", "is_correct": true },
+      { "text": "Đúng", "is_correct": false },
+      { "text": "Không xác định", "is_correct": false }
+    ],
+    "answer_explanation": "Phát biểu: Tất cả học sinh đều thích học.\nCó một học sinh không thích học, tức tồn tại phản chứng.\nPhát biểu 'tất cả' yêu cầu mọi học sinh đều thích học, nhưng phản chứng cho thấy điều này sai.\nDo đó, phát biểu là sai.\nLựa chọn 'đúng' mâu thuẫn với dữ kiện.\n'Không xác định' không đúng vì có bằng chứng rõ ràng.\nLogic đúng/sai yêu cầu kiểm tra tính đúng của phát biểu.\nKiểm tra phản chứng giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc05000000000000000f",
+    "question": "Một cửa hàng giảm giá 20% cho sản phẩm giá 500.000 đồng. Giá sau giảm là bao nhiêu?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000012"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "400.000 đồng", "is_correct": true },
+      { "text": "450.000 đồng", "is_correct": false },
+      { "text": "480.000 đồng", "is_correct": false }
+    ],
+    "answer_explanation": "Giá gốc sản phẩm: 500.000 đồng.\nGiảm giá 20%, tức giảm 20% × 500.000 = 100.000 đồng.\nGiá sau giảm: 500.000 - 100.000 = 400.000 đồng.\nCách khác: Giá sau giảm = 80% × 500.000 = 400.000 đồng.\nCác lựa chọn khác không phù hợp với phép tính.\nSuy luận toán học yêu cầu áp dụng phép tính phần trăm.\nKiểm tra phép tính giảm giá giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000010",
+    "question": "Một người đi từ A đến B với tốc độ 40 km/h và quay lại với tốc độ 60 km/h. Tốc độ trung bình của toàn chuyến đi là bao nhiêu?",
+    "level": 4,
+    "tag_ids": ["665dbc000000000000000012"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "48 km/h", "is_correct": true },
+      { "text": "50 km/h", "is_correct": false },
+      { "text": "52 km/h", "is_correct": false }
+    ],
+    "answer_explanation": "Giả sử quãng đường từ A đến B là S km.\nThời gian đi: S ÷ 40 giờ. Thời gian về: S ÷ 60 giờ.\nTổng quãng đường: 2S km.\nTổng thời gian: (S/40) + (S/60) = S(3/120 + 2/120) = S × 5/120 = S/24 giờ.\nTốc độ trung bình = Tổng quãng đường ÷ Tổng thời gian = 2S ÷ (S/24) = 48 km/h.\nCác lựa chọn khác không phù hợp với công thức tốc độ trung bình.\nSuy luận toán học yêu cầu tính toán chính xác.\nKiểm tra công thức tốc độ giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000011",
+    "question": "Các số: 4, 9, 16, 25, 30. Số nào không thuộc nhóm?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000013"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "30", "is_correct": true },
+      { "text": "9", "is_correct": false },
+      { "text": "16", "is_correct": false }
+    ],
+    "answer_explanation": "Các số: 4, 9, 16, 25, 30.\nKiểm tra: 4 = 2², 9 = 3², 16 = 4², 25 = 5² là số chính phương.\n30 không phải số chính phương (5² = 25, 6² = 36).\nDo đó, 30 không thuộc nhóm số chính phương.\nLựa chọn 9 và 16 đều là số chính phương, thuộc nhóm.\nTìm điểm khác biệt yêu cầu nhận diện đặc điểm chung của nhóm.\nKiểm tra tính chất số học giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000012",
+    "question": "Các hình: vuông, tam giác, hình tròn, hình chữ nhật, ngũ giác. Hình nào không thuộc nhóm?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000013"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Hình tròn", "is_correct": true },
+      { "text": "Vuông", "is_correct": false },
+      { "text": "Tam giác", "is_correct": false }
+    ],
+    "answer_explanation": "Các hình: vuông, tam giác, hình tròn, hình chữ nhật, ngũ giác.\nVuông, tam giác, hình chữ nhật, ngũ giác là đa giác (có cạnh thẳng).\nHình tròn không phải đa giác vì có đường cong.\nDo đó, hình tròn không thuộc nhóm đa giác.\nLựa chọn vuông và tam giác đều là đa giác, thuộc nhóm.\nTìm điểm khác biệt yêu cầu nhận diện đặc điểm chung của nhóm.\nKiểm tra tính chất hình học giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000013",
+    "question": "Cho A: 'Trời mưa', B: 'Tôi ở nhà'. Phát biểu (A OR B) AND NOT A có nghĩa là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000014"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Trời không mưa và tôi ở nhà", "is_correct": true },
+      { "text": "Trời mưa và tôi ở nhà", "is_correct": false },
+      { "text": "Trời không mưa và tôi không ở nhà", "is_correct": false }
+    ],
+    "answer_explanation": "A: Trời mưa, B: Tôi ở nhà.\nPhát biểu: (A OR B) AND NOT A.\nA OR B: Trời mưa hoặc tôi ở nhà.\nNOT A: Trời không mưa.\n(A OR B) AND NOT A: (Trời mưa hoặc tôi ở nhà) và trời không mưa.\nĐiều này đúng khi trời không mưa (NOT A) và tôi ở nhà (B).\nDo đó, nghĩa là trời không mưa và tôi ở nhà.\nLogic Boole yêu cầu phân tích toán tử logic.\nKiểm tra giá trị của từng phần giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc050000000000000014",
+    "question": "Cho X: 'Anh ấy học giỏi', Y: 'Anh ấy chăm chỉ'. Phát biểu NOT (X AND Y) có nghĩa là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000014"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Anh ấy không học giỏi hoặc không chăm chỉ", "is_correct": true },
+      { "text": "Anh ấy học giỏi và chăm chỉ", "is_correct": false },
+      { "text": "Anh ấy không học giỏi và không chăm chỉ", "is_correct": false }
+    ],
+    "answer_explanation": "X: Anh ấy học giỏi, Y: Anh ấy chăm chỉ.\nPhát biểu: NOT (X AND Y).\nX AND Y: Anh ấy học giỏi và chăm chỉ.\nNOT (X AND Y): Không phải (học giỏi và chăm chỉ).\nTheo luật De Morgan, NOT (X AND Y) = NOT X OR NOT Y.\nTức là anh ấy không học giỏi hoặc không chăm chỉ.\nLựa chọn khác không phù hợp với biểu thức logic.\nLogic Boole yêu cầu áp dụng toán tử và luật logic.\nKiểm tra luật De Morgan giúp xác định đáp án đúng.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
   }
 ]

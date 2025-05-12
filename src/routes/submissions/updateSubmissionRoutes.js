@@ -83,6 +83,31 @@ const { updateSubmission } = require('../../controllers/submissions/updateSubmis
  *                       type: integer
  *                       enum: [0, 1]
  *                       description: Whether the instrument was skipped (0 or 1)
+ *               logic_questions:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - logic_question_id
+ *                   properties:
+ *                     logic_question_id:
+ *                       type: string
+ *                       description: ID of the logic question
+ *                     answer:
+ *                       type: string
+ *                       description: Answer to the logic question (e.g., 'true,false,true')
+ *                     other:
+ *                       type: string
+ *                       description: Additional text for the logic question response
+ *                     point:
+ *                       type: number
+ *                       minimum: 0
+ *                       default: 0
+ *                       description: Score given to the logic question response
+ *                     is_skip:
+ *                       type: integer
+ *                       enum: [0, 1]
+ *                       description: Whether the logic question was skipped (0 or 1)
  *               essay:
  *                 type: object
  *                 properties:
@@ -111,7 +136,7 @@ const { updateSubmission } = require('../../controllers/submissions/updateSubmis
  *       400:
  *         description: Invalid input data
  *       404:
- *         description: Submission, question, or instrument not found
+ *         description: Submission, question, instrument, or logic question not found
  *       500:
  *         description: Server error
  */

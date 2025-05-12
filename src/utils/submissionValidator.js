@@ -69,7 +69,12 @@ function isValidPoint(point) {
  */
 function validateSubmissionInput(submissionData) {
   const errors = [];
-  const { requiredFields, requiredAnswerFields, requiredInstrumentFields } = submissionModel;
+  const {
+    requiredFields,
+    requiredAnswerFields,
+    requiredInstrumentFields,
+    requiredLogicQuestionFields,
+  } = submissionModel;
 
   // Check required fields
   for (const field of requiredFields) {
@@ -165,6 +170,40 @@ function validateSubmissionInput(submissionData) {
     }
   }
 
+  // Validate logic_questions array if present
+  if (submissionData.logic_questions) {
+    if (!Array.isArray(submissionData.logic_questions)) {
+      errors.push('Field logic_questions must be an array');
+    } else {
+      // Validate each logic question in the array
+      submissionData.logic_questions.forEach((logicQuestion, index) => {
+        // Check required fields for each logic question
+        for (const field of requiredLogicQuestionFields) {
+          if (!logicQuestion[field]) {
+            errors.push(`Missing required field: ${field} in logic_questions[${index}]`);
+          }
+        }
+
+        // Validate logic_question_id is a valid ObjectId
+        if (logicQuestion.logic_question_id && !isValidObjectId(logicQuestion.logic_question_id)) {
+          errors.push(`Invalid logic_question_id format in logic_questions[${index}]`);
+        }
+
+        // Validate is_skip if present
+        if (logicQuestion.is_skip !== undefined && !isValidIsSkip(logicQuestion.is_skip)) {
+          errors.push(`Invalid is_skip value in logic_questions[${index}]. Must be 0 or 1`);
+        }
+
+        // Validate point if present
+        if (logicQuestion.point !== undefined && !isValidPoint(logicQuestion.point)) {
+          errors.push(
+            `Invalid point value in logic_questions[${index}]. Must be a number greater than or equal to 0`
+          );
+        }
+      });
+    }
+  }
+
   // Validate essay if present
   if (submissionData.essay) {
     if (typeof submissionData.essay !== 'object') {
@@ -203,6 +242,11 @@ function formatSubmissionDefaults(submissionData) {
   // Apply default values for instruments if missing
   if (formattedSubmission.instruments === undefined) {
     formattedSubmission.instruments = defaultValues.instruments;
+  }
+
+  // Apply default values for logic_questions if missing
+  if (formattedSubmission.logic_questions === undefined) {
+    formattedSubmission.logic_questions = defaultValues.logic_questions;
   }
 
   // Apply default values for essay if missing
@@ -247,10 +291,28 @@ function formatSubmissionDefaults(submissionData) {
     }));
   }
 
+  // Apply default values to each logic question if missing
+  if (Array.isArray(formattedSubmission.logic_questions)) {
+    formattedSubmission.logic_questions = formattedSubmission.logic_questions.map(
+      logicQuestion => ({
+        ...logicQuestion,
+        is_skip: logicQuestion.is_skip !== undefined ? logicQuestion.is_skip : 0,
+        other: logicQuestion.other !== undefined ? logicQuestion.other : '',
+        point: logicQuestion.point !== undefined ? logicQuestion.point : 0,
+        answer: logicQuestion.answer !== undefined ? logicQuestion.answer : '',
+      })
+    );
+  }
+
   // Don't add default instruments array if it's not in the original data
   // This is to fix the test case that expects the original data structure
   if (!submissionData.hasOwnProperty('instruments')) {
     delete formattedSubmission.instruments;
+  }
+
+  // Don't add default logic_questions array if it's not in the original data
+  if (!submissionData.hasOwnProperty('logic_questions')) {
+    delete formattedSubmission.logic_questions;
   }
 
   return formattedSubmission;
@@ -262,7 +324,17 @@ function formatSubmissionDefaults(submissionData) {
  * @returns {Object} Sanitized update data
  */
 function sanitizeUpdateData(updateData) {
-  const sanitized = { ...updateData };
+  const allowedFields = ['answers', 'instruments', 'logic_questions', 'essay', 'review'];
+
+  const sanitized = {};
+
+  // Only include allowed fields in the sanitized data
+  for (const field of allowedFields) {
+    if (updateData.hasOwnProperty(field)) {
+      sanitized[field] = updateData[field];
+    }
+  }
+
   return sanitized;
 }
 

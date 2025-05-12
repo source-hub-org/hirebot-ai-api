@@ -209,6 +209,46 @@ async function instrumentsExist(instrumentIds) {
   }
 }
 
+/**
+ * Check if logic questions exist in the database
+ * @async
+ * @param {Array<string>} logicQuestionIds - Array of logic question IDs to check
+ * @returns {Promise<{exists: boolean, missingIds: Array<string>}>} Result with exists flag and array of missing IDs
+ */
+async function logicQuestionsExist(logicQuestionIds) {
+  try {
+    if (!logicQuestionIds || !Array.isArray(logicQuestionIds) || logicQuestionIds.length === 0) {
+      return { exists: true, missingIds: [] };
+    }
+
+    const validLogicQuestionIds = logicQuestionIds.filter(id => ObjectId.isValid(id));
+
+    if (validLogicQuestionIds.length === 0) {
+      return {
+        exists: false,
+        missingIds: logicQuestionIds,
+      };
+    }
+
+    const objectIds = validLogicQuestionIds.map(id => new ObjectId(id));
+
+    const logicQuestions = await baseRepository.findMany('logic_questions', {
+      _id: { $in: objectIds },
+    });
+
+    const foundIds = logicQuestions.map(q => q._id.toString());
+    const missingIds = validLogicQuestionIds.filter(id => !foundIds.includes(id));
+
+    return {
+      exists: missingIds.length === 0,
+      missingIds,
+    };
+  } catch (error) {
+    logger.error(`Error checking logic questions existence:`, error);
+    throw error;
+  }
+}
+
 module.exports = {
   insertSubmissionToDB,
   getSubmissionById,
@@ -216,4 +256,5 @@ module.exports = {
   candidateExists,
   questionsExist,
   instrumentsExist,
+  logicQuestionsExist,
 };

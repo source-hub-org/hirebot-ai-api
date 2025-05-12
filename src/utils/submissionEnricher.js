@@ -144,7 +144,59 @@ async function fetchInstrumentsByIds(instrumentIds) {
 }
 
 /**
- * Enrich a single submission with candidate, question, and instrument data
+ * Fetch logic questions by array of IDs
+ * @async
+ * @param {Array<string>} logicQuestionIds - Array of logic question IDs
+ * @returns {Promise<Object>} Map of logic question IDs to logic question data
+ */
+async function fetchLogicQuestionsByIds(logicQuestionIds) {
+  try {
+    if (!logicQuestionIds || !Array.isArray(logicQuestionIds) || logicQuestionIds.length === 0) {
+      return {};
+    }
+
+    // Filter valid ObjectIds
+    const validLogicQuestionIds = logicQuestionIds.filter(id => ObjectId.isValid(id));
+
+    if (validLogicQuestionIds.length === 0) {
+      return {};
+    }
+
+    const objectIds = validLogicQuestionIds.map(id => new ObjectId(id));
+
+    // Select necessary fields from logic_questions
+    const logicQuestions = await baseRepository.findMany(
+      'logic_questions',
+      { _id: { $in: objectIds } },
+      {
+        projection: {
+          question: 1,
+          description: 1,
+          type: 1,
+          level: 1,
+          tag_ids: 1,
+          tags: 1,
+          choices: 1,
+          answer_explanation: 1,
+        },
+      }
+    );
+
+    // Convert array to map for easier lookup
+    const logicQuestionMap = {};
+    logicQuestions.forEach(logicQuestion => {
+      logicQuestionMap[logicQuestion._id.toString()] = logicQuestion;
+    });
+
+    return logicQuestionMap;
+  } catch (error) {
+    logger.error('Error fetching logic questions:', error);
+    return {};
+  }
+}
+
+/**
+ * Enrich a single submission with candidate, question, instrument, and logic question data
  * @async
  * @param {Object} submission - Submission to enrich
  * @returns {Promise<Object>} Enriched submission
@@ -212,6 +264,29 @@ async function enrichSubmission(submission) {
       });
     }
 
+    // Extract logic question IDs from logic_questions
+    const logicQuestionIds =
+      submission.logic_questions && Array.isArray(submission.logic_questions)
+        ? submission.logic_questions.map(logicQuestion => logicQuestion.logic_question_id)
+        : [];
+
+    // Fetch logic questions data
+    const logicQuestionMap = await fetchLogicQuestionsByIds(logicQuestionIds);
+
+    // Enrich logic_questions with logic question data
+    if (enrichedSubmission.logic_questions && Array.isArray(enrichedSubmission.logic_questions)) {
+      enrichedSubmission.logic_questions = enrichedSubmission.logic_questions.map(logicQuestion => {
+        const logicQuestionId = logicQuestion.logic_question_id;
+        return {
+          ...logicQuestion,
+          logic_question:
+            logicQuestionId && logicQuestionMap[logicQuestionId]
+              ? logicQuestionMap[logicQuestionId]
+              : null,
+        };
+      });
+    }
+
     return enrichedSubmission;
   } catch (error) {
     logger.error(`Error enriching submission:`, error);
@@ -254,6 +329,7 @@ module.exports = {
   fetchCandidateById,
   fetchQuestionsByIds,
   fetchInstrumentsByIds,
+  fetchLogicQuestionsByIds,
   enrichSubmission,
   enrichSubmissions,
 };
