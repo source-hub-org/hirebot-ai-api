@@ -3,7 +3,7 @@
  * @module controllers/logic-questions/getAllLogicQuestionsController
  */
 
-const { getQuestions } = require('../../service/logicQuestionService');
+const { getQuestions } = require('../../service/logicQuestionGetService');
 const logger = require('../../utils/logger');
 
 /**
@@ -34,7 +34,7 @@ const formatErrorResponse = errors => {
 };
 
 /**
- * Controller to get all logic questions with filtering and pagination
+ * Controller to get all logic questions with filtering, sorting, and pagination
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @returns {Object} Response with questions or error
@@ -42,9 +42,19 @@ const formatErrorResponse = errors => {
 const getAllLogicQuestionsController = async (req, res) => {
   try {
     // Extract query parameters
-    const { level, tag_id, type, page, limit } = req.query;
+    const { level, tag_id, type, page, limit, sort_by, sort_direction, ignore_question_ids } =
+      req.query;
 
-    const result = await getQuestions({ level, tag_id, type, page, limit });
+    const result = await getQuestions({
+      level,
+      tag_id,
+      type,
+      page,
+      limit,
+      sort_by,
+      sort_direction,
+      ignore_question_ids,
+    });
 
     if (!result.success) {
       logger.warn('Failed to retrieve logic questions:', result.errors);

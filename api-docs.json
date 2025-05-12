@@ -2794,6 +2794,504 @@
         }
       }
     },
+    "/api/logic-questions": {
+      "post": {
+        "summary": "Create a new logic question",
+        "description": "Create a new logic question with the provided data",
+        "tags": ["Logic Questions"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LogicQuestionInput" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Logic question created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input data",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all logic questions",
+        "description": "Retrieves logic questions with filtering, sorting, and pagination.\nSupports random sorting with 'sort_by=random' query parameter.\nYou can exclude specific questions with 'ignore_question_ids' parameter (comma-separated list of IDs).\n",
+        "tags": ["Logic Questions"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "level",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 6 },
+            "description": "Filter by difficulty level (1-6)"
+          },
+          {
+            "in": "query",
+            "name": "tag_id",
+            "schema": { "type": "string" },
+            "description": "Filter by tag ID"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": { "type": "string", "enum": ["multiple_choice", "open_question"] },
+            "description": "Filter by question type"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "minimum": 1, "default": 1 },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "type": "string",
+              "enum": ["createdAt", "level", "type", "random"],
+              "default": "createdAt"
+            },
+            "description": "Field to sort by. Use 'random' for random sorting."
+          },
+          {
+            "in": "query",
+            "name": "sort_direction",
+            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" },
+            "description": "Sort direction (ascending or descending)"
+          },
+          {
+            "in": "query",
+            "name": "ignore_question_ids",
+            "schema": { "type": "string" },
+            "description": "Comma-separated list of question IDs to exclude from results",
+            "example": "60d21b4667d0d8992e610c85,60d21b4667d0d8992e610c86"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved logic questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/LogicQuestion" }
+                    },
+                    "pagination": { "$ref": "#/components/schemas/PaginationInfo" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad request" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/logic-questions/{id}": {
+      "delete": {
+        "summary": "Delete a logic question",
+        "description": "Delete a logic question by its ID",
+        "tags": ["Logic Questions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The logic question ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logic question deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid ID format",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "404": {
+            "description": "Logic question not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a logic question by ID",
+        "description": "Retrieve a logic question by its ID",
+        "tags": ["Logic Questions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The logic question ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logic question retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid ID format",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "404": {
+            "description": "Logic question not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a logic question",
+        "description": "Update a logic question with the provided data",
+        "tags": ["Logic Questions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The logic question ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LogicQuestionInput" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logic question updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input data or ID format",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "404": {
+            "description": "Logic question not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/logic-tags": {
+      "post": {
+        "summary": "Create a new logic tag",
+        "description": "Create a new logic tag with the provided data",
+        "tags": ["Logic Tags"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LogicTagInput" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Logic tag created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicTag" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input data",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all logic tags",
+        "description": "Retrieve a list of all logic tags",
+        "tags": ["Logic Tags"],
+        "responses": {
+          "200": {
+            "description": "A list of logic tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/LogicTag" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/logic-tags/{id}": {
+      "delete": {
+        "summary": "Delete a logic tag",
+        "description": "Delete a logic tag by its ID",
+        "tags": ["Logic Tags"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The logic tag ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logic tag deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicTag" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid ID format",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "404": {
+            "description": "Logic tag not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a logic tag by ID",
+        "description": "Retrieve a logic tag by its ID",
+        "tags": ["Logic Tags"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The logic tag ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logic tag retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicTag" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid ID format",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "404": {
+            "description": "Logic tag not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a logic tag",
+        "description": "Update a logic tag with the provided data",
+        "tags": ["Logic Tags"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The logic tag ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LogicTagInput" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logic tag updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/LogicTag" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input data or ID format",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "404": {
+            "description": "Logic tag not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      }
+    },
     "/api/positions": {
       "post": {
         "summary": "Create a new position",
@@ -4555,491 +5053,6 @@
           }
         }
       }
-    },
-    "/api/logic-tags": {
-      "get": {
-        "summary": "Get all logic tags",
-        "description": "Retrieve a list of all logic tags",
-        "tags": ["Logic Tags"],
-        "responses": {
-          "200": {
-            "description": "A list of logic tags",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/LogicTag" }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a new logic tag",
-        "description": "Create a new logic tag with the provided data",
-        "tags": ["Logic Tags"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/LogicTagInput" } }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Logic tag created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicTag" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid input data",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      }
-    },
-    "/api/logic-tags/{id}": {
-      "get": {
-        "summary": "Get a logic tag by ID",
-        "description": "Retrieve a logic tag by its ID",
-        "tags": ["Logic Tags"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "The logic tag ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Logic tag retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicTag" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid ID format",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "404": {
-            "description": "Logic tag not found",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Update a logic tag",
-        "description": "Update a logic tag with the provided data",
-        "tags": ["Logic Tags"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "The logic tag ID"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/LogicTagInput" } }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Logic tag updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicTag" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid input data or ID format",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "404": {
-            "description": "Logic tag not found",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete a logic tag",
-        "description": "Delete a logic tag by its ID",
-        "tags": ["Logic Tags"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "The logic tag ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Logic tag deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicTag" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid ID format",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "404": {
-            "description": "Logic tag not found",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      }
-    },
-    "/api/logic-questions": {
-      "get": {
-        "summary": "Get all logic questions",
-        "description": "Retrieve a list of logic questions with optional filtering",
-        "tags": ["Logic Questions"],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "level",
-            "schema": { "type": "integer", "minimum": 1, "maximum": 6 },
-            "description": "Filter by difficulty level (1-6)"
-          },
-          {
-            "in": "query",
-            "name": "tag_id",
-            "schema": { "type": "string" },
-            "description": "Filter by tag ID"
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "schema": { "type": "string", "enum": ["multiple_choice", "open_question"] },
-            "description": "Filter by question type"
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": { "type": "integer", "minimum": 1, "default": 1 },
-            "description": "Page number for pagination"
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
-            "description": "Number of items per page"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of logic questions",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/LogicQuestion" }
-                    },
-                    "pagination": { "$ref": "#/components/schemas/PaginationInfo" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid query parameters",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a new logic question",
-        "description": "Create a new logic question with the provided data",
-        "tags": ["Logic Questions"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/LogicQuestionInput" } }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Logic question created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid input data",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      }
-    },
-    "/api/logic-questions/{id}": {
-      "get": {
-        "summary": "Get a logic question by ID",
-        "description": "Retrieve a logic question by its ID",
-        "tags": ["Logic Questions"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "The logic question ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Logic question retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid ID format",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "404": {
-            "description": "Logic question not found",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Update a logic question",
-        "description": "Update a logic question with the provided data",
-        "tags": ["Logic Questions"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "The logic question ID"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/LogicQuestionInput" } }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Logic question updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid input data or ID format",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "404": {
-            "description": "Logic question not found",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete a logic question",
-        "description": "Delete a logic question by its ID",
-        "tags": ["Logic Questions"],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "The logic question ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Logic question deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "data": { "$ref": "#/components/schemas/LogicQuestion" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - Invalid ID format",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "404": {
-            "description": "Logic question not found",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
-        }
-      }
     }
   },
   "tags": [
@@ -5051,11 +5064,11 @@
       "description": "API endpoints for managing instruments (assessment questions)"
     },
     { "name": "Languages", "description": "API endpoints for managing programming languages" },
+    { "name": "Logic Tags", "description": "API endpoints for managing logic tags" },
+    { "name": "Logic Questions", "description": "API endpoints for managing logic questions" },
     { "name": "Positions", "description": "API endpoints for managing positions" },
     { "name": "Questions", "description": "API endpoints for generating and managing questions" },
     { "name": "Submissions", "description": "Submission management endpoints" },
-    { "name": "Topics", "description": "API endpoints for managing topics" },
-    { "name": "Logic Tags", "description": "API endpoints for managing logic tags" },
-    { "name": "Logic Questions", "description": "API endpoints for managing logic questions" }
+    { "name": "Topics", "description": "API endpoints for managing topics" }
   ]
 }

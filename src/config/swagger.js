@@ -684,7 +684,7 @@ const swaggerOptions = {
     },
   },
   // Path to the API docs
-  apis: ['./src/routes/**/*.js', './src/config/logic-swagger.js'], // Path to the API docs
+  apis: ['./src/routes/**/*.js', './src/routes/logic-common-schemas.js'], // Path to the API docs
 };
 
 // Initialize swagger-jsdoc

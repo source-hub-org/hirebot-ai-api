@@ -5,15 +5,15 @@
 
 const {
   createLogicQuestion,
-  getLogicQuestions,
-  countLogicQuestions,
-  getLogicQuestionById,
   updateLogicQuestion,
   deleteLogicQuestion,
 } = require('../repository/logicQuestionRepository');
 const { checkLogicTagsExist } = require('../repository/logicTagRepository');
 const { isValidObjectId, toObjectIds, areValidObjectIds } = require('../utils/validateObjectId');
 const logger = require('../utils/logger');
+
+// Import the new service modules
+const { getQuestions, getQuestionById } = require('./logicQuestionGetService');
 
 /**
  * Validate logic question data
@@ -168,111 +168,6 @@ async function createQuestion(questionData) {
     };
   } catch (error) {
     logger.error('Error creating logic question:', error);
-    return {
-      success: false,
-      errors: [error.message],
-    };
-  }
-}
-
-/**
- * Get logic questions with filtering and pagination
- * @async
- * @param {Object} queryParams - Query parameters for filtering
- * @returns {Promise<Object>} Result object with success flag, data, pagination, and errors
- */
-async function getQuestions(queryParams = {}) {
-  try {
-    const { level, tag_id, type, page = 1, limit = 10 } = queryParams;
-    const filter = {};
-
-    // Apply filters if provided
-    if (level !== undefined) {
-      const levelNum = parseInt(level, 10);
-      if (!isNaN(levelNum) && levelNum >= 1 && levelNum <= 6) {
-        filter.level = levelNum;
-      }
-    }
-
-    if (tag_id && isValidObjectId(tag_id)) {
-      filter.tag_ids = tag_id;
-    }
-
-    if (type && ['multiple_choice', 'open_question'].includes(type)) {
-      filter.type = type;
-    }
-
-    // Parse pagination parameters
-    const pageNum = parseInt(page, 10) || 1;
-    const limitNum = parseInt(limit, 10) || 10;
-    const skip = (pageNum - 1) * limitNum;
-
-    // Get questions and total count
-    const [questions, total] = await Promise.all([
-      getLogicQuestions(filter, { limit: limitNum, skip, sort: { createdAt: -1 } }),
-      countLogicQuestions(filter),
-    ]);
-
-    logger.info(`Retrieved ${questions.length} logic questions (total: ${total})`);
-
-    // Calculate pagination info
-    const totalPages = Math.ceil(total / limitNum);
-
-    return {
-      success: true,
-      data: questions,
-      pagination: {
-        total,
-        page: pageNum,
-        limit: limitNum,
-        totalPages,
-        hasNextPage: pageNum < totalPages,
-        hasPrevPage: pageNum > 1,
-      },
-    };
-  } catch (error) {
-    logger.error('Error retrieving logic questions:', error);
-    return {
-      success: false,
-      errors: [error.message],
-    };
-  }
-}
-
-/**
- * Get logic question by ID
- * @async
- * @param {string} id - Question ID
- * @returns {Promise<Object>} Result object with success flag, data, and errors
- */
-async function getQuestionById(id) {
-  try {
-    // Validate ID format
-    if (!isValidObjectId(id)) {
-      logger.warn(`Invalid logic question ID format: ${id}`);
-      return {
-        success: false,
-        errors: ['Invalid question ID format'],
-      };
-    }
-
-    const question = await getLogicQuestionById(id);
-
-    if (!question) {
-      logger.warn(`Logic question with ID ${id} not found`);
-      return {
-        success: false,
-        errors: ['Question not found'],
-      };
-    }
-
-    logger.info(`Retrieved logic question with ID ${id}`);
-    return {
-      success: true,
-      data: question,
-    };
-  } catch (error) {
-    logger.error(`Error retrieving logic question with ID ${id}:`, error);
     return {
       success: false,
       errors: [error.message],
