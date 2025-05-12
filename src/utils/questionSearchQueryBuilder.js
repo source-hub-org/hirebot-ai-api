@@ -9,12 +9,12 @@
  * @param {string|undefined} language - Language(s) to search for (comma-separated)
  * @param {string|undefined} position - Position level(s) to search for (comma-separated)
  * @param {string} sort_by - Field to sort by
- * @param {string} sortDirection - Direction to sort (asc/desc)
+ * @param {string} sort_direction - Direction to sort (asc/desc)
  * @param {number} page - Page number
  * @param {number} pageSize - Number of items per page
  * @returns {Object} MongoDB query parameters
  */
-function buildMongoQuery(topic, language, position, sort_by, sortDirection, page, pageSize) {
+function buildMongoQuery(topic, language, position, sort_by, sort_direction, page, pageSize) {
   // 1. Build filter
   const filter = {};
 
@@ -67,7 +67,7 @@ function buildMongoQuery(topic, language, position, sort_by, sortDirection, page
     sortOptions = null; // We'll use a different approach for random sorting
   } else {
     // Standard sorting
-    sortOptions[sort_by] = sortDirection === 'asc' ? 1 : -1;
+    sortOptions[sort_by] = sort_direction === 'asc' ? 1 : -1;
   }
 
   // 3. Calculate pagination parameters

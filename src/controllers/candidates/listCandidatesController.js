@@ -52,8 +52,8 @@ const getAllCandidates = async (req, res) => {
 
     if (req.query.sort_by) {
       const sortField = req.query.sort_by;
-      const sortDirection = req.query.sort_direction === 'asc' ? 1 : -1;
-      sort = { [sortField]: sortDirection };
+      const sort_direction = req.query.sort_direction === 'asc' ? 1 : -1;
+      sort = { [sortField]: sort_direction };
     }
 
     // Generate MongoDB pagination options
