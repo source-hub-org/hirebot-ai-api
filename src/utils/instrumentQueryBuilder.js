@@ -72,20 +72,20 @@ function buildFilter(queryParams) {
 /**
  * Builds sort options based on the provided parameters
  * @param {Object} queryParams - Query parameters
- * @param {string} [queryParams.sortBy] - Field to sort by
- * @param {string} [queryParams.sortOrder] - Sort order (asc/desc)
+ * @param {string} [queryParams.sort_by] - Field to sort by
+ * @param {string} [queryParams.sort_direction] - Sort direction (asc/desc)
  * @returns {Object|null} MongoDB sort options or null for random sorting
  */
 function buildSortOptions(queryParams) {
   // Handle random sort separately
-  if (queryParams.sortBy === 'random') {
+  if (queryParams.sort_by === 'random') {
     return null;
   }
 
   // Build standard sort options
   const sortOptions = {};
-  if (queryParams.sortBy) {
-    sortOptions[queryParams.sortBy] = queryParams.sortOrder === 'asc' ? 1 : -1;
+  if (queryParams.sort_by) {
+    sortOptions[queryParams.sort_by] = queryParams.sort_direction === 'asc' ? 1 : -1;
   } else {
     sortOptions.createdAt = -1; // Default sort by creation date, newest first
   }

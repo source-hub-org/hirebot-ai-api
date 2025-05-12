@@ -197,8 +197,8 @@ describe('Language Service', () => {
           slug: 'java',
           page: '2',
           limit: '5',
-          sortBy: 'name',
-          sortOrder: 'desc',
+          sort_by: 'name',
+          sort_direction: 'desc',
         };
 
         const languages = [{ _id: 'id1', name: 'Java', ...sampleLanguage }];

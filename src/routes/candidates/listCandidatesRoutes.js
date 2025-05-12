@@ -52,12 +52,12 @@ const { getAllCandidates } = require('../../controllers/candidates/listCandidate
  *           default: createdAt
  *         description: Field to sort by
  *       - in: query
- *         name: sort_order
+ *         name: sort_direction
  *         schema:
  *           type: string
  *           enum: [asc, desc]
  *           default: desc
- *         description: Sort order (ascending or descending)
+ *         description: Sort direction (ascending or descending)
  *     responses:
  *       200:
  *         description: Paginated list of candidates

@@ -190,9 +190,9 @@ function buildOptionsFromQuery(queryParams) {
   const options = {};
 
   // Add sorting
-  if (queryParams.sortBy) {
-    const sortOrder = queryParams.sortOrder === 'desc' ? -1 : 1;
-    options.sort = { [queryParams.sortBy]: sortOrder };
+  if (queryParams.sort_by) {
+    const sort_direction = queryParams.sort_direction === 'desc' ? -1 : 1;
+    options.sort = { [queryParams.sort_by]: sort_direction };
   } else {
     // Default sort by level ascending
     options.sort = { level: 1 };
