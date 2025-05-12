@@ -358,5 +358,155 @@
     "answer_explanation": "Khối lập phương lớn được cắt thành 8 khối nhỏ (2x2x2).\nMỗi khối nhỏ là một khối lập phương có 6 mặt.\nChỉ các mặt ngoài của khối lớn được sơn màu.\nMỗi khối nhỏ ở góc có 3 mặt tiếp xúc với bên ngoài, nên có 3 mặt được sơn.\nCác khối nhỏ khác có ít mặt được sơn hơn, nhưng câu hỏi ngụ ý khối ở góc.\nDo đó, đáp án là 3 mặt.\nTư duy không gian yêu cầu hình dung cách chia khối lập phương.\nKiểm tra vị trí các khối nhỏ giúp xác định số mặt được sơn.",
     "createdAt": "2025-05-12T10:00:00Z",
     "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc020000000000000001",
+    "question": "Một khối lập phương có cạnh 4cm được sơn xanh toàn bộ bề mặt. Nếu cắt thành 64 khối lập phương nhỏ (4x4x4), bao nhiêu khối nhỏ có đúng 1 mặt sơn xanh?",
+    "level": 4,
+    "tag_ids": ["665dbc000000000000000006"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "24", "is_correct": true },
+      { "text": "16", "is_correct": false },
+      { "text": "32", "is_correct": false }
+    ],
+    "answer_explanation": "Khối lập phương 4x4x4 tạo ra 64 khối nhỏ.\nMỗi khối nhỏ có 6 mặt, chỉ các mặt ngoài được sơn xanh.\nKhối nhỏ có 1 mặt sơn xanh nằm ở giữa các mặt của lập phương lớn.\nMỗi mặt của lập phương lớn có 4x4 = 16 khối nhỏ, nhưng chỉ 4 khối ở góc có 3 mặt sơn, 8 khối ở cạnh có 2 mặt sơn, còn lại 4 khối giữa có 1 mặt sơn.\nLập phương có 6 mặt, nên tổng cộng 6 × 4 = 24 khối có 1 mặt sơn xanh.\nTư duy không gian yêu cầu hình dung vị trí các khối nhỏ.\nKiểm tra số mặt sơn của từng loại khối giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc020000000000000002",
+    "question": "Một hình chữ nhật có chiều dài 6cm, chiều rộng 4cm được xoay 180 độ quanh tâm. Vị trí của góc trên cùng bên trái ban đầu sẽ ở đâu?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000006"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Góc dưới cùng bên phải", "is_correct": true },
+      { "text": "Góc trên cùng bên phải", "is_correct": false },
+      { "text": "Góc dưới cùng bên trái", "is_correct": false }
+    ],
+    "answer_explanation": "Hình chữ nhật có 4 góc: trên trái, trên phải, dưới trái, dưới phải.\nXoay 180 độ quanh tâm khiến các góc đối diện hoán đổi vị trí.\nGóc trên trái di chuyển đến vị trí góc dưới phải.\nGóc trên phải đến dưới trái, dưới trái đến trên phải, dưới phải đến trên trái.\nDo đó, góc dưới phải là vị trí mới của góc trên trái ban đầu.\nTư duy không gian yêu cầu hình dung sự xoay của hình chữ nhật.\nKiểm tra vị trí các góc sau khi xoay giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc020000000000000003",
+    "question": "Một hình trụ có bán kính đáy 3cm và chiều cao 6cm. Nếu cắt đôi theo mặt phẳng song song với trục và qua tâm, mỗi phần là hình gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000006"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Nửa hình trụ", "is_correct": true },
+      { "text": "Hình chữ nhật", "is_correct": false },
+      { "text": "Hình nón", "is_correct": false }
+    ],
+    "answer_explanation": "Hình trụ có đáy tròn và trục nối tâm hai đáy.\nMặt phẳng cắt song song với trục và qua tâm chia hình trụ thành hai phần đối xứng.\nMỗi phần giữ nguyên chiều cao 6cm, một nửa đáy tròn, và một phần mặt cong.\nĐây là nửa hình trụ với mặt cắt là hình chữ nhật và hai nửa đáy là nửa hình tròn.\nCác lựa chọn khác không phù hợp vì không giữ được dạng hình trụ.\nTư duy không gian yêu cầu hình dung mặt cắt của hình trụ.\nKiểm tra hình dạng các mặt sau khi cắt giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc020000000000000004",
+    "question": "Một khối cầu có bán kính 5cm. Nếu cắt bằng một mặt phẳng cách tâm 3cm, mặt cắt là hình gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000006"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Hình tròn", "is_correct": true },
+      { "text": "Hình elip", "is_correct": false },
+      { "text": "Hình parabol", "is_correct": false }
+    ],
+    "answer_explanation": "Khối cầu có bán kính 5cm, mọi điểm trên bề mặt cách tâm 5cm.\nMặt phẳng cắt cách tâm 3cm giao với khối cầu tạo một đường tròn.\nBán kính mặt cắt là căn bậc hai của (5² - 3²) = căn 16 = 4cm.\nMặt cắt của khối cầu với mặt phẳng luôn là hình tròn (trừ trường hợp chỉ chạm).\nCác lựa chọn khác như elip hay parabol không phù hợp với hình học khối cầu.\nTư duy không gian yêu cầu hình dung giao tuyến của mặt phẳng và khối cầu.\nKiểm tra công thức bán kính mặt cắt giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc020000000000000005",
+    "question": "Một hình chóp tứ giác đều có cạnh đáy 4cm được gấp dọc theo đường chéo của đáy. Hình tạo ra có bao nhiêu mặt phẳng?",
+    "level": 4,
+    "tag_ids": ["665dbc000000000000000006"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "4", "is_correct": true },
+      { "text": "3", "is_correct": false },
+      { "text": "5", "is_correct": false }
+    ],
+    "answer_explanation": "Hình chóp tứ giác đều có đáy vuông cạnh 4cm và 4 mặt bên tam giác.\nGấp dọc theo đường chéo của đáy (nối hai đỉnh đối diện) khiến hai nửa đáy chồng lên nhau.\nĐáy mới là một tam giác (nửa đường chéo làm cạnh), và hai mặt bên liên quan gập lại.\nKết quả là một hình chóp tam giác với 3 mặt bên tam giác và 1 đáy tam giác, tổng cộng 4 mặt.\nCác lựa chọn khác không phù hợp với cấu trúc hình sau khi gấp.\nTư duy không gian yêu cầu hình dung cách gấp và đếm mặt phẳng.\nKiểm tra các mặt sau khi gấp giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc030000000000000001",
+    "question": "Lập luận: 'Học sinh mặc đồng phục sẽ học tốt hơn.' Lập luận này có vấn đề gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000007"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Thiếu bằng chứng nhân quả", "is_correct": true },
+      { "text": "Suy luận diễn dịch sai", "is_correct": false },
+      { "text": "Không có vấn đề", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng mặc đồng phục dẫn đến học tốt hơn.\nKhông có bằng chứng rõ ràng chứng minh mối quan hệ nhân quả này.\nHọc tốt phụ thuộc vào nhiều yếu tố như phương pháp giảng dạy, động lực học sinh.\nLập luận giả định đồng phục trực tiếp ảnh hưởng đến kết quả học tập.\nTư duy phản biện yêu cầu đánh giá tính hợp lệ của mối liên hệ nhân quả.\nKiểm tra các yếu tố khác và yêu cầu dữ liệu thực nghiệm giúp phát hiện lỗi.\nCác lựa chọn khác không phản ánh vấn đề thiếu bằng chứng của lập luận.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc030000000000000002",
+    "question": "Lập luận: 'Anh ấy thành công vì làm việc 12 tiếng mỗi ngày.' Lập luận này có hợp lý không?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000007"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Không, vì thiếu thông tin về các yếu tố khác", "is_correct": true },
+      { "text": "Có, vì làm việc nhiều dẫn đến thành công", "is_correct": false },
+      { "text": "Có, vì thời gian làm việc là yếu tố chính", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng làm việc 12 tiếng mỗi ngày dẫn đến thành công.\nThành công phụ thuộc vào nhiều yếu tố như kỹ năng, chiến lược, cơ hội.\nLập luận bỏ qua các yếu tố này và giả định thời gian làm việc là nguyên nhân duy nhất.\nKhông có dữ liệu cụ thể chứng minh mối quan hệ nhân quả.\nTư duy phản biện yêu cầu xem xét tất cả yếu tố ảnh hưởng.\nKiểm tra các nguyên nhân khác giúp phát hiện lỗi trong lập luận.\nCác lựa chọn khác giả định quá mức về vai trò của thời gian làm việc.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc030000000000000003",
+    "question": "Lập luận: 'Sản phẩm này tốt nhất vì được quảng cáo nhiều.' Lập luận này có vấn đề gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000007"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Nhầm lẫn giữa quảng cáo và chất lượng", "is_correct": true },
+      { "text": "Suy luận quy nạp sai", "is_correct": false },
+      { "text": "Không có vấn đề", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng quảng cáo nhiều đồng nghĩa với sản phẩm tốt nhất.\nQuảng cáo liên quan đến tiếp thị, không đảm bảo chất lượng sản phẩm.\nChất lượng cần được đánh giá qua hiệu suất, đánh giá khách hàng, không phải tần suất quảng cáo.\nLập luận nhầm lẫn giữa hai khái niệm không liên quan trực tiếp.\nTư duy phản biện yêu cầu phân biệt các yếu tố không liên quan.\nKiểm tra tiêu chí đánh giá chất lượng giúp phát hiện lỗi lập luận.\nCác lựa chọn khác không phản ánh vấn đề nhầm lẫn này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc030000000000000004",
+    "question": "Lập luận: 'Trẻ em ngày nay lười biếng vì dùng điện thoại quá nhiều.' Lập luận này có hợp lý không?",
+    "level": 4,
+    "tag_ids": ["665dbc000000000000000007"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Không, vì thiếu bằng chứng nhân quả", "is_correct": true },
+      { "text": "Có, vì điện thoại làm mất tập trung", "is_correct": false },
+      { "text": "Có, vì trẻ em ít vận động", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng dùng điện thoại nhiều khiến trẻ em lười biếng.\nKhông có bằng chứng cụ thể chứng minh điện thoại là nguyên nhân trực tiếp.\nLười biếng có thể do nhiều yếu tố như môi trường học, động lực, thói quen.\nLập luận giả định mối quan hệ nhân quả mà không có dữ liệu hỗ trợ.\nTư duy phản biện yêu cầu đánh giá bằng chứng và xem xét các nguyên nhân khác.\nKiểm tra nghiên cứu về tác động của điện thoại giúp phát hiện lỗi.\nCác lựa chọn khác giả định sai về mối liên hệ nhân quả.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc030000000000000005",
+    "question": "Lập luận: 'Công ty này đáng tin vì có trụ sở tại thành phố lớn.' Lập luận này có vấn đề gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000007"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Nhầm lẫn giữa vị trí và độ tin cậy", "is_correct": true },
+      { "text": "Suy luận diễn dịch sai", "is_correct": false },
+      { "text": "Không có vấn đề", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng công ty đáng tin vì có trụ sở tại thành phố lớn.\nVị trí trụ sở không đảm bảo độ tin cậy của công ty.\nĐộ tin cậy phụ thuộc vào uy tín, chất lượng dịch vụ, đánh giá khách hàng.\nLập luận nhầm lẫn giữa yếu tố không liên quan và tiêu chí đánh giá.\nTư duy phản biện yêu cầu phân biệt các yếu tố không ảnh hưởng trực tiếp.\nKiểm tra tiêu chí đánh giá độ tin cậy giúp phát hiện lỗi lập luận.\nCác lựa chọn khác không phản ánh vấn đề nhầm lẫn này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
   }
 ]

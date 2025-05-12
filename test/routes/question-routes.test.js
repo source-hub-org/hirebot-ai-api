@@ -279,9 +279,8 @@ describe('Question Routes', () => {
           position: ['junior'], // Should be string
         });
 
-      // This is returning 500 instead of 400 because arrays can't be converted to lowercase
-      // in the validation step, causing an unhandled error
-      expect(response.status).toBe(500);
+      // The validation now properly handles arrays and returns 400 instead of 500
+      expect(response.status).toBe(400);
       expect(response.body.status).toBe('error');
     });
 

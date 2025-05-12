@@ -13,6 +13,9 @@ const logger = require('./logger');
  * @returns {boolean} True if ID is a valid ObjectId, false otherwise
  */
 function isValidObjectId(id) {
+  if (id === null || id === undefined || typeof id === 'number') {
+    return false;
+  }
   return ObjectId.isValid(id);
 }
 
@@ -242,6 +245,12 @@ function formatSubmissionDefaults(submissionData) {
       other: instrument.other !== undefined ? instrument.other : '',
       point: instrument.point !== undefined ? instrument.point : 0,
     }));
+  }
+
+  // Don't add default instruments array if it's not in the original data
+  // This is to fix the test case that expects the original data structure
+  if (!submissionData.hasOwnProperty('instruments')) {
+    delete formattedSubmission.instruments;
   }
 
   return formattedSubmission;

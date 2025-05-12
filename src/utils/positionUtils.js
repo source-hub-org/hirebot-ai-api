@@ -23,7 +23,9 @@ const VALID_POSITIONS = ['intern', 'fresher', 'junior', 'middle', 'senior', 'exp
  * @returns {boolean} - Whether the position is valid
  */
 const isValidPosition = position => {
-  return position && VALID_POSITIONS.includes(position.toLowerCase());
+  return (
+    position && typeof position === 'string' && VALID_POSITIONS.includes(position.toLowerCase())
+  );
 };
 
 /**

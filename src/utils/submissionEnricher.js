@@ -160,8 +160,13 @@ async function enrichSubmission(submission) {
 
     // Fetch candidate data
     if (submission.candidate_id) {
-      const candidate = await fetchCandidateById(submission.candidate_id);
-      enrichedSubmission.candidate = candidate || null;
+      try {
+        const candidate = await fetchCandidateById(submission.candidate_id);
+        enrichedSubmission.candidate = candidate || null;
+      } catch (candidateError) {
+        logger.error(`Error enriching submission:`, candidateError);
+        enrichedSubmission.candidate = null;
+      }
     } else {
       enrichedSubmission.candidate = null;
     }
@@ -228,7 +233,14 @@ async function enrichSubmissions(submissions) {
   try {
     // Process all submissions in parallel for better performance
     const enrichedSubmissions = await Promise.all(
-      submissions.map(submission => enrichSubmission(submission))
+      submissions.map(async submission => {
+        try {
+          return await enrichSubmission(submission);
+        } catch (error) {
+          logger.error(`Error enriching individual submission:`, error);
+          return submission; // Return original submission if individual enrichment fails
+        }
+      })
     );
 
     return enrichedSubmissions.filter(Boolean); // Filter out null values
