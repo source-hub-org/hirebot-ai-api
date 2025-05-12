@@ -25,7 +25,7 @@ function validateLogicTagData(tagData) {
   const errors = [];
 
   // Check if name is provided and is a string
-  if (!tagData.name) {
+  if (tagData.name === undefined || tagData.name === null) {
     errors.push('Tag name is required');
   } else if (typeof tagData.name !== 'string') {
     errors.push('Tag name must be a string');
@@ -100,7 +100,7 @@ async function createTag(tagData) {
 
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error creating logic tag: ${error.message}`],
     };
   }
 }
@@ -120,11 +120,11 @@ async function getAllTags() {
       data: tags,
     };
   } catch (error) {
-    logger.error('Error retrieving logic tags:', error);
+    logger.error('Error getting all logic tags:', error);
 
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error getting all logic tags: ${error.message}`],
     };
   }
 }
@@ -139,7 +139,7 @@ async function getTagById(id) {
   try {
     // Validate ID format
     if (!isValidObjectId(id)) {
-      logger.warn(`Invalid logic tag ID format: ${id}`);
+      logger.warn(`Invalid tag ID format: ${id}`);
       return {
         success: false,
         errors: ['Invalid tag ID format'],
@@ -149,7 +149,7 @@ async function getTagById(id) {
     const tag = await getLogicTagById(id);
 
     if (!tag) {
-      logger.warn(`Logic tag with ID ${id} not found`);
+      logger.warn(`Tag not found with ID: ${id}`);
       return {
         success: false,
         errors: ['Tag not found'],
@@ -162,10 +162,10 @@ async function getTagById(id) {
       data: tag,
     };
   } catch (error) {
-    logger.error(`Error retrieving logic tag with ID ${id}:`, error);
+    logger.error(`Error getting logic tag with ID ${id}:`, error);
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error getting tag: ${error.message}`],
     };
   }
 }
@@ -181,17 +181,27 @@ async function updateTag(id, updateData) {
   try {
     // Validate ID format
     if (!isValidObjectId(id)) {
-      logger.warn(`Invalid logic tag ID format: ${id}`);
+      logger.warn(`Invalid tag ID format: ${id}`);
       return {
         success: false,
         errors: ['Invalid tag ID format'],
       };
     }
 
+    // Check if tag exists
+    const existingTag = await getLogicTagById(id);
+    if (!existingTag) {
+      logger.warn(`Tag not found with ID: ${id}`);
+      return {
+        success: false,
+        errors: ['Tag not found'],
+      };
+    }
+
     // Validate update data
     const validation = validateLogicTagData(updateData);
     if (!validation.isValid) {
-      logger.warn('Invalid logic tag update data:', validation.errors);
+      logger.warn('Invalid logic tag data:', validation.errors);
       return {
         success: false,
         errors: validation.errors,
@@ -209,25 +219,17 @@ async function updateTag(id, updateData) {
     if (updateData.slug) {
       const existingTag = await getLogicTagBySlug(updateData.slug);
       if (existingTag && existingTag._id.toString() !== id) {
-        logger.warn(`Tag with slug '${updateData.slug}' already exists`);
+        logger.warn(`Another tag with slug '${updateData.slug}' already exists`);
         return {
           success: false,
-          errors: [`Tag with slug '${updateData.slug}' already exists`],
+          errors: [`Another tag with slug '${updateData.slug}' already exists`],
         };
       }
     }
 
     const updatedTag = await updateLogicTag(id, updateData);
 
-    if (!updatedTag) {
-      logger.warn(`Logic tag with ID ${id} not found for update`);
-      return {
-        success: false,
-        errors: ['Tag not found'],
-      };
-    }
-
-    logger.info(`Updated logic tag with ID ${id}`);
+    logger.info(`Logic tag with ID ${id} updated successfully`);
     return {
       success: true,
       data: updatedTag,
@@ -245,7 +247,7 @@ async function updateTag(id, updateData) {
 
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error updating tag: ${error.message}`],
     };
   }
 }
@@ -260,24 +262,26 @@ async function deleteTag(id) {
   try {
     // Validate ID format
     if (!isValidObjectId(id)) {
-      logger.warn(`Invalid logic tag ID format: ${id}`);
+      logger.warn(`Invalid tag ID format: ${id}`);
       return {
         success: false,
         errors: ['Invalid tag ID format'],
       };
     }
 
-    const deletedTag = await deleteLogicTag(id);
-
-    if (!deletedTag) {
-      logger.warn(`Logic tag with ID ${id} not found for deletion`);
+    // Check if tag exists
+    const existingTag = await getLogicTagById(id);
+    if (!existingTag) {
+      logger.warn(`Tag not found with ID: ${id}`);
       return {
         success: false,
         errors: ['Tag not found'],
       };
     }
 
-    logger.info(`Deleted logic tag with ID ${id}`);
+    const deletedTag = await deleteLogicTag(id);
+
+    logger.info(`Logic tag with ID ${id} deleted successfully`);
     return {
       success: true,
       data: deletedTag,
@@ -286,7 +290,52 @@ async function deleteTag(id) {
     logger.error(`Error deleting logic tag with ID ${id}:`, error);
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error deleting tag: ${error.message}`],
+    };
+  }
+}
+
+/**
+ * Check if logic tags exist by IDs
+ * @async
+ * @param {Array<string>} ids - Array of tag IDs
+ * @returns {Promise<Object>} Result object with success flag, data, and errors
+ */
+async function checkLogicTagsExist(ids) {
+  try {
+    // Handle empty array case
+    if (!ids || ids.length === 0) {
+      return {
+        success: true,
+        data: [],
+      };
+    }
+
+    const tags = await getLogicTagsByIds(ids);
+
+    if (tags.length === ids.length) {
+      return {
+        success: true,
+        data: tags,
+      };
+    } else {
+      // Find which tags are missing
+      const foundIds = tags.map(tag => tag._id.toString());
+      const missingIds = ids.filter(id => !foundIds.includes(id));
+
+      logger.warn('Some logic tags do not exist:', missingIds);
+
+      return {
+        success: false,
+        errors: ['One or more tags do not exist'],
+        data: tags,
+      };
+    }
+  } catch (error) {
+    logger.error('Error checking if logic tags exist:', error);
+    return {
+      success: false,
+      errors: [`Error checking if tags exist: ${error.message}`],
     };
   }
 }
@@ -297,4 +346,5 @@ module.exports = {
   getTagById,
   updateTag,
   deleteTag,
+  checkLogicTagsExist,
 };

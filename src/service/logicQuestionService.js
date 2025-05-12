@@ -145,18 +145,18 @@ async function createQuestion(questionData) {
       };
     }
 
-    // Convert tag_ids to ObjectIds
-    questionData.tag_ids = toObjectIds(questionData.tag_ids);
-
     // Check if all tags exist
-    const tagsExist = await checkLogicTagsExist(questionData.tag_ids);
-    if (!tagsExist) {
-      logger.warn('One or more tags do not exist');
+    const tagsResult = await checkLogicTagsExist(questionData.tag_ids);
+    if (!tagsResult.success) {
+      logger.warn('One or more logic tags do not exist');
       return {
         success: false,
         errors: ['One or more tags do not exist'],
       };
     }
+
+    // Convert tag_ids to ObjectIds
+    questionData.tag_ids = toObjectIds(questionData.tag_ids);
 
     // Create question
     const question = await createLogicQuestion(questionData);
@@ -170,7 +170,7 @@ async function createQuestion(questionData) {
     logger.error('Error creating logic question:', error);
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error creating question: ${error.message}`],
     };
   }
 }
@@ -186,49 +186,47 @@ async function updateQuestion(id, updateData) {
   try {
     // Validate ID format
     if (!isValidObjectId(id)) {
-      logger.warn(`Invalid logic question ID format: ${id}`);
+      logger.warn(`Invalid question ID format: ${id}`);
       return {
         success: false,
         errors: ['Invalid question ID format'],
       };
     }
 
+    // Check if question exists
+    const questionResult = await getQuestionById(id);
+    if (!questionResult.success) {
+      return questionResult;
+    }
+
     // Validate update data
     const validation = validateLogicQuestionData(updateData, true);
     if (!validation.isValid) {
-      logger.warn('Invalid logic question update data:', validation.errors);
+      logger.warn('Invalid logic question data:', validation.errors);
       return {
         success: false,
         errors: validation.errors,
       };
     }
 
-    // Convert tag_ids to ObjectIds if provided
+    // Check if all tags exist if provided
     if (updateData.tag_ids) {
-      updateData.tag_ids = toObjectIds(updateData.tag_ids);
-
-      // Check if all tags exist
-      const tagsExist = await checkLogicTagsExist(updateData.tag_ids);
-      if (!tagsExist) {
-        logger.warn('One or more tags do not exist');
+      const tagsResult = await checkLogicTagsExist(updateData.tag_ids);
+      if (!tagsResult.success) {
+        logger.warn('One or more logic tags do not exist');
         return {
           success: false,
           errors: ['One or more tags do not exist'],
         };
       }
+
+      // Convert tag_ids to ObjectIds
+      updateData.tag_ids = toObjectIds(updateData.tag_ids);
     }
 
     const updatedQuestion = await updateLogicQuestion(id, updateData);
 
-    if (!updatedQuestion) {
-      logger.warn(`Logic question with ID ${id} not found for update`);
-      return {
-        success: false,
-        errors: ['Question not found'],
-      };
-    }
-
-    logger.info(`Updated logic question with ID ${id}`);
+    logger.info(`Logic question with ID ${id} updated successfully`);
     return {
       success: true,
       data: updatedQuestion,
@@ -237,7 +235,7 @@ async function updateQuestion(id, updateData) {
     logger.error(`Error updating logic question with ID ${id}:`, error);
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error updating question: ${error.message}`],
     };
   }
 }
@@ -252,24 +250,22 @@ async function deleteQuestion(id) {
   try {
     // Validate ID format
     if (!isValidObjectId(id)) {
-      logger.warn(`Invalid logic question ID format: ${id}`);
+      logger.warn(`Invalid question ID format: ${id}`);
       return {
         success: false,
         errors: ['Invalid question ID format'],
       };
     }
 
-    const deletedQuestion = await deleteLogicQuestion(id);
-
-    if (!deletedQuestion) {
-      logger.warn(`Logic question with ID ${id} not found for deletion`);
-      return {
-        success: false,
-        errors: ['Question not found'],
-      };
+    // Check if question exists
+    const questionResult = await getQuestionById(id);
+    if (!questionResult.success) {
+      return questionResult;
     }
 
-    logger.info(`Deleted logic question with ID ${id}`);
+    const deletedQuestion = await deleteLogicQuestion(id);
+
+    logger.info(`Logic question with ID ${id} deleted successfully`);
     return {
       success: true,
       data: deletedQuestion,
@@ -278,7 +274,7 @@ async function deleteQuestion(id) {
     logger.error(`Error deleting logic question with ID ${id}:`, error);
     return {
       success: false,
-      errors: [error.message],
+      errors: [`Error deleting question: ${error.message}`],
     };
   }
 }

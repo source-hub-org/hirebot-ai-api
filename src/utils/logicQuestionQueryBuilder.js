@@ -5,6 +5,8 @@
 
 const { isValidObjectId } = require('./validateObjectId');
 const logger = require('./logger');
+const { Types } = require('mongoose');
+const { ObjectId } = Types;
 
 /**
  * Parse a comma-separated string of ObjectIds into an array of valid ObjectIds
@@ -17,7 +19,6 @@ function parseObjectIds(idsString) {
   }
 
   try {
-    const { ObjectId } = require('mongoose').Types;
     return idsString
       .split(',')
       .map(id => id.trim())
@@ -51,7 +52,8 @@ function buildFilter(queryParams) {
 
   // Apply tag filter if provided
   if (queryParams.tag_id && isValidObjectId(queryParams.tag_id)) {
-    filter.tag_ids = queryParams.tag_id;
+    // Convert to ObjectId and use $in operator to match documents where tag_ids array contains this ID
+    filter.tag_ids = { $in: [new ObjectId(queryParams.tag_id)] };
   }
 
   // Apply type filter if provided

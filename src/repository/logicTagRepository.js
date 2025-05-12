@@ -90,11 +90,22 @@ async function getLogicTagsByIds(ids) {
  * Check if tags exist by IDs
  * @async
  * @param {Array<string>} ids - Array of tag IDs
- * @returns {Promise<boolean>} True if all tags exist, false otherwise
+ * @returns {Promise<Object>} Object with success flag and data/errors
  */
 async function checkLogicTagsExist(ids) {
   const tags = await getLogicTagsByIds(ids);
-  return tags.length === ids.length;
+  if (tags.length === ids.length) {
+    return {
+      success: true,
+      data: tags,
+    };
+  } else {
+    return {
+      success: false,
+      errors: ['One or more tags do not exist'],
+      data: tags,
+    };
+  }
 }
 
 module.exports = {
