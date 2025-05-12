@@ -18,6 +18,15 @@
       "is_skip": 0
     }
   ],
+  "logic_questions": [
+    {
+      "logic_question_id": "string",
+      "answer": "true,false,true",
+      "other": "string",
+      "point": 0,
+      "is_skip": 0
+    }
+  ],
   "essay": {
     "question": "Bạn hãy trình bày cách bạn tiếp cận giải một bài toán thuật toán khó.",
     "answer": "Em sẽ phân tích input, tìm quy luật, sau đó thử brute-force trước khi tối ưu bằng quy hoạch động hoặc greedy.",

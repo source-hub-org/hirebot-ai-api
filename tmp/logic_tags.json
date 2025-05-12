@@ -1,0 +1,162 @@
+[
+  {
+    "_id": "665dbc000000000000000001",
+    "name": "Nhận diện mẫu",
+    "slug": "pattern-recognition",
+    "description": "Nhận diện và mở rộng các mẫu logic hoặc chuỗi.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000002",
+    "name": "Dãy số",
+    "slug": "number-series",
+    "description": "Phân tích chuỗi số và xác định số tiếp theo.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000003",
+    "name": "Tương đồng",
+    "slug": "analogies",
+    "description": "Tìm mối quan hệ logic giữa các cặp từ hoặc mẫu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000004",
+    "name": "Suy luận diễn dịch",
+    "slug": "deductive-reasoning",
+    "description": "Rút ra kết luận từ những mệnh đề hoặc dữ kiện đã cho.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000005",
+    "name": "Suy luận quy nạp",
+    "slug": "inductive-reasoning",
+    "description": "Tạo giả định từ các ví dụ hoặc quan sát cụ thể.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000006",
+    "name": "Tư duy không gian",
+    "slug": "spatial-reasoning",
+    "description": "Hình dung và thao tác các hình khối trong không gian.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000007",
+    "name": "Tư duy phản biện",
+    "slug": "critical-thinking",
+    "description": "Phân tích dữ kiện để đưa ra phán đoán hợp lý.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000008",
+    "name": "Nhận diện giả định",
+    "slug": "assumption-recognition",
+    "description": "Tìm ra các giả định chưa được nêu rõ trong lập luận.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000009",
+    "name": "Phân tích dữ liệu",
+    "slug": "data-interpretation",
+    "description": "Hiểu và rút ra thông tin từ bảng, biểu đồ hoặc đồ thị.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc00000000000000000a",
+    "name": "Câu đố logic",
+    "slug": "logical-puzzles",
+    "description": "Giải quyết vấn đề yêu cầu các bước logic chặt chẽ.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc00000000000000000b",
+    "name": "Nguyên nhân - Kết quả",
+    "slug": "cause-effect",
+    "description": "Xác định hậu quả hợp lý từ các hành động hoặc sự kiện.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc00000000000000000c",
+    "name": "Chuỗi logic",
+    "slug": "logical-sequences",
+    "description": "Xác định trình tự logic của các sự kiện hoặc phát biểu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc00000000000000000d",
+    "name": "Giải quyết vấn đề",
+    "slug": "problem-solving",
+    "description": "Tiếp cận và giải quyết vấn đề bằng các bước suy luận logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc00000000000000000e",
+    "name": "Phân tích phát biểu",
+    "slug": "statement-analysis",
+    "description": "Đánh giá tính đúng sai và logic của các phát biểu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc00000000000000000f",
+    "name": "Tam đoạn luận",
+    "slug": "syllogisms",
+    "description": "Suy luận từ hai tiền đề để đưa ra kết luận hợp logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000010",
+    "name": "Biểu đồ Venn",
+    "slug": "venn-diagrams",
+    "description": "Dùng biểu diễn trực quan để phân tích mối quan hệ tập hợp.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000011",
+    "name": "Logic Đúng/Sai",
+    "slug": "true-false-logic",
+    "description": "Xác định giá trị đúng sai trong cấu trúc logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000012",
+    "name": "Suy luận toán học",
+    "slug": "mathematical-reasoning",
+    "description": "Áp dụng khái niệm toán học để giải các bài toán logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000013",
+    "name": "Tìm điểm khác biệt",
+    "slug": "odd-one-out",
+    "description": "Xác định phần tử không phù hợp với nhóm dựa trên logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc000000000000000014",
+    "name": "Logic Boole",
+    "slug": "boolean-logic",
+    "description": "Áp dụng các toán tử AND, OR, NOT trong bài toán logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  }
+]

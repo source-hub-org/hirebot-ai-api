@@ -13,6 +13,8 @@ const positionRoutes = require('./positions');
 const languageRoutes = require('./languages');
 const instrumentTagRoutes = require('./instrument-tags');
 const instrumentRoutes = require('./instruments');
+const logicTagRoutes = require('./logic-tags');
+const logicQuestionRoutes = require('./logic-questions');
 
 /**
  * Creates a router for question routes
@@ -74,6 +76,26 @@ const createInstrumentRouter = () => {
   return router;
 };
 
+/**
+ * Creates a router for logic tag routes
+ * @returns {Object} Express router for logic tag routes
+ */
+const createLogicTagRouter = () => {
+  const router = express.Router();
+  router.use('/', logicTagRoutes);
+  return router;
+};
+
+/**
+ * Creates a router for logic question routes
+ * @returns {Object} Express router for logic question routes
+ */
+const createLogicQuestionRouter = () => {
+  const router = express.Router();
+  router.use('/', logicQuestionRoutes);
+  return router;
+};
+
 module.exports = {
   healthCheckRoutes,
   candidateRoutes,
@@ -84,4 +106,6 @@ module.exports = {
   languageRoutes: createLanguageRouter(),
   instrumentTagRoutes: createInstrumentTagRouter(),
   instrumentRoutes: createInstrumentRouter(),
+  logicTagRoutes: createLogicTagRouter(),
+  logicQuestionRoutes: createLogicQuestionRouter(),
 };

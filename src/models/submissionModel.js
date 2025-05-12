@@ -19,6 +19,12 @@
  * @property {string} [instruments[].other=''] - Additional text for the instrument response
  * @property {number} [instruments[].point=0] - Score given to the instrument response
  * @property {number} [instruments[].is_skip=0] - Whether the instrument was skipped (0 or 1)
+ * @property {Array<Object>} [logic_questions=[]] - Array of logic question responses
+ * @property {string} logic_questions[].logic_question_id - ID of the logic question (required)
+ * @property {string} [logic_questions[].answer=''] - Answer to the logic question (e.g., 'true,false,true')
+ * @property {string} [logic_questions[].other=''] - Additional text for the logic question response
+ * @property {number} [logic_questions[].point=0] - Score given to the logic question response
+ * @property {number} [logic_questions[].is_skip=0] - Whether the logic question was skipped (0 or 1)
  * @property {Object} [essay={}] - Essay information
  * @property {string} [essay.question=''] - Essay question
  * @property {string} [essay.answer=''] - Essay answer
@@ -35,6 +41,7 @@
 const defaultValues = {
   answers: [],
   instruments: [],
+  logic_questions: [],
   essay: {
     question: null,
     answer: null,
@@ -65,6 +72,12 @@ const requiredAnswerFields = ['question_id'];
 const requiredInstrumentFields = ['instrument_id'];
 
 /**
+ * Required fields for each logic question in the logic_questions array
+ * @type {Array<string>}
+ */
+const requiredLogicQuestionFields = ['logic_question_id'];
+
+/**
  * Submission model definition
  */
 const submissionModel = {
@@ -72,6 +85,7 @@ const submissionModel = {
   requiredFields,
   requiredAnswerFields,
   requiredInstrumentFields,
+  requiredLogicQuestionFields,
   defaultValues,
   answerValueRange: {
     min: 0,

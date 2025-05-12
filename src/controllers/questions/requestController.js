@@ -15,14 +15,14 @@ const validateRequestParams = body => {
   const { topics, limit, position, language } = body;
   const errors = [];
 
-  // Validate limit if provided
-  if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
-    errors.push('Limit must be a positive integer');
-  }
-
   // Validate topics if provided
   if (topics !== undefined && !Array.isArray(topics)) {
     errors.push('Topics must be an array');
+  }
+
+  // Validate limit if provided
+  if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
+    errors.push('Limit must be a positive integer');
   }
 
   // Validate position (required)

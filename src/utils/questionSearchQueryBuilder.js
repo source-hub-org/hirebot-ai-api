@@ -4,6 +4,15 @@
  */
 
 /**
+ * Escapes special characters in a string for use in a regular expression
+ * @param {string} string - The string to escape
+ * @returns {string} The escaped string
+ */
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+/**
  * Builds MongoDB query parameters based on search criteria
  * @param {string|undefined} topic - Topic(s) to search for (comma-separated)
  * @param {string|undefined} language - Language(s) to search for (comma-separated)
@@ -22,10 +31,10 @@ function buildMongoQuery(topic, language, position, sort_by, sort_direction, pag
   if (topic) {
     const topics = topic.split(',').map(t => t.trim());
     if (topics.length === 1) {
-      filter.topic = { $regex: new RegExp(topics[0], 'i') }; // Case-insensitive search
+      filter.topic = { $regex: new RegExp(escapeRegExp(topics[0]), 'i') }; // Case-insensitive search
     } else if (topics.length > 1) {
       filter.topic = {
-        $in: topics.map(t => new RegExp(t, 'i')), // Array of case-insensitive regexes
+        $in: topics.map(t => new RegExp(escapeRegExp(t), 'i')), // Array of case-insensitive regexes
       };
     }
   }
@@ -34,10 +43,10 @@ function buildMongoQuery(topic, language, position, sort_by, sort_direction, pag
   if (language) {
     const languages = language.split(',').map(l => l.trim());
     if (languages.length === 1) {
-      filter.language = { $regex: new RegExp(languages[0], 'i') }; // Case-insensitive search
+      filter.language = { $regex: new RegExp(escapeRegExp(languages[0]), 'i') }; // Case-insensitive search
     } else if (languages.length > 1) {
       filter.language = {
-        $in: languages.map(l => new RegExp(l, 'i')), // Array of case-insensitive regexes
+        $in: languages.map(l => new RegExp(escapeRegExp(l), 'i')), // Array of case-insensitive regexes
       };
     }
   }
@@ -48,11 +57,11 @@ function buildMongoQuery(topic, language, position, sort_by, sort_direction, pag
     if (positions.length === 1) {
       // For position, we need to handle capitalization in the database
       // The first letter might be capitalized in the database
-      const positionRegex = new RegExp(`^${positions[0]}$`, 'i');
+      const positionRegex = new RegExp(`^${escapeRegExp(positions[0])}$`, 'i');
       filter.position = { $regex: positionRegex };
     } else if (positions.length > 1) {
       filter.position = {
-        $in: positions.map(p => new RegExp(`^${p}$`, 'i')), // Array of case-insensitive regexes
+        $in: positions.map(p => new RegExp(`^${escapeRegExp(p)}$`, 'i')), // Array of case-insensitive regexes
       };
     }
   }

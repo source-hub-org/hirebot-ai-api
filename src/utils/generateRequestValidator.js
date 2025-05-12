@@ -27,7 +27,11 @@ const validateGenerateRequest = requestBody => {
   }
 
   // Validate position is one of the allowed values
-  if (position && !VALID_POSITIONS.includes(position.toLowerCase())) {
+  if (
+    position &&
+    typeof position === 'string' &&
+    !VALID_POSITIONS.includes(position.toLowerCase())
+  ) {
     validationErrors.push(`Position must be one of: ${VALID_POSITIONS.join(', ')}`);
   }
 

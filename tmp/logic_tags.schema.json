@@ -1,0 +1,38 @@
+{
+  "collection": "logic_tags",
+  "description": "Tags used to categorize logic questions by topic or skill.",
+  "fields": {
+    "_id": {
+      "type": "ObjectId",
+      "description": "Unique identifier for the tag."
+    },
+    "name": {
+      "type": "String",
+      "description": "Human-readable name of the tag (e.g. 'Pattern Recognition')."
+    },
+    "slug": {
+      "type": "String",
+      "description": "URL-safe version of the tag name (e.g. 'pattern-recognition')."
+    },
+    "description": {
+      "type": "String",
+      "description": "Optional description of the tag."
+    },
+    "createdAt": {
+      "type": "Date",
+      "description": "Timestamp when the tag was created."
+    },
+    "updatedAt": {
+      "type": "Date",
+      "description": "Timestamp of the last tag update."
+    }
+  },
+  "example": {
+    "_id": "64d0c3d9f3e9f1a1b0c2e3d1",
+    "name": "Pattern Recognition",
+    "slug": "pattern-recognition",
+    "description": "Identify and continue logical sequences or patterns.",
+    "createdAt": "2025-05-12T08:00:00Z",
+    "updatedAt": "2025-05-12T08:00:00Z"
+  }
+}
