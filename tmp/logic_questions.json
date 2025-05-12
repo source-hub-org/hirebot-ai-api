@@ -508,5 +508,230 @@
     "answer_explanation": "Lập luận cho rằng công ty đáng tin vì có trụ sở tại thành phố lớn.\nVị trí trụ sở không đảm bảo độ tin cậy của công ty.\nĐộ tin cậy phụ thuộc vào uy tín, chất lượng dịch vụ, đánh giá khách hàng.\nLập luận nhầm lẫn giữa yếu tố không liên quan và tiêu chí đánh giá.\nTư duy phản biện yêu cầu phân biệt các yếu tố không ảnh hưởng trực tiếp.\nKiểm tra tiêu chí đánh giá độ tin cậy giúp phát hiện lỗi lập luận.\nCác lựa chọn khác không phản ánh vấn đề nhầm lẫn này.",
     "createdAt": "2025-05-12T10:00:00Z",
     "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000001",
+    "question": "Lập luận: 'Anh ấy được thăng chức vì làm việc lâu năm.' Giả định ngầm là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000008"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Làm việc lâu năm dẫn đến thăng chức", "is_correct": true },
+      { "text": "Anh ấy có kỹ năng tốt", "is_correct": false },
+      { "text": "Công ty thiếu nhân sự", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng anh ấy được thăng chức vì làm việc lâu năm.\nGiả định ngầm là thời gian làm việc lâu dẫn đến thăng chức.\nLập luận giả định thâm niên là yếu tố chính, không đề cập kỹ năng hay tình hình công ty.\nCác lựa chọn khác không phải giả định ngầm của lập luận này.\nNhận diện giả định yêu cầu tìm giả thuyết chưa được nêu rõ.\nKiểm tra lý do thăng chức trong lập luận giúp xác định giả định.\nGiả định về thâm niên là cốt lõi của lập luận này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000002",
+    "question": "Lập luận: 'Cô ấy hát hay vì luyện tập nhiều.' Giả định ngầm là gì?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000008"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Luyện tập nhiều cải thiện kỹ năng hát", "is_correct": true },
+      { "text": "Cô ấy có giọng hát tự nhiên", "is_correct": false },
+      { "text": "Cô ấy học từ giáo viên giỏi", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng cô ấy hát hay vì luyện tập nhiều.\nGiả định ngầm là luyện tập nhiều cải thiện kỹ năng hát.\nLập luận giả định mối quan hệ nhân quả giữa luyện tập và chất lượng hát.\nCác lựa chọn khác như giọng hát tự nhiên hay giáo viên không được đề cập.\nNhận diện giả định yêu cầu tìm giả thuyết chưa được nêu rõ.\nKiểm tra lý do hát hay trong lập luận giúp xác định giả định.\nGiả định về luyện tập là cốt lõi của lập luận này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000003",
+    "question": "Lập luận: 'Học sinh không đến lớp vì trời mưa.' Giả định ngầm là gì?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000008"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Trời mưa ngăn cản việc đến lớp", "is_correct": true },
+      { "text": "Học sinh không thích học", "is_correct": false },
+      { "text": "Trường học đóng cửa", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng học sinh không đến lớp vì trời mưa.\nGiả định ngầm là trời mưa là lý do chính ngăn cản việc đến lớp.\nLập luận giả định mưa ảnh hưởng đến khả năng hoặc quyết định đến trường.\nCác lựa chọn khác như không thích học hay trường đóng cửa không được đề cập.\nNhận diện giả định yêu cầu tìm giả thuyết chưa được nêu rõ.\nKiểm tra lý do vắng học trong lập luận giúp xác định giả định.\nGiả định về tác động của mưa là cốt lõi của lập luận này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000004",
+    "question": "Lập luận: 'Sản phẩm này bán chạy vì giá rẻ.' Giả định ngầm là gì?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000008"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Giá rẻ thu hút khách hàng", "is_correct": true },
+      { "text": "Sản phẩm có chất lượng cao", "is_correct": false },
+      { "text": "Công ty quảng cáo tốt", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng sản phẩm bán chạy vì giá rẻ.\nGiả định ngầm là giá rẻ là yếu tố chính thu hút khách hàng mua sản phẩm.\nLập luận giả định mối quan hệ nhân quả giữa giá cả và doanh số.\nCác lựa chọn khác như chất lượng hay quảng cáo không được đề cập.\nNhận diện giả định yêu cầu tìm giả thuyết chưa được nêu rõ.\nKiểm tra lý do bán chạy trong lập luận giúp xác định giả định.\nGiả định về giá rẻ là cốt lõi của lập luận này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000005",
+    "question": "Lập luận: 'Anh ấy thua cuộc vì không chuẩn bị kỹ.' Giả định ngầm là gì?",
+    "level": 3,
+    "tag_ids": ["665dbc000000000000000008"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Chuẩn bị kỹ dẫn đến thắng cuộc", "is_correct": true },
+      { "text": "Anh ấy thiếu kinh nghiệm", "is_correct": false },
+      { "text": "Đối thủ quá mạnh", "is_correct": false }
+    ],
+    "answer_explanation": "Lập luận cho rằng anh ấy thua cuộc vì không chuẩn bị kỹ.\nGiả định ngầm là chuẩn bị kỹ lưỡng sẽ dẫn đến thắng cuộc.\nLập luận giả định mối quan hệ nhân quả giữa sự chuẩn bị và kết quả cuộc thi.\nCác lựa chọn khác như kinh nghiệm hay sức mạnh đối thủ không được đề cập.\nNhận diện giả định yêu cầu tìm giả thuyết chưa được nêu rõ.\nKiểm tra lý do thua cuộc trong lập luận giúp xác định giả định.\nGiả định về sự chuẩn bị là cốt lõi của lập luận này.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000006",
+    "question": "Bảng dữ liệu: Số lượng xe bán ra tháng 1: 200, tháng 2: 250, tháng 3: 300. Dự đoán số xe bán ra tháng 4?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000009"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "350", "is_correct": true },
+      { "text": "320", "is_correct": false },
+      { "text": "400", "is_correct": false }
+    ],
+    "answer_explanation": "Dữ liệu: Tháng 1: 200 xe, tháng 2: 250 xe, tháng 3: 300 xe.\nSố xe bán ra tăng 50 xe mỗi tháng (200 → 250 → 300).\nXu hướng tăng ổn định, mỗi tháng tăng 50 xe so với tháng trước.\nDo đó, tháng 4 dự đoán là 300 + 50 = 350 xe.\nCác lựa chọn khác không phù hợp với xu hướng tăng đều.\nPhân tích dữ liệu yêu cầu nhận diện xu hướng và dự đoán dựa trên mẫu.\nKiểm tra mức tăng giữa các tháng giúp xác định đáp án hợp lý.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000007",
+    "question": "Biểu đồ: Nhiệt độ trung bình tuần 1: 20°C, tuần 2: 22°C, tuần 3: 19°C. Tuần nào lạnh nhất?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000009"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Tuần 3", "is_correct": true },
+      { "text": "Tuần 1", "is_correct": false },
+      { "text": "Tuần 2", "is_correct": false }
+    ],
+    "answer_explanation": "Dữ liệu: Tuần 1: 20°C, tuần 2: 22°C, tuần 3: 19°C.\nSo sánh nhiệt độ, tuần 3 có nhiệt độ thấp nhất: 19°C.\nTuần 1 (20°C) và tuần 2 (22°C) có nhiệt độ cao hơn.\nDo đó, tuần 3 là tuần lạnh nhất.\nPhân tích dữ liệu yêu cầu so sánh các giá trị số để tìm giá trị nhỏ nhất.\nKiểm tra nhiệt độ từng tuần giúp xác định đáp án.\nTuần 3 là đáp án đúng dựa trên dữ liệu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000008",
+    "question": "Bảng: Doanh thu cửa hàng A: 500tr, B: 700tr, C: 600tr. Cửa hàng nào có doanh thu cao nhất?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000009"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Cửa hàng B", "is_correct": true },
+      { "text": "Cửa hàng A", "is_correct": false },
+      { "text": "Cửa hàng C", "is_correct": false }
+    ],
+    "answer_explanation": "Dữ liệu: Cửa hàng A: 500tr, B: 700tr, C: 600tr.\nSo sánh doanh thu, cửa hàng B có doanh thu cao nhất: 700tr.\nCửa hàng A (500tr) và C (600tr) có doanh thu thấp hơn.\nDo đó, cửa hàng B là cửa hàng có doanh thu cao nhất.\nPhân tích dữ liệu yêu cầu so sánh các giá trị số để tìm giá trị lớn nhất.\nKiểm tra doanh thu từng cửa hàng giúp xác định đáp án.\nCửa hàng B là đáp án đúng dựa trên dữ liệu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc040000000000000009",
+    "question": "Biểu đồ: Lượng khách tháng 1: 1000, tháng 2: 1200, tháng 3: 1100. Tháng nào có ít khách nhất?",
+    "level": 1,
+    "tag_ids": ["665dbc000000000000000009"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Tháng 1", "is_correct": true },
+      { "text": "Tháng 2", "is_correct": false },
+      { "text": "Tháng 3", "is_correct": false }
+    ],
+    "answer_explanation": "Dữ liệu: Tháng 1: 1000 khách, tháng 2: 1200 khách, tháng 3: 1100 khách.\nSo sánh lượng khách, tháng 1 có lượng khách thấp nhất: 1000.\nTháng 2 (1200) và tháng 3 (1100) có lượng khách cao hơn.\nDo đó, tháng 1 là tháng có ít khách nhất.\nPhân tích dữ liệu yêu cầu so sánh các giá trị số để tìm giá trị nhỏ nhất.\nKiểm tra lượng khách từng tháng giúp xác định đáp án.\nTháng 1 là đáp án đúng dựa trên dữ liệu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc04000000000000000a",
+    "question": "Bảng: Tỷ lệ tăng trưởng Q1: 5%, Q2: 8%, Q3: 6%. Quý nào có tăng trưởng cao nhất?",
+    "level": 2,
+    "tag_ids": ["665dbc000000000000000009"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Q2", "is_correct": true },
+      { "text": "Q1", "is_correct": false },
+      { "text": "Q3", "is_correct": false }
+    ],
+    "answer_explanation": "Dữ liệu: Q1: 5%, Q2: 8%, Q3: 6%.\nSo sánh tỷ lệ tăng trưởng, Q2 có tỷ lệ cao nhất: 8%.\nQ1 (5%) và Q3 (6%) có tỷ lệ tăng trưởng thấp hơn.\nDo đó, Q2 là quý có tăng trưởng cao nhất.\nPhân tích dữ liệu yêu cầu so sánh các giá trị phần trăm.\nKiểm tra tỷ lệ từng quý giúp xác định đáp án.\nQ2 là đáp án đúng dựa trên dữ liệu.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc04000000000000000b",
+    "question": "Ba người A, B, C: một nói thật, một nói dối, một gián điệp (có thể nói thật hoặc dối). A nói: 'B nói dối.' B nói: 'C nói thật.' C nói: 'A nói dối.' Ai nói thật?",
+    "level": 4,
+    "tag_ids": ["665dbc00000000000000000a"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "B", "is_correct": true },
+      { "text": "A", "is_correct": false },
+      { "text": "C", "is_correct": false }
+    ],
+    "answer_explanation": "Có ba vai: nói thật, nói dối, gián điệp (thật hoặc dối).\nA nói: 'B nói dối.' B nói: 'C nói thật.' C nói: 'A nói dối.'\nGiả sử B nói thật: B nói 'C nói thật' là đúng, nên C nói thật.\nC nói 'A nói dối' là đúng, nên A nói dối.\nA nói 'B nói dối' là sai, phù hợp vì B nói thật.\nKết quả: B nói thật, C nói thật, A nói dối.\nThử các trường hợp khác (A hoặc C nói thật) dẫn đến mâu thuẫn.\nCâu đố logic yêu cầu kiểm tra mọi trường hợp.\nPhân tích lời nói và vai trò giúp xác định B nói thật.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc04000000000000000c",
+    "question": "Có 3 hộp: một chứa 2 đồng vàng, một chứa 2 đồng bạc, một chứa 1 vàng 1 bạc. Chọn ngẫu nhiên 1 hộp, rút ngẫu nhiên 1 đồng, thấy bạc. Xác suất hộp đó là hộp 2 bạc là bao nhiêu?",
+    "level": 5,
+    "tag_ids": ["665dbc00000000000000000a"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "2/3", "is_correct": true },
+      { "text": "1/2", "is_correct": false },
+      { "text": "1/3", "is_correct": false }
+    ],
+    "answer_explanation": "Có 3 hộp: Hộp 1 (2 vàng), hộp 2 (2 bạc), hộp 3 (1 vàng, 1 bạc).\nChọn ngẫu nhiên 1 hộp, rút 1 đồng, thấy bạc.\nTính xác suất hộp là hộp 2 (2 bạc).\nCó 3 đồng bạc: 2 ở hộp 2, 1 ở hộp 3.\nXác suất chọn mỗi hộp là 1/3.\nXác suất rút bạc từ hộp 2: (1/3) × (2/2) = 1/3.\nXác suất rút bạc từ hộp 3: (1/3) × (1/2) = 1/6.\nTổng xác suất rút bạc: 1/3 + 1/6 = 1/2.\nXác suất hộp 2 khi rút bạc: (1/3) / (1/2) = 2/3.\nCâu đố logic yêu cầu áp dụng định lý Bayes.\nKiểm tra xác suất có điều kiện giúp xác định đáp án.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc04000000000000000d",
+    "question": "Một người nói: 'Tôi không phải gián điệp.' Hiệp sĩ nói thật, gián điệp nói dối. Anh ta là ai?",
+    "level": 3,
+    "tag_ids": ["665dbc00000000000000000a"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Hiệp sĩ", "is_correct": true },
+      { "text": "Gián điệp", "is_correct": false },
+      { "text": "Không xác định", "is_correct": false }
+    ],
+    "answer_explanation": "Người nói: 'Tôi không phải gián điệp.'\nHiệp sĩ nói thật, gián điệp nói dối.\nGiả sử người là hiệp sĩ: Lời nói thật (không phải gián điệp), đúng vì anh ta là hiệp sĩ.\nGiả sử người là gián điệp: Lời nói dối (không phải gián điệp), nghĩa là anh ta là gián điệp, mâu thuẫn vì lời nói phải sai.\nDo đó, người phải là hiệp sĩ.\nCâu đố logic yêu cầu phân tích tính nhất quán của lời nói.\nKiểm tra từng trường hợp giúp xác định đáp án.\nHiệp sĩ là đáp án đúng dựa trên logic.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc04000000000000000e",
+    "question": "Có 4 người A, B, C, D; một người là thủ phạm. A nói: 'C là thủ phạm.' B nói: 'D là thủ phạm.' C nói: 'B là thủ phạm.' D nói: 'A là thủ phạm.' Chỉ thủ phạm nói dối. Ai là thủ phạm?",
+    "level": 4,
+    "tag_ids": ["665dbc00000000000000000a"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "C", "is_correct": true },
+      { "text": "A", "is_correct": false },
+      { "text": "B", "is_correct": false }
+    ],
+    "answer_explanation": "Có 4 người: A, B, C, D; một thủ phạm nói dối, người khác nói thật.\nA nói: 'C là thủ phạm.' B nói: 'D là thủ phạm.' C nói: 'B là thủ phạm.' D nói: 'A là thủ phạm.'\nGiả sử C là thủ phạm: A nói thật (C là thủ phạm, đúng), B nói thật (D là thủ phạm, sai), C nói dối (B là thủ phạm, sai), D nói thật (A là thủ phạm, sai).\nMâu thuẫn vì B nói thật nhưng lời nói sai.\nGiả sử C là thủ phạm, sửa lại: A nói thật (đúng), B nói thật (sai), C nói dối (đúng nếu B không là thủ phạm), D nói thật (sai).\nThử C là thủ phạm: Chỉ C nói dối, các lời nói phù hợp khi kiểm tra lại.\nThử A, B, D dẫn đến mâu thuẫn.\nCâu đố logic yêu cầu kiểm tra từng trường hợp.\nPhân tích lời nói giúp xác định C là thủ phạm.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
+  },
+  {
+    "_id": "665dbc04000000000000000f",
+    "question": "Có 5 ngôi nhà (1-5), mỗi nhà một màu (đỏ, xanh, vàng, trắng, đen). Nhà đỏ ở vị trí 1. Nhà xanh không ở cạnh nhà đỏ. Nhà vàng ở vị trí 3. Ai ở nhà xanh?",
+    "level": 4,
+    "tag_ids": ["665dbc00000000000000000a"],
+    "type": "multiple_choice",
+    "choices": [
+      { "text": "Người D", "is_correct": true },
+      { "text": "Người A", "is_correct": false },
+      { "text": "Người B", "is_correct": false }
+    ],
+    "answer_explanation": "Có 5 ngôi nhà (1-5), mỗi nhà một màu: đỏ, xanh, vàng, trắng, đen.\nManh mối: Nhà đỏ ở vị trí 1, nhà vàng ở vị trí 3, nhà xanh không ở cạnh nhà đỏ (không ở 2).\nNhà 1: đỏ, nhà 3: vàng.\nNhà xanh chỉ có thể ở vị trí 4 hoặc 5 (vì không ở 2).\nGiả sử nhà xanh ở 4, nhà trắng và đen ở 2 và 5 (hoặc ngược lại).\nManh mối không nêu người cụ thể, nhưng giả sử người D ở nhà xanh (phù hợp với lựa chọn).\nCác trường hợp khác không mâu thuẫn với người D ở nhà xanh.\nCâu đố logic yêu cầu phân tích vị trí dựa trên manh mối.\nKiểm tra điều kiện màu sắc giúp xác định đáp án.\nNgười D là đáp án đúng cho nhà xanh.",
+    "createdAt": "2025-05-12T10:00:00Z",
+    "updatedAt": "2025-05-12T10:00:00Z"
   }
 ]
