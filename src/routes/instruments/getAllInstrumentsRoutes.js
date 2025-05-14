@@ -119,24 +119,18 @@ const router = express.Router();
  *                 pagination:
  *                   type: object
  *                   properties:
+ *                     total:
+ *                       type: integer
+ *                       example: 25
  *                     page:
  *                       type: integer
  *                       example: 1
- *                     limit:
+ *                     page_size:
  *                       type: integer
  *                       example: 10
- *                     totalCount:
- *                       type: integer
- *                       example: 25
- *                     totalPages:
+ *                     total_pages:
  *                       type: integer
  *                       example: 3
- *                     hasNextPage:
- *                       type: boolean
- *                       example: true
- *                     hasPrevPage:
- *                       type: boolean
- *                       example: false
  *       500:
  *         description: Server error
  *         content:

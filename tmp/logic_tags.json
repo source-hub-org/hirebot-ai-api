@@ -1,0 +1,42 @@
+[
+  {
+    "_id": { "$oid": "681c800a7d7472fb89b43bd1" },
+    "name": "Pattern Recognition",
+    "slug": "pattern-recognition",
+    "description": "- Identifies logical patterns in sequences.\n- Extends patterns based on rules.\n- Used in data analysis and algorithms.\n- Requires keen observation and logic.",
+    "createdAt": "2025-05-14T10:41:00Z",
+    "updatedAt": "2025-05-14T10:41:00Z"
+  },
+  {
+    "_id": { "$oid": "681c800a7d7472fb89b43bd2" },
+    "name": "Number Series",
+    "slug": "number-series",
+    "description": "- Analyzes sequences to find patterns.\n- Predicts next number in series.\n- Common in IQ and logic tests.\n- Needs mathematical and logical skills.",
+    "createdAt": "2025-05-14T10:41:00Z",
+    "updatedAt": "2025-05-14T10:41:00Z"
+  },
+  {
+    "_id": { "$oid": "681c800a7d7472fb89b43bd4" },
+    "name": "Deductive Reasoning",
+    "slug": "deductive-reasoning",
+    "description": "- Draws conclusions from given premises.\n- Ensures logical validity of outcomes.\n- Applied in real-world problem-solving.\n- Demands strict logical thinking.",
+    "createdAt": "2025-05-14T10:41:00Z",
+    "updatedAt": "2025-05-14T10:41:00Z"
+  },
+  {
+    "_id": { "$oid": "681c800a7d7472fb89b43bd7" },
+    "name": "Critical Thinking",
+    "slug": "critical-thinking",
+    "description": "- Analyzes facts for rational judgments.\n- Evaluates argument validity.\n- Used in decision-making processes.\n- Requires analytical and logical skills.",
+    "createdAt": "2025-05-14T10:41:00Z",
+    "updatedAt": "2025-05-14T10:41:00Z"
+  },
+  {
+    "_id": { "$oid": "681c800a7d7472fb89b43bdd" },
+    "name": "Problem Solving",
+    "slug": "problem-solving",
+    "description": "- Approaches issues with logical steps.\n- Finds solutions through reasoning.\n- Applied in practical scenarios.\n- Needs creative and analytical thinking.",
+    "createdAt": "2025-05-14T10:41:00Z",
+    "updatedAt": "2025-05-14T10:41:00Z"
+  }
+]

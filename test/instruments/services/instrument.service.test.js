@@ -279,12 +279,10 @@ describe('Instrument Service', () => {
           success: true,
           data: instruments,
           pagination: {
+            total: 2,
             page: 1,
-            limit: 10,
-            totalCount: 2,
-            totalPages: 1,
-            hasNextPage: false,
-            hasPrevPage: false,
+            page_size: 10,
+            total_pages: 1,
           },
         });
       });
@@ -317,12 +315,10 @@ describe('Instrument Service', () => {
           success: true,
           data: instruments,
           pagination: {
+            total: 6,
             page: 2,
-            limit: 5,
-            totalCount: 6,
-            totalPages: 2,
-            hasNextPage: false,
-            hasPrevPage: true,
+            page_size: 5,
+            total_pages: 2,
           },
         });
       });
@@ -457,12 +453,10 @@ describe('Instrument Service', () => {
           success: true,
           data: instruments,
           pagination: {
+            total: 2,
             page: 1,
-            limit: 10,
-            totalCount: 2,
-            totalPages: 1,
-            hasNextPage: false,
-            hasPrevPage: false,
+            page_size: 10,
+            total_pages: 1,
           },
         });
       });
@@ -502,12 +496,10 @@ describe('Instrument Service', () => {
           success: true,
           data: instruments,
           pagination: {
+            total: 6,
             page: 2,
-            limit: 5,
-            totalCount: 6,
-            totalPages: 2,
-            hasNextPage: false,
-            hasPrevPage: true,
+            page_size: 5,
+            total_pages: 2,
           },
         });
       });

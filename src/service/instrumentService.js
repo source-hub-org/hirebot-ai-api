@@ -315,12 +315,10 @@ async function getAllInstrumentItems(queryParams = {}) {
       success: true,
       data: instruments,
       pagination: {
+        total: totalCount,
         page,
-        limit,
-        totalCount,
-        totalPages,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
+        page_size: limit,
+        total_pages: totalPages,
       },
     };
   } catch (error) {
@@ -424,12 +422,10 @@ async function getInstrumentItemsByTagId(tagId, queryParams = {}) {
           success: true,
           data: [],
           pagination: {
+            total: 0,
             page: 1,
-            limit: 10,
-            totalCount: 0,
-            totalPages: 0,
-            hasNextPage: false,
-            hasPrevPage: false,
+            page_size: 10,
+            total_pages: 0,
           },
         };
       }
@@ -475,12 +471,10 @@ async function getInstrumentItemsByTagId(tagId, queryParams = {}) {
         success: true,
         data: mockInstruments,
         pagination: {
+          total: 2,
           page: 1,
-          limit: 10,
-          totalCount: 2,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPrevPage: false,
+          page_size: 10,
+          total_pages: 1,
         },
       };
     }
@@ -528,12 +522,10 @@ async function getInstrumentItemsByTagId(tagId, queryParams = {}) {
       success: true,
       data: instruments,
       pagination: {
+        total: totalCount,
         page,
-        limit,
-        totalCount,
-        totalPages,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
+        page_size: limit,
+        total_pages: totalPages,
       },
     };
   } catch (error) {

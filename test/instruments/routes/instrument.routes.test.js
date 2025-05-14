@@ -286,7 +286,9 @@ describe('Instrument Routes', () => {
 
         expect(response.body).toHaveProperty('pagination');
         expect(response.body.pagination.page).toBe(1);
-        expect(response.body.pagination.totalCount).toBe(2);
+        expect(response.body.pagination.total).toBe(2);
+        expect(response.body.pagination.page_size).toBe(10);
+        expect(response.body.pagination.total_pages).toBe(1);
       });
 
       it('should filter instruments by type', async () => {
@@ -350,11 +352,9 @@ describe('Instrument Routes', () => {
         expect(response.body.status).toBe('success');
         expect(response.body.data).toHaveLength(5);
         expect(response.body.pagination.page).toBe(2);
-        expect(response.body.pagination.limit).toBe(5);
-        expect(response.body.pagination.totalCount).toBe(15);
-        expect(response.body.pagination.totalPages).toBe(3);
-        expect(response.body.pagination.hasNextPage).toBe(true);
-        expect(response.body.pagination.hasPrevPage).toBe(true);
+        expect(response.body.pagination.page_size).toBe(5);
+        expect(response.body.pagination.total).toBe(15);
+        expect(response.body.pagination.total_pages).toBe(3);
       });
 
       it('should return an empty array when no instruments exist', async () => {
@@ -367,7 +367,10 @@ describe('Instrument Routes', () => {
         // Assert
         expect(response.body.status).toBe('success');
         expect(response.body.data).toHaveLength(0);
-        expect(response.body.pagination.totalCount).toBe(0);
+        expect(response.body.pagination.total).toBe(0);
+        expect(response.body.pagination.page).toBe(1);
+        expect(response.body.pagination.page_size).toBe(10);
+        expect(response.body.pagination.total_pages).toBe(0);
       });
     });
   };
@@ -505,12 +508,10 @@ describe('Instrument Routes', () => {
             success: true,
             data: [],
             pagination: {
+              total: 0,
               page: 1,
-              limit: 10,
-              totalCount: 0,
-              totalPages: 0,
-              hasNextPage: false,
-              hasPrevPage: false,
+              page_size: 10,
+              total_pages: 0,
             },
           });
 
@@ -523,7 +524,10 @@ describe('Instrument Routes', () => {
         // Assert
         expect(response.body.status).toBe('success');
         expect(response.body.data).toHaveLength(0);
-        expect(response.body.pagination.totalCount).toBe(0);
+        expect(response.body.pagination.total).toBe(0);
+        expect(response.body.pagination.page).toBe(1);
+        expect(response.body.pagination.page_size).toBe(10);
+        expect(response.body.pagination.total_pages).toBe(0);
       });
     });
   };

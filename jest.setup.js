@@ -7,7 +7,7 @@ beforeAll(() => {
   // Use absolute path to ensure the file is found
   const envPath = path.resolve(process.cwd(), '.env.testing');
   const result = dotenv.config({ path: envPath });
-  
+
   if (result.error) {
     console.error('Error loading .env.testing file:', result.error);
   } else {
