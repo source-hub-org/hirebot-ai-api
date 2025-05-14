@@ -47,7 +47,7 @@ const router = express.Router();
  *           default: 1
  *         description: Page number for pagination
  *       - in: query
- *         name: limit
+ *         name: page_size
  *         schema:
  *           type: integer
  *           minimum: 1

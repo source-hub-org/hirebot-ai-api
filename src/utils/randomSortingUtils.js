@@ -26,12 +26,14 @@ function shuffleArray(array) {
  * @param {Object} filter - MongoDB filter
  * @param {Object} options - Query options
  * @param {number} options.skip - Number of documents to skip
- * @param {number} options.limit - Maximum number of documents to return
+ * @param {number} options.page_size - Maximum number of documents to return (preferred)
+ * @param {number} options.limit - Maximum number of documents to return (legacy)
  * @returns {Promise<Array<Object>>} Array of randomly sorted documents
  */
 async function getRandomDocuments(collection, filter, options) {
   try {
-    const { skip, limit } = options;
+    const { skip, limit, page_size } = options;
+    const itemsPerPage = page_size || limit; // Use page_size, fall back to limit
     const totalCount = await collection.countDocuments(filter);
 
     if (totalCount === 0) {
@@ -44,12 +46,14 @@ async function getRandomDocuments(collection, filter, options) {
       const shuffled = shuffleArray(allDocuments);
 
       // Apply pagination to the shuffled results
-      return shuffled.slice(skip, skip + limit);
+      return shuffled.slice(skip, skip + itemsPerPage);
     }
 
     // For larger collections, use MongoDB's $sample aggregation
     // Note: This is less efficient for pagination but works for larger datasets
-    return await collection.aggregate([{ $match: filter }, { $sample: { size: limit } }]).toArray();
+    return await collection
+      .aggregate([{ $match: filter }, { $sample: { size: itemsPerPage } }])
+      .toArray();
   } catch (error) {
     logger.error('Error getting random documents:', error);
     return [];

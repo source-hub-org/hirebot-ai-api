@@ -267,31 +267,44 @@ describe('Logic Question Query Builder', () => {
   });
 
   describe('buildPaginationOptions', () => {
-    it('should calculate pagination options correctly', () => {
+    it('should calculate pagination options correctly with page_size', () => {
+      const result1 = buildPaginationOptions({ page: '2', page_size: '10' });
+      expect(result1).toEqual({ page: 2, limit: 10, page_size: 10, skip: 10 });
+
+      const result2 = buildPaginationOptions({ page: 3, page_size: 15 });
+      expect(result2).toEqual({ page: 3, limit: 15, page_size: 15, skip: 30 });
+    });
+
+    it('should calculate pagination options correctly with limit (legacy)', () => {
       const result1 = buildPaginationOptions({ page: '2', limit: '10' });
-      expect(result1).toEqual({ page: 2, limit: 10, skip: 10 });
+      expect(result1).toEqual({ page: 2, limit: 10, page_size: 10, skip: 10 });
 
       const result2 = buildPaginationOptions({ page: 3, limit: 15 });
-      expect(result2).toEqual({ page: 3, limit: 15, skip: 30 });
+      expect(result2).toEqual({ page: 3, limit: 15, page_size: 15, skip: 30 });
     });
 
     it('should use default values if parameters are not provided', () => {
       const result1 = buildPaginationOptions({});
-      expect(result1).toEqual({ page: 1, limit: 10, skip: 0 });
+      expect(result1).toEqual({ page: 1, limit: 10, page_size: 10, skip: 0 });
 
       const result2 = buildPaginationOptions({ page: 'invalid' });
-      expect(result2).toEqual({ page: 1, limit: 10, skip: 0 });
+      expect(result2).toEqual({ page: 1, limit: 10, page_size: 10, skip: 0 });
 
       const result3 = buildPaginationOptions({ limit: 'invalid' });
-      expect(result3).toEqual({ page: 1, limit: 10, skip: 0 });
+      expect(result3).toEqual({ page: 1, limit: 10, page_size: 10, skip: 0 });
     });
 
     it('should handle string and number inputs', () => {
-      const result1 = buildPaginationOptions({ page: '2', limit: '20' });
-      expect(result1).toEqual({ page: 2, limit: 20, skip: 20 });
+      const result1 = buildPaginationOptions({ page: '2', page_size: '20' });
+      expect(result1).toEqual({ page: 2, limit: 20, page_size: 20, skip: 20 });
 
-      const result2 = buildPaginationOptions({ page: 2, limit: 20 });
-      expect(result2).toEqual({ page: 2, limit: 20, skip: 20 });
+      const result2 = buildPaginationOptions({ page: 2, page_size: 20 });
+      expect(result2).toEqual({ page: 2, limit: 20, page_size: 20, skip: 20 });
+    });
+
+    it('should prioritize page_size over limit when both are provided', () => {
+      const result = buildPaginationOptions({ page: 2, page_size: 15, limit: 10 });
+      expect(result).toEqual({ page: 2, limit: 15, page_size: 15, skip: 15 });
     });
   });
 });

@@ -39,6 +39,31 @@ const swaggerOptions = {
     ],
     components: {
       schemas: {
+        PaginationInfo: {
+          type: 'object',
+          properties: {
+            total: {
+              type: 'integer',
+              example: 50,
+              description: 'Total number of records',
+            },
+            page: {
+              type: 'integer',
+              example: 1,
+              description: 'Current page number',
+            },
+            page_size: {
+              type: 'integer',
+              example: 20,
+              description: 'Number of items per page',
+            },
+            total_pages: {
+              type: 'integer',
+              example: 3,
+              description: 'Total number of pages',
+            },
+          },
+        },
         Position: {
           type: 'object',
           required: ['slug', 'title', 'description', 'instruction', 'level'],

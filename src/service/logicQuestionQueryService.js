@@ -21,11 +21,12 @@ const logger = require('../utils/logger');
  * @returns {Promise<Array<Object>>} Array of question documents
  */
 async function getQuestionsWithStandardSort(filter, sortOptions, paginationOptions) {
-  const { skip, limit } = paginationOptions;
+  const { skip, limit, page_size } = paginationOptions;
+  const itemsPerPage = page_size || limit; // Use page_size, fall back to limit
   return await getLogicQuestions(filter, {
     sort: sortOptions,
     skip,
-    limit,
+    limit: itemsPerPage,
   });
 }
 
@@ -71,15 +72,16 @@ async function getQuestionsWithRandomSort(filter, paginationOptions) {
  * @returns {Object} Pagination information
  */
 function calculatePagination(total, paginationOptions) {
-  const { page, limit } = paginationOptions;
-  const totalPages = Math.ceil(total / limit);
+  const { page, limit, page_size } = paginationOptions;
+  const itemsPerPage = page_size || limit; // Use page_size, fall back to limit
+  const total_pages = Math.ceil(total / itemsPerPage);
 
   return {
     total,
     page,
-    limit,
-    totalPages,
-    hasNextPage: page < totalPages,
+    page_size: itemsPerPage,
+    total_pages,
+    hasNextPage: page < total_pages,
     hasPrevPage: page > 1,
   };
 }

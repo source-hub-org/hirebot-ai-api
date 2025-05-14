@@ -42,7 +42,7 @@ const formatErrorResponse = errors => {
 const getAllLogicQuestionsController = async (req, res) => {
   try {
     // Extract query parameters
-    const { level, tag_id, type, page, limit, sort_by, sort_direction, ignore_question_ids } =
+    const { level, tag_id, type, page, page_size, sort_by, sort_direction, ignore_question_ids } =
       req.query;
 
     const result = await getQuestions({
@@ -50,7 +50,8 @@ const getAllLogicQuestionsController = async (req, res) => {
       tag_id,
       type,
       page,
-      limit,
+      limit: page_size, // Map page_size to limit for backward compatibility
+      page_size, // Also pass the original page_size
       sort_by,
       sort_direction,
       ignore_question_ids,
