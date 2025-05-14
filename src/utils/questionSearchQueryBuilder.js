@@ -105,16 +105,20 @@ function buildMongoQuery(
 
   // 1. Build filter
   const filter = {};
+  const andConditions = [];
+
+  // Handle topic and topic_id as an OR condition
+  const topicConditions = [];
 
   // Handle topic parameter (optional, can be multiple comma-separated values)
   if (topic) {
     const topics = topic.split(',').map(t => t.trim());
     if (topics.length === 1) {
-      filter.topic = { $regex: new RegExp(escapeRegExp(topics[0]), 'i') }; // Case-insensitive search
+      topicConditions.push({ topic: { $regex: new RegExp(escapeRegExp(topics[0]), 'i') } });
     } else if (topics.length > 1) {
-      filter.topic = {
-        $in: topics.map(t => new RegExp(escapeRegExp(t), 'i')), // Array of case-insensitive regexes
-      };
+      topicConditions.push({
+        topic: { $in: topics.map(t => new RegExp(escapeRegExp(t), 'i')) },
+      });
     }
   }
 
@@ -122,21 +126,31 @@ function buildMongoQuery(
   if (topic_id) {
     const topicIds = convertToObjectIds(topic_id);
     if (topicIds.length === 1) {
-      filter.topic_id = topicIds[0];
+      topicConditions.push({ topic_id: topicIds[0] });
     } else if (topicIds.length > 1) {
-      filter.topic_id = { $in: topicIds };
+      topicConditions.push({ topic_id: { $in: topicIds } });
     }
   }
+
+  // Add topic conditions to AND array if any exist
+  if (topicConditions.length > 0) {
+    andConditions.push({ $or: topicConditions });
+  }
+
+  // Handle language and language_id as an OR condition
+  const languageConditions = [];
 
   // Handle language parameter (optional, can be multiple comma-separated values)
   if (language) {
     const languages = language.split(',').map(l => l.trim());
     if (languages.length === 1) {
-      filter.language = { $regex: new RegExp(escapeRegExp(languages[0]), 'i') }; // Case-insensitive search
+      languageConditions.push({
+        language: { $regex: new RegExp(escapeRegExp(languages[0]), 'i') },
+      });
     } else if (languages.length > 1) {
-      filter.language = {
-        $in: languages.map(l => new RegExp(escapeRegExp(l), 'i')), // Array of case-insensitive regexes
-      };
+      languageConditions.push({
+        language: { $in: languages.map(l => new RegExp(escapeRegExp(l), 'i')) },
+      });
     }
   }
 
@@ -144,24 +158,31 @@ function buildMongoQuery(
   if (language_id) {
     const languageIds = convertToObjectIds(language_id);
     if (languageIds.length === 1) {
-      filter.language_id = languageIds[0];
+      languageConditions.push({ language_id: languageIds[0] });
     } else if (languageIds.length > 1) {
-      filter.language_id = { $in: languageIds };
+      languageConditions.push({ language_id: { $in: languageIds } });
     }
   }
+
+  // Add language conditions to AND array if any exist
+  if (languageConditions.length > 0) {
+    andConditions.push({ $or: languageConditions });
+  }
+
+  // Handle position and position_id as an OR condition
+  const positionConditions = [];
 
   // Handle position parameter (optional, can be multiple comma-separated values)
   if (position) {
     const positions = position.split(',').map(p => p.trim());
     if (positions.length === 1) {
       // For position, we need to handle capitalization in the database
-      // The first letter might be capitalized in the database
       const positionRegex = new RegExp(`^${escapeRegExp(positions[0])}$`, 'i');
-      filter.position = { $regex: positionRegex };
+      positionConditions.push({ position: { $regex: positionRegex } });
     } else if (positions.length > 1) {
-      filter.position = {
-        $in: positions.map(p => new RegExp(`^${escapeRegExp(p)}$`, 'i')), // Array of case-insensitive regexes
-      };
+      positionConditions.push({
+        position: { $in: positions.map(p => new RegExp(`^${escapeRegExp(p)}$`, 'i')) },
+      });
     }
   }
 
@@ -169,10 +190,20 @@ function buildMongoQuery(
   if (position_id) {
     const positionIds = convertToObjectIds(position_id);
     if (positionIds.length === 1) {
-      filter.position_id = positionIds[0];
+      positionConditions.push({ position_id: positionIds[0] });
     } else if (positionIds.length > 1) {
-      filter.position_id = { $in: positionIds };
+      positionConditions.push({ position_id: { $in: positionIds } });
     }
+  }
+
+  // Add position conditions to AND array if any exist
+  if (positionConditions.length > 0) {
+    andConditions.push({ $or: positionConditions });
+  }
+
+  // Apply the AND conditions to the filter if any exist
+  if (andConditions.length > 0) {
+    filter.$and = andConditions;
   }
 
   // 2. Build sort options

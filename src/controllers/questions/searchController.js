@@ -61,8 +61,10 @@ const formatErrorResponse = error => {
  */
 const searchQuestionsController = async (req, res) => {
   try {
+    const filters = req.filters;
+
     // 1. Extract and validate query parameters
-    const validationResult = validateSearchParams(req.query);
+    const validationResult = validateSearchParams(filters);
 
     if (validationResult.errors.length > 0) {
       return res.status(400).json(formatValidationErrorResponse(validationResult.errors));

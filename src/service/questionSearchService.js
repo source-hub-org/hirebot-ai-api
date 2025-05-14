@@ -65,7 +65,13 @@ async function searchQuestions(searchParams) {
         );
 
         if (validObjectIds.length > 0) {
-          filter._id = { $nin: validObjectIds };
+          // If we have $and conditions, add the exclusion as another condition
+          if (filter.$and) {
+            filter.$and.push({ _id: { $nin: validObjectIds } });
+          } else {
+            // Otherwise, add it directly to the filter
+            filter._id = { $nin: validObjectIds };
+          }
         }
       } catch (error) {
         logger.warn('Error processing ignore_question_ids:', error);

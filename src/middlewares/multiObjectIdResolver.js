@@ -135,6 +135,8 @@ async function multiObjectIdResolverMiddleware(req, res, next) {
       positionTitle
     );
 
+    let filters = {};
+
     // Update request data with resolved values
     if (isPostRequest) {
       req.body.topic_id = resolvedTopicData.ids;
@@ -150,7 +152,19 @@ async function multiObjectIdResolverMiddleware(req, res, next) {
       req.query.language = resolvedLanguageData.names;
       req.query.position_id = resolvedPositionData.ids;
       req.query.position = resolvedPositionData.names;
+
+      filters = {
+        ...req.query,
+        topic_id: resolvedTopicData.ids || '',
+        topic: resolvedTopicData.names || '',
+        language_id: resolvedLanguageData.ids || '',
+        language: resolvedLanguageData.names || '',
+        position_id: resolvedPositionData.ids || '',
+        position: resolvedPositionData.names || '',
+      };
     }
+
+    req.filters = filters;
 
     next();
   } catch (error) {

@@ -37,18 +37,20 @@ function validateSearchParams(query) {
     if (typeof params.position !== 'string') {
       errors.push('Position must be a string');
     } else {
-      // Handle multiple positions separated by commas
-      const positions = params.position.split(',').map(p => p.trim().toLowerCase());
-      const validPositions = ['intern', 'fresher', 'junior', 'middle', 'senior', 'expert'];
+      if (params.position.trim().length) {
+        // Handle multiple positions separated by commas
+        const positions = params.position.split(',').map(p => p.trim().toLowerCase());
+        const validPositions = ['intern', 'fresher', 'junior', 'middle', 'senior', 'expert'];
 
-      // Check if all positions are valid
-      const invalidPositions = positions.filter(p => !validPositions.includes(p));
+        // Check if all positions are valid
+        const invalidPositions = positions.filter(p => !validPositions.includes(p));
 
-      if (invalidPositions.length > 0) {
-        errors.push(`Position must be one of: ${validPositions.join(', ')}`);
-      } else {
-        // Normalize position to lowercase (keep the comma-separated format)
-        params.position = positions.join(',');
+        if (invalidPositions.length > 0) {
+          errors.push(`Position must be one of: ${validPositions.join(', ')}`);
+        } else {
+          // Normalize position to lowercase (keep the comma-separated format)
+          params.position = positions.join(',');
+        }
       }
     }
   }
