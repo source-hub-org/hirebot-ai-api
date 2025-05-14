@@ -24,9 +24,17 @@ const logger = require('./utils/logger');
 // Load environment variables
 // Use .env.testing for test environments, otherwise use .env
 if (process.env.NODE_ENV === 'testing') {
-  dotenv.config({ path: '.env.testing' });
+  const path = require('path');
+  const envPath = path.resolve(process.cwd(), '.env.testing');
+  const result = dotenv.config({ path: envPath });
+  if (result.error) {
+    console.error('Error loading .env.testing file:', result.error);
+  } else {
+    console.log('Loaded environment from .env.testing');
+  }
 } else {
   dotenv.config();
+  console.log('Loaded environment from .env');
 }
 
 // Initialize Express app
