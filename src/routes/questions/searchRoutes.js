@@ -5,6 +5,7 @@
 
 const express = require('express');
 const { searchQuestionsController } = require('../../controllers/questions/searchController');
+const multiObjectIdResolverMiddleware = require('../../middlewares/multiObjectIdResolver');
 
 const router = express.Router();
 
@@ -32,6 +33,13 @@ const router = express.Router();
  *         description: The topic(s) of the questions to search for, separated by commas (e.g., JavaScript,React,Node.js)
  *         example: JavaScript,React
  *       - in: query
+ *         name: topic_id
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The ID(s) of the topics to search for, separated by commas (will be resolved from topic if not provided)
+ *         example: 60d21b4667d0d8992e610c85,60d21b4667d0d8992e610c86
+ *       - in: query
  *         name: language
  *         required: false
  *         schema:
@@ -39,12 +47,26 @@ const router = express.Router();
  *         description: The programming or spoken language(s) of the questions, separated by commas (e.g., JavaScript,Python,Java)
  *         example: JavaScript,TypeScript
  *       - in: query
+ *         name: language_id
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The ID(s) of the languages to search for, separated by commas (will be resolved from language if not provided)
+ *         example: 60d21b4667d0d8992e610c87,60d21b4667d0d8992e610c88
+ *       - in: query
  *         name: position
  *         required: false
  *         schema:
  *           type: string
  *         description: The experience level(s) for the questions, separated by commas (e.g., junior,middle,senior)
  *         example: junior,middle
+ *       - in: query
+ *         name: position_id
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The ID(s) of the positions to search for, separated by commas (will be resolved from position if not provided)
+ *         example: 60d21b4667d0d8992e610c89,60d21b4667d0d8992e610c90
  *       - in: query
  *         name: sort_by
  *         required: false
@@ -154,14 +176,26 @@ const router = express.Router();
  *                         type: string
  *                         description: Topic of the question
  *                         example: "JavaScript"
+ *                       topic_id:
+ *                         type: string
+ *                         description: ID of the topic
+ *                         example: "60d21b4667d0d8992e610c85"
  *                       language:
  *                         type: string
  *                         description: Programming language of the question
  *                         example: "JavaScript"
+ *                       language_id:
+ *                         type: string
+ *                         description: ID of the language
+ *                         example: "60d21b4667d0d8992e610c87"
  *                       position:
  *                         type: string
  *                         description: Position level the question is targeted for
  *                         example: "Junior"
+ *                       position_id:
+ *                         type: string
+ *                         description: ID of the position
+ *                         example: "60d21b4667d0d8992e610c89"
  *                       positionLevel:
  *                         type: integer
  *                         description: Numeric representation of the position level
@@ -228,6 +262,6 @@ const router = express.Router();
  *                   example: Database connection error
  *                   description: Detailed error information
  */
-router.get('/search', searchQuestionsController);
+router.get('/search', multiObjectIdResolverMiddleware, searchQuestionsController);
 
 module.exports = router;

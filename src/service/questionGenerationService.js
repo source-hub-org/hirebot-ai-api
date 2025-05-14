@@ -14,12 +14,12 @@ const logger = require('../utils/logger');
  * @param {string} params.topic - The topic for questions
  * @param {string} params.language - The programming language
  * @param {string} params.position - The position level
- * @returns {Promise<Array>} - Array of generated questions with pagination
+ * @returns {Promise<Array>} - Array of generated questions with metadata
  */
 const generateQuestions = async ({ topic, language, position }) => {
   const positionLowerCase = position.toLowerCase();
 
-  // Get position pagination (now async)
+  // Get position metadata (now async)
   const { difficultyText, positionInstruction, positionLevel } =
     await getPositionMetadata(positionLowerCase);
 
@@ -39,20 +39,26 @@ const generateQuestions = async ({ topic, language, position }) => {
 };
 
 /**
- * Prepares questions with pagination for storage
+ * Prepares questions with metadata for storage
  * @param {Array} questions - Raw questions from AI
- * @param {Object} pagination - Metadata to add to questions
- * @returns {Array} - Questions with added pagination
+ * @param {Object} metadata - Metadata to add to questions
+ * @returns {Array} - Questions with added metadata
  */
-const prepareQuestionsWithMetadata = (questions, { topic, language, position, positionLevel }) => {
+const prepareQuestionsWithMetadata = (
+  questions,
+  { topic, topic_id, language, language_id, position, position_id, positionLevel }
+) => {
   const timestamp = new Date();
   const positionText = formatPositionForDisplay(position);
 
   return questions.map(question => ({
     ...question,
     topic,
+    topic_id,
     language,
+    language_id,
     position: positionText,
+    position_id,
     positionLevel,
     createdAt: timestamp,
   }));
@@ -70,22 +76,25 @@ const storeQuestions = async questions => {
 /**
  * Complete process to generate and store questions
  * @param {Object} params - Parameters for question generation
- * @returns {Promise<Array>} - Generated and stored questions with pagination
+ * @returns {Promise<Array>} - Generated and stored questions with metadata
  */
 const generateAndStoreQuestions = async params => {
-  const { topic, language, position } = params;
+  const { topic, topic_id, language, language_id, position, position_id } = params;
 
-  // Get position pagination (now async)
+  // Get position metadata (now async)
   const { positionLevel } = await getPositionMetadata(position.toLowerCase());
 
   // Generate questions
   const questions = await generateQuestions(params);
 
-  // Prepare questions with pagination
+  // Prepare questions with metadata
   const questionsWithMetadata = prepareQuestionsWithMetadata(questions, {
     topic,
+    topic_id,
     language,
+    language_id,
     position,
+    position_id,
     positionLevel,
   });
 
