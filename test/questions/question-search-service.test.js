@@ -285,9 +285,11 @@ describe('Question Search Service', () => {
     expect(getCollection).toHaveBeenCalledWith('questions');
     expect(getCollection().countDocuments).toHaveBeenCalledWith(
       expect.objectContaining({
-        topic: expect.any(Object),
-        language: expect.any(Object),
-        position: expect.any(Object),
+        $and: expect.arrayContaining([
+          expect.objectContaining({ $or: expect.any(Array) }),
+          expect.objectContaining({ $or: expect.any(Array) }),
+          expect.objectContaining({ $or: expect.any(Array) }),
+        ]),
       })
     );
   });
@@ -309,9 +311,11 @@ describe('Question Search Service', () => {
     expect(findMany).toHaveBeenCalledWith(
       'questions',
       expect.objectContaining({
-        topic: expect.any(Object),
-        language: expect.any(Object),
-        position: expect.any(Object),
+        $and: expect.arrayContaining([
+          expect.objectContaining({ $or: expect.any(Array) }),
+          expect.objectContaining({ $or: expect.any(Array) }),
+          expect.objectContaining({ $or: expect.any(Array) }),
+        ]),
       }),
       expect.objectContaining({
         sort: { question: 1 }, // Ascending sort by question
