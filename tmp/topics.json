@@ -1,0 +1,74 @@
+{
+  "topics": [
+    {
+      "title": "Conditional Statements",
+      "difficulty": 1,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- Conditional statements control program flow.\n- Use if-else to make decisions.\n- Compare values with operators.\n- Essential for logic handling."
+    },
+    {
+      "title": "Loops",
+      "difficulty": 1,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- Loops repeat code until a condition is met.\n- Types include for, while, do-while.\n- Avoid infinite loops with care.\n- Key for repetitive tasks."
+    },
+    {
+      "title": "Arrays and Strings",
+      "difficulty": 1,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- Arrays store multiple values.\n- Strings are sequences of characters.\n- Support operations like slicing.\n- Used for data manipulation."
+    },
+    {
+      "title": "Stack and Queue",
+      "difficulty": 1,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- Stack uses LIFO; Queue uses FIFO.\n- Key for algorithms like traversal.\n- Manage data efficiently.\n- Simple yet powerful structures."
+    },
+    {
+      "title": "Basic Sorting Algorithms",
+      "difficulty": 1,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- Sorting organizes data in order.\n- Includes Bubble, Selection Sort.\n- Impacts query performance.\n- Essential for data processing."
+    },
+    {
+      "title": "Linked List",
+      "difficulty": 2,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- Linked List links nodes with data.\n- Flexible for insertions, deletions.\n- Used in dynamic data structures.\n- Efficient for certain tasks."
+    },
+    {
+      "title": "Binary Search",
+      "difficulty": 2,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- Binary Search finds items fast.\n- Works on sorted data, O(log n).\n- Splits search space in half.\n- Requires pre-sorted input."
+    },
+    {
+      "title": "DFS and BFS",
+      "difficulty": 2,
+      "popularity": "high",
+      "suitable_level": "intern",
+      "description": "- DFS explores deep; BFS explores wide.\n- Used for graph and tree traversal.\n- BFS finds shortest paths.\n- Key for search algorithms."
+    },
+    {
+      "title": "Authentication",
+      "difficulty": 3,
+      "popularity": "high",
+      "suitable_level": "fresher",
+      "description": "- Authentication verifies user identity.\n- Uses passwords or tokens.\n- Ensures secure system access.\n- Critical for app security."
+    },
+    {
+      "title": "Authorization",
+      "difficulty": 3,
+      "popularity": "high",
+      "suitable_level": "fresher",
+      "description": "- Authorization controls resource access.\n- Defines user permissions.\n- Uses roles or policies.\n- Enhances system security."
+    }
+  ]
+}

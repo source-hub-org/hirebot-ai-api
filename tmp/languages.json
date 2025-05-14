@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Python",
+    "designed_by": "Guido van Rossum",
+    "first_appeared": 1991,
+    "paradigm": ["object-oriented", "imperative", "functional", "procedural"],
+    "usage": "AI, data science, web development, scripting",
+    "popularity_rank": 1,
+    "type_system": "dynamic, strong"
+  },
+  {
+    "name": "JavaScript",
+    "designed_by": "Brendan Eich",
+    "first_appeared": 1995,
+    "paradigm": ["event-driven", "functional", "imperative"],
+    "usage": "Front-end web, back-end (Node.js), mobile apps",
+    "popularity_rank": 2,
+    "type_system": "dynamic, weak"
+  },
+  {
+    "name": "Java",
+    "designed_by": "James Gosling, Sun Microsystems",
+    "first_appeared": 1995,
+    "paradigm": ["object-oriented", "class-based"],
+    "usage": "Enterprise applications, Android development",
+    "popularity_rank": 3,
+    "type_system": "static, strong"
+  },
+  {
+    "name": "C#",
+    "designed_by": "Microsoft",
+    "first_appeared": 2000,
+    "paradigm": ["object-oriented", "component-oriented"],
+    "usage": "Web apps, desktop apps, game development (Unity)",
+    "popularity_rank": 4,
+    "type_system": "static, strong"
+  },
+  {
+    "name": "C++",
+    "designed_by": "Bjarne Stroustrup",
+    "first_appeared": 1985,
+    "paradigm": ["object-oriented", "procedural", "generic"],
+    "usage": "Systems programming, game development, performance-critical apps",
+    "popularity_rank": 5,
+    "type_system": "static, weak"
+  }
+]

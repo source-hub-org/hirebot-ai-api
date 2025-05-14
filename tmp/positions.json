@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "intern",
+    "title": "intern",
+    "description": "- Tests basic programming knowledge and logic.",
+    "instruction": "- Create simple MCQs on syntax and logic.",
+    "level": 1,
+    "is_active": true
+  },
+  {
+    "slug": "fresher",
+    "title": "fresher",
+    "description": "- Assesses basic coding and algorithm skills.",
+    "instruction": "- Ask for simple function writing, analysis.",
+    "level": 2,
+    "is_active": true
+  },
+  {
+    "slug": "junior",
+    "title": "junior",
+    "description": "- Evaluates coding, debugging, testing skills.",
+    "instruction": "- Test logic errors, unit tests, conventions.",
+    "level": 3,
+    "is_active": true
+  },
+  {
+    "slug": "middle",
+    "title": "middle",
+    "description": "- Tests design, optimization, and patterns.",
+    "instruction": "- Ask for design solutions, code optimization.",
+    "level": 4,
+    "is_active": true
+  },
+  {
+    "slug": "senior",
+    "title": "senior",
+    "description": "- Assesses system design, performance, security.",
+    "instruction": "- Test architecture, performance, security.",
+    "level": 5,
+    "is_active": true
+  },
+  {
+    "slug": "expert",
+    "title": "expert",
+    "description": "- Evaluates strategic system design, vision.",
+    "instruction": "- Test architecture, tech strategy, conflicts.",
+    "level": 6,
+    "is_active": true
+  }
+]
