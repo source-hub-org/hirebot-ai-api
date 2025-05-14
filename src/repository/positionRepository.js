@@ -91,6 +91,23 @@ async function getPositionById(id) {
 }
 
 /**
+ * Get a position by title
+ * @async
+ * @param {string} title - Position title
+ * @returns {Promise<Object|null>} Position object or null if not found
+ * @throws {Error} If retrieval fails
+ */
+async function getPositionByTitle(title) {
+  try {
+    logger.info(`Retrieving position with title: ${title}`);
+    return await findOne(POSITIONS_COLLECTION, { title });
+  } catch (error) {
+    logger.error(`Error retrieving position with title ${title}:`, error);
+    throw error;
+  }
+}
+
+/**
  * Get a position by slug
  * @async
  * @param {string} slug - Position slug
@@ -211,6 +228,7 @@ module.exports = {
   createPosition,
   getAllPositions,
   getPositionById,
+  getPositionByTitle,
   getPositionBySlug,
   updatePosition,
   deletePosition,

@@ -3,7 +3,7 @@ module.exports = {
   setupFilesAfterEnv: ['./jest.setup.js'],
   collectCoverage: true,
   testEnvironment: 'node',
-  testMatch: ['**/test/**/*.js'],
+  testMatch: ['**/test/**/*.test.js'],
   moduleNameMapper: {
     '^@repository/(.*)$': '<rootDir>/src/repository/$1',
     '^@routes/(.*)$': '<rootDir>/src/routes/$1',

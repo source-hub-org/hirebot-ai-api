@@ -17,9 +17,9 @@ describe('Question Search Query Builder', () => {
     );
 
     // Check filter
-    expect(result.filter).toHaveProperty('topic');
-    expect(result.filter).toHaveProperty('language');
-    expect(result.filter).toHaveProperty('position');
+    expect(result.filter).toHaveProperty('$and');
+    expect(result.filter.$and).toBeInstanceOf(Array);
+    expect(result.filter.$and.length).toBe(3); // One for each parameter group
 
     // Check sort options
     expect(result.sortOptions).toHaveProperty('createdAt');
@@ -34,12 +34,33 @@ describe('Question Search Query Builder', () => {
     const result = buildMongoQuery('React', 'TypeScript', 'senior', 'question', 'asc', 3, 10);
 
     // Check filter
-    expect(result.filter.topic.$regex).toBeInstanceOf(RegExp);
-    expect(result.filter.topic.$regex.source).toBe('React');
-    expect(result.filter.language.$regex).toBeInstanceOf(RegExp);
-    expect(result.filter.language.$regex.source).toBe('TypeScript');
-    expect(result.filter.position.$regex).toBeInstanceOf(RegExp);
-    expect(result.filter.position.$regex.source).toBe('^senior$');
+    expect(result.filter).toHaveProperty('$and');
+    expect(result.filter.$and).toBeInstanceOf(Array);
+    expect(result.filter.$and.length).toBe(3); // One for each parameter group
+
+    // Find the topic condition
+    const topicCondition = result.filter.$and.find(
+      condition => condition.$or && condition.$or.some(orCond => orCond.topic)
+    );
+    expect(topicCondition).toBeDefined();
+    expect(topicCondition.$or[0].topic.$regex).toBeInstanceOf(RegExp);
+    expect(topicCondition.$or[0].topic.$regex.source).toBe('React');
+
+    // Find the language condition
+    const languageCondition = result.filter.$and.find(
+      condition => condition.$or && condition.$or.some(orCond => orCond.language)
+    );
+    expect(languageCondition).toBeDefined();
+    expect(languageCondition.$or[0].language.$regex).toBeInstanceOf(RegExp);
+    expect(languageCondition.$or[0].language.$regex.source).toBe('TypeScript');
+
+    // Find the position condition
+    const positionCondition = result.filter.$and.find(
+      condition => condition.$or && condition.$or.some(orCond => orCond.position)
+    );
+    expect(positionCondition).toBeDefined();
+    expect(positionCondition.$or[0].position.$regex).toBeInstanceOf(RegExp);
+    expect(positionCondition.$or[0].position.$regex.source).toBe('^senior$');
 
     // Check sort options
     expect(result.sortOptions).toHaveProperty('question');
@@ -61,10 +82,23 @@ describe('Question Search Query Builder', () => {
       20
     );
 
-    // Check that the regex has the 'i' flag for case-insensitive search
-    expect(result.filter.topic.$regex.flags).toBe('i');
-    expect(result.filter.language.$regex.flags).toBe('i');
-    expect(result.filter.position.$regex.flags).toBe('i');
+    // Find the topic condition
+    const topicCondition = result.filter.$and.find(
+      condition => condition.$or && condition.$or.some(orCond => orCond.topic)
+    );
+    expect(topicCondition.$or[0].topic.$regex.flags).toBe('i');
+
+    // Find the language condition
+    const languageCondition = result.filter.$and.find(
+      condition => condition.$or && condition.$or.some(orCond => orCond.language)
+    );
+    expect(languageCondition.$or[0].language.$regex.flags).toBe('i');
+
+    // Find the position condition
+    const positionCondition = result.filter.$and.find(
+      condition => condition.$or && condition.$or.some(orCond => orCond.position)
+    );
+    expect(positionCondition.$or[0].position.$regex.flags).toBe('i');
   });
 
   it('should handle different sort directions', () => {

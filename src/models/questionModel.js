@@ -4,6 +4,7 @@
  */
 
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema.Types;
 
 /**
  * Schema for question documents
@@ -62,15 +63,27 @@ const questionSchema = new mongoose.Schema(
       required: [true, 'Topic is required'],
       trim: true,
     },
+    topic_id: {
+      type: ObjectId,
+      ref: 'Topic',
+    },
     language: {
       type: String,
       required: [true, 'Language is required'],
       trim: true,
     },
+    language_id: {
+      type: ObjectId,
+      ref: 'Language',
+    },
     position: {
       type: String,
       required: [true, 'Position is required'],
       trim: true,
+    },
+    position_id: {
+      type: ObjectId,
+      ref: 'Position',
     },
     positionLevel: {
       type: Number,

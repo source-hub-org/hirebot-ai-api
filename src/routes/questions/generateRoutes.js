@@ -5,6 +5,7 @@
 
 const express = require('express');
 const { generateQuestionsController } = require('../../controllers/questions/generateController');
+const objectIdResolverMiddleware = require('../../middlewares/objectIdResolver');
 
 const router = express.Router();
 
@@ -30,14 +31,26 @@ const router = express.Router();
  *                 type: string
  *                 description: The topic for which questions should be generated
  *                 example: "Data Structures"
+ *               topic_id:
+ *                 type: string
+ *                 description: The ID of the topic (optional, will be resolved from topic if not provided)
+ *                 example: "60d21b4667d0d8992e610c85"
  *               language:
  *                 type: string
  *                 description: The programming language for the questions
  *                 example: "JavaScript"
+ *               language_id:
+ *                 type: string
+ *                 description: The ID of the language (optional, will be resolved from language if not provided)
+ *                 example: "60d21b4667d0d8992e610c86"
  *               position:
  *                 type: string
  *                 description: Position level (intern, fresher, junior, middle, senior, expert)
  *                 example: "junior"
+ *               position_id:
+ *                 type: string
+ *                 description: The ID of the position (optional, will be resolved from position if not provided)
+ *                 example: "60d21b4667d0d8992e610c87"
  *     responses:
  *       200:
  *         description: Questions generated successfully
@@ -73,12 +86,24 @@ const router = express.Router();
  *                         type: string
  *                       topic:
  *                         type: string
+ *                       topic_id:
+ *                         type: string
+ *                         description: The ID of the topic
+ *                         example: "60d21b4667d0d8992e610c85"
  *                       language:
  *                         type: string
+ *                       language_id:
+ *                         type: string
+ *                         description: The ID of the language
+ *                         example: "60d21b4667d0d8992e610c86"
  *                       position:
  *                         type: string
  *                         description: Text representation of the position level
  *                         example: "Junior Developer"
+ *                       position_id:
+ *                         type: string
+ *                         description: The ID of the position
+ *                         example: "60d21b4667d0d8992e610c87"
  *                       positionLevel:
  *                         type: integer
  *                         description: Numeric position level (1-6)
@@ -132,6 +157,6 @@ const router = express.Router();
  *                   type: string
  *                   example: Failed to generate questions from AI.
  */
-router.post('/generate', generateQuestionsController);
+router.post('/generate', objectIdResolverMiddleware, generateQuestionsController);
 
 module.exports = router;

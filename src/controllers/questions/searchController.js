@@ -54,17 +54,37 @@ const formatErrorResponse = error => {
  * @param {Object} res - Express response object
  * @returns {Object} Response with questions or error
  * @description
+ * - Supports searching by topic, topic_id, language, language_id, position, position_id
+ * - Supports multiple values for each parameter (comma-separated)
  * - Supports random sorting with 'sort_by=random' query parameter (default)
  * - Supports excluding specific questions with 'ignore_question_ids' parameter (comma-separated list of IDs)
  */
 const searchQuestionsController = async (req, res) => {
   try {
+    const filters = req.filters;
+
     // 1. Extract and validate query parameters
-    const validationResult = validateSearchParams(req.query);
+    const validationResult = validateSearchParams(filters);
 
     if (validationResult.errors.length > 0) {
       return res.status(400).json(formatValidationErrorResponse(validationResult.errors));
     }
+
+    // Log the search parameters for debugging
+    logger.debug('Search parameters:', {
+      topic: validationResult.params.topic,
+      topic_id: validationResult.params.topic_id,
+      language: validationResult.params.language,
+      language_id: validationResult.params.language_id,
+      position: validationResult.params.position,
+      position_id: validationResult.params.position_id,
+      sort_by: validationResult.params.sort_by,
+      sort_direction: validationResult.params.sort_direction,
+      page: validationResult.params.page,
+      page_size: validationResult.params.page_size,
+      mode: validationResult.params.mode,
+      ignore_question_ids: validationResult.params.ignore_question_ids,
+    });
 
     // 2. Search for questions using the service
     // Note: sort_by=random is now the default if not specified

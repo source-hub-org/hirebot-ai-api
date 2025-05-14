@@ -12,35 +12,52 @@ function validateSearchParams(query) {
   const errors = [];
   const params = { ...query };
 
-  // Optional topic parameter (previously required)
+  // Optional topic parameter
   if (params.topic !== undefined && typeof params.topic !== 'string') {
     errors.push('Topic must be a string');
   }
 
-  // Optional language parameter (previously required)
+  // Optional topic_id parameter
+  if (params.topic_id !== undefined && typeof params.topic_id !== 'string') {
+    errors.push('topic_id must be a string of comma-separated IDs');
+  }
+
+  // Optional language parameter
   if (params.language !== undefined && typeof params.language !== 'string') {
     errors.push('Language must be a string');
   }
 
-  // Optional position parameter (previously required)
+  // Optional language_id parameter
+  if (params.language_id !== undefined && typeof params.language_id !== 'string') {
+    errors.push('language_id must be a string of comma-separated IDs');
+  }
+
+  // Optional position parameter
   if (params.position !== undefined) {
     if (typeof params.position !== 'string') {
       errors.push('Position must be a string');
     } else {
-      // Handle multiple positions separated by commas
-      const positions = params.position.split(',').map(p => p.trim().toLowerCase());
-      const validPositions = ['intern', 'fresher', 'junior', 'middle', 'senior', 'expert'];
+      if (params.position.trim().length) {
+        // Handle multiple positions separated by commas
+        const positions = params.position.split(',').map(p => p.trim().toLowerCase());
+        const validPositions = ['intern', 'fresher', 'junior', 'middle', 'senior', 'expert'];
 
-      // Check if all positions are valid
-      const invalidPositions = positions.filter(p => !validPositions.includes(p));
+        // Check if all positions are valid
+        const invalidPositions = positions.filter(p => !validPositions.includes(p));
 
-      if (invalidPositions.length > 0) {
-        errors.push(`Position must be one of: ${validPositions.join(', ')}`);
-      } else {
-        // Normalize position to lowercase (keep the comma-separated format)
-        params.position = positions.join(',');
+        if (invalidPositions.length > 0) {
+          errors.push(`Position must be one of: ${validPositions.join(', ')}`);
+        } else {
+          // Normalize position to lowercase (keep the comma-separated format)
+          params.position = positions.join(',');
+        }
       }
     }
+  }
+
+  // Optional position_id parameter
+  if (params.position_id !== undefined && typeof params.position_id !== 'string') {
+    errors.push('position_id must be a string of comma-separated IDs');
   }
 
   // Optional sort_by parameter

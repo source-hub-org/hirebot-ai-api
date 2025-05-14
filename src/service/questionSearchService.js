@@ -4,7 +4,7 @@
  */
 
 const { findMany, getCollection } = require('../repository/baseRepository');
-const { buildMongoQuery } = require('../utils/questionSearchQueryBuilder');
+const { buildMongoQuery, convertToObjectIds } = require('../utils/questionSearchQueryBuilder');
 const logger = require('../utils/logger');
 
 /**
@@ -12,22 +12,28 @@ const logger = require('../utils/logger');
  * @async
  * @param {Object} searchParams - Search parameters
  * @param {string} searchParams.topic - Topic to search for
+ * @param {string} searchParams.topic_id - Topic ID to search for
  * @param {string} searchParams.language - Language to search for
+ * @param {string} searchParams.language_id - Language ID to search for
  * @param {string} searchParams.position - Position level to search for
+ * @param {string} searchParams.position_id - Position ID to search for
  * @param {string} searchParams.sort_by - Field to sort by (can be 'random' for random sorting)
  * @param {string} searchParams.sort_direction - Direction to sort (asc/desc)
  * @param {number} searchParams.page - Page number
  * @param {number} searchParams.page_size - Number of items per page
  * @param {string} searchParams.mode - Response mode ('full', 'compact', or 'minimalist')
  * @param {string[]} searchParams.ignore_question_ids - Array of question IDs to exclude from results
- * @returns {Promise<Object>} Search results with pagination pagination
+ * @returns {Promise<Object>} Search results with pagination information
  */
 async function searchQuestions(searchParams) {
   try {
     const {
       topic,
+      topic_id,
       language,
+      language_id,
       position,
+      position_id,
       sort_by = 'random', // Default to random sorting if not specified
       sort_direction,
       page,
@@ -39,8 +45,11 @@ async function searchQuestions(searchParams) {
     // Build the MongoDB query
     const { filter, sortOptions, skip, limit } = buildMongoQuery(
       topic,
+      topic_id,
       language,
+      language_id,
       position,
+      position_id,
       sort_by,
       sort_direction,
       page,
@@ -50,22 +59,19 @@ async function searchQuestions(searchParams) {
     // Add filter to exclude questions with IDs in ignore_question_ids
     if (ignore_question_ids.length > 0) {
       try {
-        const { ObjectId } = require('mongodb');
         // Convert string IDs to ObjectId and filter out any invalid IDs
-        const validObjectIds = ignore_question_ids
-          .filter(id => id && id.length === 24) // Basic validation for MongoDB ObjectId
-          .map(id => {
-            try {
-              return new ObjectId(id);
-            } catch (err) {
-              // Skip invalid IDs
-              return null;
-            }
-          })
-          .filter(id => id !== null);
+        const validObjectIds = convertToObjectIds(
+          Array.isArray(ignore_question_ids) ? ignore_question_ids.join(',') : ignore_question_ids
+        );
 
         if (validObjectIds.length > 0) {
-          filter._id = { $nin: validObjectIds };
+          // If we have $and conditions, add the exclusion as another condition
+          if (filter.$and) {
+            filter.$and.push({ _id: { $nin: validObjectIds } });
+          } else {
+            // Otherwise, add it directly to the filter
+            filter._id = { $nin: validObjectIds };
+          }
         }
       } catch (error) {
         logger.warn('Error processing ignore_question_ids:', error);
@@ -129,7 +135,7 @@ async function searchQuestions(searchParams) {
     // Get total count for pagination info
     const totalCount = await collection.countDocuments(filter);
 
-    // Calculate pagination pagination
+    // Calculate pagination information
     const totalPages = Math.ceil(totalCount / limit);
 
     // Process questions based on mode

@@ -34,10 +34,20 @@ describe('questionSearchQueryBuilder', () => {
         10
       );
 
-      expect(result.filter).toHaveProperty('topic');
-      expect(result.filter.topic).toHaveProperty('$regex');
-      expect(result.filter.topic.$regex).toBeInstanceOf(RegExp);
-      expect(result.filter.topic.$regex.toString()).toMatch(/JavaScript/i);
+      expect(result.filter).toHaveProperty('$and');
+      expect(result.filter.$and).toBeInstanceOf(Array);
+      expect(result.filter.$and.length).toBe(1);
+
+      const topicCondition = result.filter.$and[0];
+      expect(topicCondition).toHaveProperty('$or');
+      expect(topicCondition.$or).toBeInstanceOf(Array);
+      expect(topicCondition.$or.length).toBe(1);
+
+      const topicRegexCondition = topicCondition.$or[0];
+      expect(topicRegexCondition).toHaveProperty('topic');
+      expect(topicRegexCondition.topic).toHaveProperty('$regex');
+      expect(topicRegexCondition.topic.$regex).toBeInstanceOf(RegExp);
+      expect(topicRegexCondition.topic.$regex.toString()).toMatch(/JavaScript/i);
     });
 
     test('should build filter with multiple topics', () => {
@@ -51,22 +61,42 @@ describe('questionSearchQueryBuilder', () => {
         10
       );
 
-      expect(result.filter).toHaveProperty('topic');
-      expect(result.filter.topic).toHaveProperty('$in');
-      expect(result.filter.topic.$in).toHaveLength(3);
-      expect(result.filter.topic.$in[0]).toBeInstanceOf(RegExp);
-      expect(result.filter.topic.$in[0].source).toEqual('JavaScript');
-      expect(result.filter.topic.$in[1].source).toEqual('React');
-      expect(result.filter.topic.$in[2].source).toEqual('Node\\.js');
+      expect(result.filter).toHaveProperty('$and');
+      expect(result.filter.$and).toBeInstanceOf(Array);
+      expect(result.filter.$and.length).toBe(1);
+
+      const topicCondition = result.filter.$and[0];
+      expect(topicCondition).toHaveProperty('$or');
+      expect(topicCondition.$or).toBeInstanceOf(Array);
+      expect(topicCondition.$or.length).toBe(1);
+
+      const topicInCondition = topicCondition.$or[0];
+      expect(topicInCondition).toHaveProperty('topic');
+      expect(topicInCondition.topic).toHaveProperty('$in');
+      expect(topicInCondition.topic.$in).toHaveLength(3);
+      expect(topicInCondition.topic.$in[0]).toBeInstanceOf(RegExp);
+      expect(topicInCondition.topic.$in[0].source).toEqual('JavaScript');
+      expect(topicInCondition.topic.$in[1].source).toEqual('React');
+      expect(topicInCondition.topic.$in[2].source).toEqual('Node\\.js');
     });
 
     test('should build filter with single language', () => {
       const result = buildMongoQuery(undefined, 'Python', undefined, 'createdAt', 'desc', 1, 10);
 
-      expect(result.filter).toHaveProperty('language');
-      expect(result.filter.language).toHaveProperty('$regex');
-      expect(result.filter.language.$regex).toBeInstanceOf(RegExp);
-      expect(result.filter.language.$regex.toString()).toMatch(/Python/i);
+      expect(result.filter).toHaveProperty('$and');
+      expect(result.filter.$and).toBeInstanceOf(Array);
+      expect(result.filter.$and.length).toBe(1);
+
+      const languageCondition = result.filter.$and[0];
+      expect(languageCondition).toHaveProperty('$or');
+      expect(languageCondition.$or).toBeInstanceOf(Array);
+      expect(languageCondition.$or.length).toBe(1);
+
+      const languageRegexCondition = languageCondition.$or[0];
+      expect(languageRegexCondition).toHaveProperty('language');
+      expect(languageRegexCondition.language).toHaveProperty('$regex');
+      expect(languageRegexCondition.language.$regex).toBeInstanceOf(RegExp);
+      expect(languageRegexCondition.language.$regex.toString()).toMatch(/Python/i);
     });
 
     test('should build filter with multiple languages', () => {
@@ -80,22 +110,42 @@ describe('questionSearchQueryBuilder', () => {
         10
       );
 
-      expect(result.filter).toHaveProperty('language');
-      expect(result.filter.language).toHaveProperty('$in');
-      expect(result.filter.language.$in).toHaveLength(3);
-      expect(result.filter.language.$in[0]).toBeInstanceOf(RegExp);
-      expect(result.filter.language.$in[0].source).toEqual('Python');
-      expect(result.filter.language.$in[1].source).toEqual('Java');
-      expect(result.filter.language.$in[2].source).toEqual('C\\+\\+');
+      expect(result.filter).toHaveProperty('$and');
+      expect(result.filter.$and).toBeInstanceOf(Array);
+      expect(result.filter.$and.length).toBe(1);
+
+      const languageCondition = result.filter.$and[0];
+      expect(languageCondition).toHaveProperty('$or');
+      expect(languageCondition.$or).toBeInstanceOf(Array);
+      expect(languageCondition.$or.length).toBe(1);
+
+      const languageInCondition = languageCondition.$or[0];
+      expect(languageInCondition).toHaveProperty('language');
+      expect(languageInCondition.language).toHaveProperty('$in');
+      expect(languageInCondition.language.$in).toHaveLength(3);
+      expect(languageInCondition.language.$in[0]).toBeInstanceOf(RegExp);
+      expect(languageInCondition.language.$in[0].source).toEqual('Python');
+      expect(languageInCondition.language.$in[1].source).toEqual('Java');
+      expect(languageInCondition.language.$in[2].source).toEqual('C\\+\\+');
     });
 
     test('should build filter with single position', () => {
       const result = buildMongoQuery(undefined, undefined, 'junior', 'createdAt', 'desc', 1, 10);
 
-      expect(result.filter).toHaveProperty('position');
-      expect(result.filter.position).toHaveProperty('$regex');
-      expect(result.filter.position.$regex).toBeInstanceOf(RegExp);
-      expect(result.filter.position.$regex.source).toEqual('^junior$');
+      expect(result.filter).toHaveProperty('$and');
+      expect(result.filter.$and).toBeInstanceOf(Array);
+      expect(result.filter.$and.length).toBe(1);
+
+      const positionCondition = result.filter.$and[0];
+      expect(positionCondition).toHaveProperty('$or');
+      expect(positionCondition.$or).toBeInstanceOf(Array);
+      expect(positionCondition.$or.length).toBe(1);
+
+      const positionRegexCondition = positionCondition.$or[0];
+      expect(positionRegexCondition).toHaveProperty('position');
+      expect(positionRegexCondition.position).toHaveProperty('$regex');
+      expect(positionRegexCondition.position.$regex).toBeInstanceOf(RegExp);
+      expect(positionRegexCondition.position.$regex.source).toEqual('^junior$');
     });
 
     test('should build filter with multiple positions', () => {
@@ -109,21 +159,37 @@ describe('questionSearchQueryBuilder', () => {
         10
       );
 
-      expect(result.filter).toHaveProperty('position');
-      expect(result.filter.position).toHaveProperty('$in');
-      expect(result.filter.position.$in).toHaveLength(3);
-      expect(result.filter.position.$in[0]).toBeInstanceOf(RegExp);
-      expect(result.filter.position.$in[0].source).toEqual('^junior$');
-      expect(result.filter.position.$in[1].source).toEqual('^middle$');
-      expect(result.filter.position.$in[2].source).toEqual('^senior$');
+      expect(result.filter).toHaveProperty('$and');
+      expect(result.filter.$and).toBeInstanceOf(Array);
+      expect(result.filter.$and.length).toBe(1);
+
+      const positionCondition = result.filter.$and[0];
+      expect(positionCondition).toHaveProperty('$or');
+      expect(positionCondition.$or).toBeInstanceOf(Array);
+      expect(positionCondition.$or.length).toBe(1);
+
+      const positionInCondition = positionCondition.$or[0];
+      expect(positionInCondition).toHaveProperty('position');
+      expect(positionInCondition.position).toHaveProperty('$in');
+      expect(positionInCondition.position.$in).toHaveLength(3);
+      expect(positionInCondition.position.$in[0]).toBeInstanceOf(RegExp);
+      expect(positionInCondition.position.$in[0].source).toEqual('^junior$');
+      expect(positionInCondition.position.$in[1].source).toEqual('^middle$');
+      expect(positionInCondition.position.$in[2].source).toEqual('^senior$');
     });
 
     test('should build filter with all parameters', () => {
       const result = buildMongoQuery('JavaScript', 'Python', 'junior', 'createdAt', 'desc', 1, 10);
 
-      expect(result.filter).toHaveProperty('topic');
-      expect(result.filter).toHaveProperty('language');
-      expect(result.filter).toHaveProperty('position');
+      expect(result.filter).toHaveProperty('$and');
+      expect(result.filter.$and).toBeInstanceOf(Array);
+      expect(result.filter.$and.length).toBe(3); // One for each parameter group
+
+      // Check that each parameter group has an $or condition
+      result.filter.$and.forEach(condition => {
+        expect(condition).toHaveProperty('$or');
+        expect(condition.$or).toBeInstanceOf(Array);
+      });
     });
 
     test('should handle whitespace in comma-separated values', () => {
@@ -137,12 +203,29 @@ describe('questionSearchQueryBuilder', () => {
         10
       );
 
-      expect(result.filter.topic.$in[0].source).toEqual('JavaScript');
-      expect(result.filter.topic.$in[1].source).toEqual('React');
-      expect(result.filter.language.$in[0].source).toEqual('Python');
-      expect(result.filter.language.$in[1].source).toEqual('Java');
-      expect(result.filter.position.$in[0].source).toEqual('^junior$');
-      expect(result.filter.position.$in[1].source).toEqual('^senior$');
+      // Find the topic condition
+      const topicCondition = result.filter.$and.find(
+        condition => condition.$or && condition.$or.some(orCond => orCond.topic)
+      );
+      expect(topicCondition).toBeDefined();
+      expect(topicCondition.$or[0].topic.$in[0].source).toEqual('JavaScript');
+      expect(topicCondition.$or[0].topic.$in[1].source).toEqual('React');
+
+      // Find the language condition
+      const languageCondition = result.filter.$and.find(
+        condition => condition.$or && condition.$or.some(orCond => orCond.language)
+      );
+      expect(languageCondition).toBeDefined();
+      expect(languageCondition.$or[0].language.$in[0].source).toEqual('Python');
+      expect(languageCondition.$or[0].language.$in[1].source).toEqual('Java');
+
+      // Find the position condition
+      const positionCondition = result.filter.$and.find(
+        condition => condition.$or && condition.$or.some(orCond => orCond.position)
+      );
+      expect(positionCondition).toBeDefined();
+      expect(positionCondition.$or[0].position.$in[0].source).toEqual('^junior$');
+      expect(positionCondition.$or[0].position.$in[1].source).toEqual('^senior$');
     });
 
     test('should set sortOptions to null for random sorting', () => {
