@@ -109,15 +109,17 @@ function buildSortOptions(queryParams) {
  * Build pagination options based on query parameters
  * @param {Object} queryParams - Query parameters
  * @param {number|string} [queryParams.page] - Page number
- * @param {number|string} [queryParams.limit] - Items per page
+ * @param {number|string} [queryParams.page_size] - Items per page (new parameter name)
+ * @param {number|string} [queryParams.limit] - Items per page (legacy parameter, fallback)
  * @returns {Object} Pagination options with skip and limit
  */
 function buildPaginationOptions(queryParams) {
   const page = parseInt(queryParams.page, 10) || 1;
-  const limit = parseInt(queryParams.limit, 10) || 10;
-  const skip = (page - 1) * limit;
+  // Use page_size if available, fall back to limit for backward compatibility
+  const page_size = parseInt(queryParams.page_size, 10) || parseInt(queryParams.limit, 10) || 10;
+  const skip = (page - 1) * page_size;
 
-  return { page, limit, skip };
+  return { page, limit: page_size, page_size, skip };
 }
 
 module.exports = {

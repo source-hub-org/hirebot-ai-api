@@ -32,7 +32,7 @@ describe('Get All Logic Questions Controller', () => {
         tag_id: '60d21b4667d0d8992e610c85',
         type: 'multiple_choice',
         page: '1',
-        limit: '10',
+        page_size: '10',
         sort_by: 'createdAt',
         sort_direction: 'desc',
         ignore_question_ids: '60d21b4667d0d8992e610c87,60d21b4667d0d8992e610c88',
@@ -49,7 +49,7 @@ describe('Get All Logic Questions Controller', () => {
   describe('formatSuccessResponse', () => {
     it('should format a success response correctly', () => {
       const questions = [{ _id: '123', question: 'Test question' }];
-      const pagination = { total: 1, page: 1, limit: 10, pages: 1 };
+      const pagination = { total: 1, page: 1, page_size: 10, total_pages: 1 };
       const result = formatSuccessResponse(questions, pagination);
 
       expect(result).toEqual({
@@ -95,8 +95,8 @@ describe('Get All Logic Questions Controller', () => {
       const mockPagination = {
         total: 1,
         page: 1,
-        limit: 10,
-        pages: 1,
+        page_size: 10,
+        total_pages: 1,
       };
 
       getQuestions.mockResolvedValue({
@@ -114,7 +114,8 @@ describe('Get All Logic Questions Controller', () => {
         tag_id: '60d21b4667d0d8992e610c85',
         type: 'multiple_choice',
         page: '1',
-        limit: '10',
+        limit: '10', // This is added by the controller for backward compatibility
+        page_size: '10',
         sort_by: 'createdAt',
         sort_direction: 'desc',
         ignore_question_ids: '60d21b4667d0d8992e610c87,60d21b4667d0d8992e610c88',
@@ -141,8 +142,8 @@ describe('Get All Logic Questions Controller', () => {
       const mockPagination = {
         total: 2,
         page: 1,
-        limit: 10,
-        pages: 1,
+        page_size: 10,
+        total_pages: 1,
       };
 
       getQuestions.mockResolvedValue({
@@ -184,7 +185,8 @@ describe('Get All Logic Questions Controller', () => {
         tag_id: '60d21b4667d0d8992e610c85',
         type: 'multiple_choice',
         page: '1',
-        limit: '10',
+        limit: '10', // This is added by the controller for backward compatibility
+        page_size: '10',
         sort_by: 'createdAt',
         sort_direction: 'desc',
         ignore_question_ids: '60d21b4667d0d8992e610c87,60d21b4667d0d8992e610c88',
@@ -216,7 +218,8 @@ describe('Get All Logic Questions Controller', () => {
         tag_id: '60d21b4667d0d8992e610c85',
         type: 'multiple_choice',
         page: '1',
-        limit: '10',
+        limit: '10', // This is added by the controller for backward compatibility
+        page_size: '10',
         sort_by: 'createdAt',
         sort_direction: 'desc',
         ignore_question_ids: '60d21b4667d0d8992e610c87,60d21b4667d0d8992e610c88',

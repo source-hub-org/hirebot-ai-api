@@ -63,11 +63,41 @@ describe('logicQuestionQueryService', () => {
   });
 
   describe('getQuestionsWithStandardSort', () => {
-    test('should return questions with standard sorting', async () => {
+    test('should return questions with standard sorting using page_size', async () => {
       // Setup mock data
       const mockFilter = { topic: 'JavaScript' };
       const mockSortOptions = { createdAt: -1 };
-      const mockPaginationOptions = { skip: 0, limit: 10 };
+      const mockPaginationOptions = { skip: 0, limit: 10, page_size: 10 };
+      const mockQuestions = [
+        { _id: new ObjectId(), title: 'Question 1' },
+        { _id: new ObjectId(), title: 'Question 2' },
+      ];
+
+      // Setup mock implementations
+      logicQuestionRepository.getLogicQuestions.mockResolvedValue(mockQuestions);
+
+      // Call the function
+      const result = await logicQuestionQueryService.getQuestionsWithStandardSort(
+        mockFilter,
+        mockSortOptions,
+        mockPaginationOptions
+      );
+
+      // Assertions
+      expect(logicQuestionRepository.getLogicQuestions).toHaveBeenCalledWith(mockFilter, {
+        sort: mockSortOptions,
+        skip: mockPaginationOptions.skip,
+        limit: mockPaginationOptions.page_size,
+      });
+
+      expect(result).toEqual(mockQuestions);
+    });
+
+    test('should return questions with standard sorting using limit (legacy)', async () => {
+      // Setup mock data
+      const mockFilter = { topic: 'JavaScript' };
+      const mockSortOptions = { createdAt: -1 };
+      const mockPaginationOptions = { skip: 0, limit: 10 }; // No page_size
       const mockQuestions = [
         { _id: new ObjectId(), title: 'Question 1' },
         { _id: new ObjectId(), title: 'Question 2' },
@@ -159,53 +189,53 @@ describe('logicQuestionQueryService', () => {
   });
 
   describe('calculatePagination', () => {
-    test('should calculate pagination info correctly', () => {
+    test('should calculate pagination info correctly with page_size', () => {
       // Test cases
       const testCases = [
         {
           total: 25,
-          paginationOptions: { page: 1, limit: 10 },
+          paginationOptions: { page: 1, page_size: 10, limit: 10 },
           expected: {
             total: 25,
             page: 1,
-            limit: 10,
-            totalPages: 3,
+            page_size: 10,
+            total_pages: 3,
             hasNextPage: true,
             hasPrevPage: false,
           },
         },
         {
           total: 25,
-          paginationOptions: { page: 2, limit: 10 },
+          paginationOptions: { page: 2, page_size: 10, limit: 10 },
           expected: {
             total: 25,
             page: 2,
-            limit: 10,
-            totalPages: 3,
+            page_size: 10,
+            total_pages: 3,
             hasNextPage: true,
             hasPrevPage: true,
           },
         },
         {
           total: 25,
-          paginationOptions: { page: 3, limit: 10 },
+          paginationOptions: { page: 3, page_size: 10, limit: 10 },
           expected: {
             total: 25,
             page: 3,
-            limit: 10,
-            totalPages: 3,
+            page_size: 10,
+            total_pages: 3,
             hasNextPage: false,
             hasPrevPage: true,
           },
         },
         {
           total: 0,
-          paginationOptions: { page: 1, limit: 10 },
+          paginationOptions: { page: 1, page_size: 10, limit: 10 },
           expected: {
             total: 0,
             page: 1,
-            limit: 10,
-            totalPages: 0,
+            page_size: 10,
+            total_pages: 0,
             hasNextPage: false,
             hasPrevPage: false,
           },
