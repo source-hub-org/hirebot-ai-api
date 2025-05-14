@@ -45,12 +45,12 @@ const getAllPositionsController = async (req, res) => {
 
     // Calculate pagination for pagination
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const page_size = parseInt(req.query.page_size) || parseInt(req.query.limit) || 10;
     const pagination = {
-      page: page,
-      limit: limit,
       total: totalCount,
-      total_pages: Math.ceil(totalCount / limit),
+      page: page,
+      page_size: page_size,
+      total_pages: Math.ceil(totalCount / page_size),
     };
 
     return res.status(200).json(formatSuccessResponse(positions, pagination));

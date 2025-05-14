@@ -12,6 +12,19 @@
   ],
   "components": {
     "schemas": {
+      "PaginationInfo": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "example": 50, "description": "Total number of records" },
+          "page": { "type": "integer", "example": 1, "description": "Current page number" },
+          "page_size": {
+            "type": "integer",
+            "example": 20,
+            "description": "Number of items per page"
+          },
+          "total_pages": { "type": "integer", "example": 3, "description": "Total number of pages" }
+        }
+      },
       "Position": {
         "type": "object",
         "required": ["slug", "title", "description", "instruction", "level"],
@@ -1759,7 +1772,7 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "page_size",
             "schema": { "type": "integer", "default": 10 },
             "description": "Number of items per page"
           },
@@ -2361,7 +2374,7 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "page_size",
             "schema": { "type": "integer", "default": 10 },
             "description": "Number of items per page"
           },
@@ -2443,12 +2456,10 @@
                     "pagination": {
                       "type": "object",
                       "properties": {
+                        "total": { "type": "integer", "example": 15 },
                         "page": { "type": "integer", "example": 1 },
-                        "limit": { "type": "integer", "example": 10 },
-                        "totalCount": { "type": "integer", "example": 15 },
-                        "totalPages": { "type": "integer", "example": 2 },
-                        "hasNextPage": { "type": "boolean", "example": true },
-                        "hasPrevPage": { "type": "boolean", "example": false }
+                        "page_size": { "type": "integer", "example": 10 },
+                        "total_pages": { "type": "integer", "example": 2 }
                       }
                     }
                   }
@@ -2627,7 +2638,7 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "page_size",
             "schema": { "type": "integer", "default": 10 },
             "description": "Number of items per page"
           },
@@ -2660,9 +2671,10 @@
                     "pagination": {
                       "type": "object",
                       "properties": {
-                        "page": { "type": "integer" },
-                        "limit": { "type": "integer" },
-                        "total": { "type": "integer" }
+                        "total": { "type": "integer", "example": 50 },
+                        "page": { "type": "integer", "example": 1 },
+                        "page_size": { "type": "integer", "example": 20 },
+                        "total_pages": { "type": "integer", "example": 3 }
                       }
                     }
                   }
@@ -2882,7 +2894,7 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "page_size",
             "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
             "description": "Number of items per page"
           },
@@ -3393,7 +3405,7 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "page_size",
             "schema": { "type": "integer", "default": 10 },
             "description": "Number of items per page"
           },
@@ -3426,9 +3438,10 @@
                     "pagination": {
                       "type": "object",
                       "properties": {
-                        "page": { "type": "integer" },
-                        "limit": { "type": "integer" },
-                        "total": { "type": "integer" }
+                        "total": { "type": "integer", "example": 50 },
+                        "page": { "type": "integer", "example": 1 },
+                        "page_size": { "type": "integer", "example": 20 },
+                        "total_pages": { "type": "integer", "example": 3 }
                       }
                     }
                   }
@@ -3648,15 +3661,30 @@
                     "description": "The topic for which questions should be generated",
                     "example": "Data Structures"
                   },
+                  "topic_id": {
+                    "type": "string",
+                    "description": "The ID of the topic (optional, will be resolved from topic if not provided)",
+                    "example": "60d21b4667d0d8992e610c85"
+                  },
                   "language": {
                     "type": "string",
                     "description": "The programming language for the questions",
                     "example": "JavaScript"
                   },
+                  "language_id": {
+                    "type": "string",
+                    "description": "The ID of the language (optional, will be resolved from language if not provided)",
+                    "example": "60d21b4667d0d8992e610c86"
+                  },
                   "position": {
                     "type": "string",
                     "description": "Position level (intern, fresher, junior, middle, senior, expert)",
                     "example": "junior"
+                  },
+                  "position_id": {
+                    "type": "string",
+                    "description": "The ID of the position (optional, will be resolved from position if not provided)",
+                    "example": "60d21b4667d0d8992e610c87"
                   }
                 }
               }
@@ -3685,11 +3713,26 @@
                           "difficulty": { "type": "string" },
                           "category": { "type": "string" },
                           "topic": { "type": "string" },
+                          "topic_id": {
+                            "type": "string",
+                            "description": "The ID of the topic",
+                            "example": "60d21b4667d0d8992e610c85"
+                          },
                           "language": { "type": "string" },
+                          "language_id": {
+                            "type": "string",
+                            "description": "The ID of the language",
+                            "example": "60d21b4667d0d8992e610c86"
+                          },
                           "position": {
                             "type": "string",
                             "description": "Text representation of the position level",
                             "example": "Junior Developer"
+                          },
+                          "position_id": {
+                            "type": "string",
+                            "description": "The ID of the position",
+                            "example": "60d21b4667d0d8992e610c87"
                           },
                           "positionLevel": {
                             "type": "integer",
@@ -4399,6 +4442,14 @@
           },
           {
             "in": "query",
+            "name": "topic_id",
+            "required": false,
+            "schema": { "type": "string" },
+            "description": "The ID(s) of the topics to search for, separated by commas (will be resolved from topic if not provided)",
+            "example": "60d21b4667d0d8992e610c85,60d21b4667d0d8992e610c86"
+          },
+          {
+            "in": "query",
             "name": "language",
             "required": false,
             "schema": { "type": "string" },
@@ -4407,11 +4458,27 @@
           },
           {
             "in": "query",
+            "name": "language_id",
+            "required": false,
+            "schema": { "type": "string" },
+            "description": "The ID(s) of the languages to search for, separated by commas (will be resolved from language if not provided)",
+            "example": "60d21b4667d0d8992e610c87,60d21b4667d0d8992e610c88"
+          },
+          {
+            "in": "query",
             "name": "position",
             "required": false,
             "schema": { "type": "string" },
             "description": "The experience level(s) for the questions, separated by commas (e.g., junior,middle,senior)",
             "example": "junior,middle"
+          },
+          {
+            "in": "query",
+            "name": "position_id",
+            "required": false,
+            "schema": { "type": "string" },
+            "description": "The ID(s) of the positions to search for, separated by commas (will be resolved from position if not provided)",
+            "example": "60d21b4667d0d8992e610c89,60d21b4667d0d8992e610c90"
           },
           {
             "in": "query",
@@ -4540,15 +4607,30 @@
                             "description": "Topic of the question",
                             "example": "JavaScript"
                           },
+                          "topic_id": {
+                            "type": "string",
+                            "description": "ID of the topic",
+                            "example": "60d21b4667d0d8992e610c85"
+                          },
                           "language": {
                             "type": "string",
                             "description": "Programming language of the question",
                             "example": "JavaScript"
                           },
+                          "language_id": {
+                            "type": "string",
+                            "description": "ID of the language",
+                            "example": "60d21b4667d0d8992e610c87"
+                          },
                           "position": {
                             "type": "string",
                             "description": "Position level the question is targeted for",
                             "example": "Junior"
+                          },
+                          "position_id": {
+                            "type": "string",
+                            "description": "ID of the position",
+                            "example": "60d21b4667d0d8992e610c89"
                           },
                           "positionLevel": {
                             "type": "integer",

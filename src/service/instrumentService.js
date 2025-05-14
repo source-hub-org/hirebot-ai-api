@@ -190,8 +190,8 @@ async function getAllInstrumentItems(queryParams = {}) {
   try {
     // Extract pagination parameters
     const page = parseInt(queryParams.page) || 1;
-    const limit = parseInt(queryParams.limit) || 10;
-    const skip = (page - 1) * limit;
+    const page_size = parseInt(queryParams.page_size) || parseInt(queryParams.limit) || 10;
+    const skip = (page - 1) * page_size;
 
     // Extract filter parameters
     const filter = {};
@@ -265,14 +265,14 @@ async function getAllInstrumentItems(queryParams = {}) {
           }
 
           // Apply pagination to the shuffled array
-          instruments = allMatchingDocs.slice(skip, skip + limit);
+          instruments = allMatchingDocs.slice(skip, skip + page_size);
         } else {
           // For larger collections, use the $sample aggregation
-          const sampleSize = Math.min(limit * 10, totalCount);
+          const sampleSize = Math.min(page_size * 10, totalCount);
           const pipeline = [
             { $match: filter },
             { $sample: { size: sampleSize } },
-            { $limit: limit },
+            { $limit: page_size },
           ];
 
           // Add lookup to populate tags
@@ -299,7 +299,7 @@ async function getAllInstrumentItems(queryParams = {}) {
       // Standard sorting
       instruments = await getAllInstruments(filter, {
         populate: ['tags'],
-        limit,
+        limit: page_size,
         skip,
         sort,
       });
@@ -307,7 +307,7 @@ async function getAllInstrumentItems(queryParams = {}) {
 
     // Get total count for pagination
     const totalCount = await countInstruments(filter);
-    const totalPages = Math.ceil(totalCount / limit);
+    const totalPages = Math.ceil(totalCount / page_size);
 
     logger.info(`Retrieved ${instruments.length} instruments (page ${page} of ${totalPages})`);
 
@@ -317,7 +317,7 @@ async function getAllInstrumentItems(queryParams = {}) {
       pagination: {
         total: totalCount,
         page,
-        page_size: limit,
+        page_size: page_size,
         total_pages: totalPages,
       },
     };
@@ -491,8 +491,8 @@ async function getInstrumentItemsByTagId(tagId, queryParams = {}) {
 
     // Extract pagination parameters
     const page = parseInt(queryParams.page) || 1;
-    const limit = parseInt(queryParams.limit) || 10;
-    const skip = (page - 1) * limit;
+    const page_size = parseInt(queryParams.page_size) || parseInt(queryParams.limit) || 10;
+    const skip = (page - 1) * page_size;
 
     // Extract sort parameters
     const sort = {};
@@ -505,14 +505,14 @@ async function getInstrumentItemsByTagId(tagId, queryParams = {}) {
     // Get instruments with pagination
     const instruments = await getInstrumentsByTagId(tagId, {
       populate: ['tags'],
-      limit,
+      limit: page_size,
       skip,
       sort,
     });
 
     // Get total count for pagination
     const totalCount = await countInstrumentsByTagId(tagId);
-    const totalPages = Math.ceil(totalCount / limit);
+    const totalPages = Math.ceil(totalCount / page_size);
 
     logger.info(
       `Retrieved ${instruments.length} instruments with tag ID ${tagId} (page ${page} of ${totalPages})`
@@ -524,7 +524,7 @@ async function getInstrumentItemsByTagId(tagId, queryParams = {}) {
       pagination: {
         total: totalCount,
         page,
-        page_size: limit,
+        page_size: page_size,
         total_pages: totalPages,
       },
     };

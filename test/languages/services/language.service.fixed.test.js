@@ -198,7 +198,7 @@ describe('Language Service', () => {
         type_system: 'static',
         slug: 'java',
         page: '2',
-        limit: '5',
+        page_size: '5',
         sort_by: 'name',
         sort_direction: 'desc',
       };

@@ -31,7 +31,7 @@ const router = express.Router();
  *           default: 1
  *         description: Page number for pagination
  *       - in: query
- *         name: limit
+ *         name: page_size
  *         schema:
  *           type: integer
  *           default: 10
@@ -107,24 +107,18 @@ const router = express.Router();
  *                 pagination:
  *                   type: object
  *                   properties:
+ *                     total:
+ *                       type: integer
+ *                       example: 15
  *                     page:
  *                       type: integer
  *                       example: 1
- *                     limit:
+ *                     page_size:
  *                       type: integer
  *                       example: 10
- *                     totalCount:
- *                       type: integer
- *                       example: 15
- *                     totalPages:
+ *                     total_pages:
  *                       type: integer
  *                       example: 2
- *                     hasNextPage:
- *                       type: boolean
- *                       example: true
- *                     hasPrevPage:
- *                       type: boolean
- *                       example: false
  *       400:
  *         description: Bad request - Invalid tag ID format
  *         content:

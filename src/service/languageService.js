@@ -239,9 +239,9 @@ function buildOptionsFromQuery(queryParams) {
 
   // Add pagination
   const page = parseInt(queryParams.page) || 1;
-  const limit = parseInt(queryParams.limit) || 10;
-  options.skip = (page - 1) * limit;
-  options.limit = limit;
+  const page_size = parseInt(queryParams.page_size) || parseInt(queryParams.limit) || 10;
+  options.skip = (page - 1) * page_size;
+  options.limit = page_size;
 
   return options;
 }

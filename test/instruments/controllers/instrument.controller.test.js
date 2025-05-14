@@ -65,7 +65,7 @@ describe('Instrument Controllers', () => {
   // Sample pagination data
   const samplePagination = {
     page: 1,
-    limit: 10,
+    page_size: 10,
     totalCount: 2,
     totalPages: 1,
     hasNextPage: false,
@@ -188,7 +188,7 @@ describe('Instrument Controllers', () => {
         // Arrange
         req.query = {
           page: '1',
-          limit: '10',
+          page_size: '10',
         };
 
         const instruments = [
@@ -355,7 +355,7 @@ describe('Instrument Controllers', () => {
         req.params.tagId = 'tag-id-1';
         req.query = {
           page: '1',
-          limit: '10',
+          page_size: '10',
         };
 
         const instruments = [

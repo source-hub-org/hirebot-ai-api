@@ -344,7 +344,7 @@ describe('Instrument Routes', () => {
 
         // Act
         const response = await request(app)
-          .get('/api/instruments?page=2&limit=5')
+          .get('/api/instruments?page=2&page_size=5')
           .expect('Content-Type', /json/)
           .expect(200);
 

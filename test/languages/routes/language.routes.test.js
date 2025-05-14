@@ -80,7 +80,7 @@ describe('Language Routes', () => {
           languages: [sampleLanguage],
           totalCount: 1,
           page: 1,
-          limit: 10,
+          page_size: 10,
           totalPages: 1,
         },
       });
@@ -162,7 +162,7 @@ describe('Language Routes', () => {
         const response = await request(app).get('/api/languages').query({
           name: 'Java',
           page: 2,
-          limit: 5,
+          page_size: 5,
         });
 
         // Assert
@@ -173,7 +173,7 @@ describe('Language Routes', () => {
         expect(controllerCall.query).toEqual({
           name: 'Java',
           page: '2',
-          limit: '5',
+          page_size: '5',
         });
       });
     });

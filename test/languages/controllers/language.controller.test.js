@@ -202,7 +202,7 @@ describe('Language Controllers', () => {
           pagination: {
             page: 1,
             total: totalCount,
-            limit: 10,
+            page_size: 10,
             total_pages: 1,
           },
         });
@@ -213,7 +213,7 @@ describe('Language Controllers', () => {
         req.query = {
           name: 'Java',
           page: '2',
-          limit: '5',
+          page_size: '5',
         };
 
         const languages = [sampleLanguage];
@@ -232,7 +232,7 @@ describe('Language Controllers', () => {
           data: languages,
           pagination: {
             page: 2,
-            limit: 5,
+            page_size: 5,
             total: totalCount,
             total_pages: 1,
           },

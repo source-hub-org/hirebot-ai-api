@@ -292,7 +292,7 @@ describe('Instrument Service', () => {
         const query = {
           type: 'scale',
           page: '2',
-          limit: '5',
+          page_size: '5',
           sort_by: 'questionId',
           sort_direction: 'asc',
         };
@@ -466,7 +466,7 @@ describe('Instrument Service', () => {
         const tagId = 'tag-id-1';
         const query = {
           page: '2',
-          limit: '5',
+          page_size: '5',
           sort_by: 'questionId',
           sort_direction: 'asc',
         };

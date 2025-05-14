@@ -42,7 +42,7 @@ const router = express.Router();
  *           default: 1
  *         description: Page number for pagination
  *       - in: query
- *         name: limit
+ *         name: page_size
  *         schema:
  *           type: integer
  *           default: 10
@@ -78,12 +78,18 @@ const router = express.Router();
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     page:
- *                       type: integer
- *                     limit:
- *                       type: integer
  *                     total:
  *                       type: integer
+ *                       example: 50
+ *                     page:
+ *                       type: integer
+ *                       example: 1
+ *                     page_size:
+ *                       type: integer
+ *                       example: 20
+ *                     total_pages:
+ *                       type: integer
+ *                       example: 3
  *       500:
  *         description: Server error
  */

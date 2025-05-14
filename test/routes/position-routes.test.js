@@ -89,23 +89,23 @@ describe('Position Routes', () => {
 
       await Position.insertMany(positionsToCreate);
 
-      // Test first page with limit
-      const res1 = await request(app).get('/api/positions?page=1&limit=10');
+      // Test first page with page_size
+      const res1 = await request(app).get('/api/positions?page=1&page_size=10');
       expect(res1.status).toBe(200);
       expect(res1.body.data.length).toBe(10);
       expect(res1.body.pagination.page).toBe(1);
-      expect(res1.body.pagination.limit).toBe(10);
+      expect(res1.body.pagination.page_size).toBe(10);
       expect(res1.body.pagination.total).toBe(16); // 1 original + 15 new ones
       expect(res1.body.pagination.total_pages).toBe(2);
 
       // Test second page
-      const res2 = await request(app).get('/api/positions?page=2&limit=10');
+      const res2 = await request(app).get('/api/positions?page=2&page_size=10');
       expect(res2.status).toBe(200);
       expect(res2.body.data.length).toBe(6); // Remaining 6 positions
       expect(res2.body.pagination.page).toBe(2);
 
-      // Test with different limit
-      const res3 = await request(app).get('/api/positions?page=1&limit=5');
+      // Test with different page_size
+      const res3 = await request(app).get('/api/positions?page=1&page_size=5');
       expect(res3.status).toBe(200);
       expect(res3.body.data.length).toBe(5);
       expect(res3.body.pagination.total_pages).toBe(4); // 17 positions with 5 per page = 4 pages
