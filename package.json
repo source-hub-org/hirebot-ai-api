@@ -20,6 +20,7 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-oauth-server": "^2.0.0",
     "ioredis": "^5.6.1",
     "mongodb": "^6.16.0",
     "mongodb-memory-server": "^10.1.4",

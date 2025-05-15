@@ -3321,6 +3321,341 @@
         }
       }
     },
+    "/api/oauth/authorize": {
+      "get": {
+        "summary": "OAuth 2.0 authorization endpoint (form)",
+        "description": "Renders the authorization form for the user to approve or deny",
+        "tags": ["OAuth"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "response_type",
+            "required": true,
+            "schema": { "type": "string", "enum": ["code"] },
+            "description": "The response type (must be 'code' for authorization code flow)"
+          },
+          {
+            "in": "query",
+            "name": "client_id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          },
+          {
+            "in": "query",
+            "name": "redirect_uri",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The redirect URI"
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": { "type": "string" },
+            "description": "The requested scope"
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "schema": { "type": "string" },
+            "description": "An opaque value used for security"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Authorization form rendered successfully" },
+          "400": { "description": "Invalid request" }
+        }
+      },
+      "post": {
+        "summary": "OAuth 2.0 authorization endpoint (decision)",
+        "description": "Handles the user's decision to approve or deny the authorization",
+        "tags": ["OAuth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_id": { "type": "string", "description": "The client ID" },
+                  "redirect_uri": { "type": "string", "description": "The redirect URI" },
+                  "response_type": {
+                    "type": "string",
+                    "enum": ["code"],
+                    "description": "The response type"
+                  },
+                  "scope": { "type": "string", "description": "The requested scope" },
+                  "state": { "type": "string", "description": "An opaque value used for security" },
+                  "approved": {
+                    "type": "string",
+                    "enum": [true, false],
+                    "description": "Whether the user approved the authorization"
+                  }
+                },
+                "required": ["client_id", "redirect_uri", "response_type", "approved"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "302": {
+            "description": "Redirects to the redirect URI with authorization code or error"
+          },
+          "400": { "description": "Invalid request" }
+        }
+      }
+    },
+    "/api/oauth/clients": {
+      "get": {
+        "summary": "Get all OAuth clients",
+        "description": "Returns a list of all OAuth clients",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "List of OAuth clients" },
+          "401": { "description": "Unauthorized" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Create a new OAuth client",
+        "description": "Creates a new OAuth client",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "clientId": { "type": "string", "description": "The client ID" },
+                  "clientSecret": { "type": "string", "description": "The client secret" },
+                  "redirectUris": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "The redirect URIs"
+                  },
+                  "grants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["password", "refresh_token", "authorization_code"]
+                    },
+                    "description": "The grant types"
+                  }
+                },
+                "required": ["clientId", "clientSecret"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "OAuth client created successfully" },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" },
+          "409": { "description": "OAuth client already exists" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/oauth/clients/{clientId}": {
+      "get": {
+        "summary": "Get an OAuth client by ID",
+        "description": "Returns an OAuth client by ID",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OAuth client" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "OAuth client not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "put": {
+        "summary": "Update an OAuth client",
+        "description": "Updates an OAuth client",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "redirectUris": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "The redirect URIs"
+                  },
+                  "grants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["password", "refresh_token", "authorization_code"]
+                    },
+                    "description": "The grant types"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OAuth client updated successfully" },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "OAuth client not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete an OAuth client",
+        "description": "Deletes an OAuth client",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OAuth client deleted successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "OAuth client not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/oauth/token": {
+      "post": {
+        "summary": "OAuth 2.0 token endpoint",
+        "description": "Obtain an access token using various grant types (password, refresh_token, authorization_code)",
+        "tags": ["OAuth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "type": "string",
+                    "enum": ["password", "refresh_token", "authorization_code"],
+                    "description": "The grant type"
+                  },
+                  "client_id": { "type": "string", "description": "The client ID" },
+                  "client_secret": { "type": "string", "description": "The client secret" },
+                  "username": {
+                    "type": "string",
+                    "description": "The username (for password grant)"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password (for password grant)"
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                    "description": "The refresh token (for refresh_token grant)"
+                  },
+                  "code": {
+                    "type": "string",
+                    "description": "The authorization code (for authorization_code grant)"
+                  },
+                  "redirect_uri": {
+                    "type": "string",
+                    "description": "The redirect URI (for authorization_code grant)"
+                  }
+                },
+                "required": ["grant_type", "client_id", "client_secret"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access token generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": { "type": "string", "description": "The access token" },
+                    "token_type": { "type": "string", "example": "Bearer" },
+                    "expires_in": {
+                      "type": "integer",
+                      "description": "Token expiration time in seconds"
+                    },
+                    "refresh_token": {
+                      "type": "string",
+                      "description": "The refresh token (if applicable)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/oauth/revoke": {
+      "post": {
+        "summary": "OAuth 2.0 token revocation endpoint",
+        "description": "Revoke an access token or refresh token",
+        "tags": ["OAuth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": { "type": "string", "description": "The token to revoke" },
+                  "token_type_hint": {
+                    "type": "string",
+                    "enum": ["access_token", "refresh_token"],
+                    "description": "The type of token to revoke"
+                  },
+                  "client_id": { "type": "string", "description": "The client ID" },
+                  "client_secret": { "type": "string", "description": "The client secret" }
+                },
+                "required": ["token", "client_id", "client_secret"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Token revoked successfully" },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
     "/api/positions": {
       "post": {
         "summary": "Create a new position",
@@ -5227,6 +5562,7 @@
       "description": "API endpoints for managing instruments (assessment questions)"
     },
     { "name": "Languages", "description": "API endpoints for managing programming languages" },
+    { "name": "OAuth", "description": "OAuth 2.0 authentication endpoints" },
     { "name": "Positions", "description": "API endpoints for managing positions" },
     { "name": "Questions", "description": "API endpoints for generating and managing questions" },
     { "name": "Submissions", "description": "Submission management endpoints" },

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const { initializeDb } = require('./repository/baseRepository');
 const { initializeRedis } = require('./service/redisService');
 const { startJobProcessor } = require('./service/jobProcessorService');
+const { initializeOAuthClients } = require('./services/oauthClientService');
 const {
   healthCheckRoutes,
   candidateRoutes,
@@ -16,7 +17,9 @@ const {
   instrumentRoutes,
   logicTagRoutes,
   logicQuestionRoutes,
+  oauthRoutes,
 } = require('./routes');
+const exampleRoutes = require('./routes/exampleRoutes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
 const logger = require('./utils/logger');
@@ -48,19 +51,30 @@ const JOB_POLLING_INTERVAL = process.env.JOB_POLLING_INTERVAL || 5000;
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Import auth middleware
+const { verifyAccessToken } = require('./middlewares/authMiddleware');
+
+// Public routes (no authentication required)
 app.use('/api/health-check', healthCheckRoutes);
-app.use('/api/questions', questionRoutes);
-app.use('/api/topics', topicRoutes);
-app.use('/api/candidates', candidateRoutes);
-app.use('/api/submissions', submissionRoutes);
-app.use('/api/positions', positionRoutes);
-app.use('/api/languages', languageRoutes);
-app.use('/api/instrument-tags', instrumentTagRoutes);
-app.use('/api/instruments', instrumentRoutes);
-app.use('/api/logic-tags', logicTagRoutes);
-app.use('/api/logic-questions', logicQuestionRoutes);
+app.use('/api/oauth', oauthRoutes);
+
+// Example routes - these have their own authentication middleware
+app.use('/api/examples', exampleRoutes);
+
+// Protected routes (authentication required)
+// Apply the verifyAccessToken middleware to all protected routes
+app.use('/api/questions', verifyAccessToken, questionRoutes);
+app.use('/api/topics', verifyAccessToken, topicRoutes);
+app.use('/api/candidates', verifyAccessToken, candidateRoutes);
+app.use('/api/submissions', verifyAccessToken, submissionRoutes);
+app.use('/api/positions', verifyAccessToken, positionRoutes);
+app.use('/api/languages', verifyAccessToken, languageRoutes);
+app.use('/api/instrument-tags', verifyAccessToken, instrumentTagRoutes);
+app.use('/api/instruments', verifyAccessToken, instrumentRoutes);
+app.use('/api/logic-tags', verifyAccessToken, logicTagRoutes);
+app.use('/api/logic-questions', verifyAccessToken, logicQuestionRoutes);
 
 // Initialize application
 async function initializeApp() {
@@ -80,6 +94,10 @@ async function initializeApp() {
       port: REDIS_PORT,
     });
     logger.info('Redis initialized');
+
+    // Initialize OAuth clients
+    await initializeOAuthClients();
+    logger.info('OAuth clients initialized');
 
     // Start the job processor
     startJobProcessor({
