@@ -5,14 +5,14 @@
 
 const express = require('express');
 const router = express.Router();
-const { getCurrentUser } = require('../../controllers/users/getCurrentUserController');
+const { getLoggedUser } = require('../../controllers/users/getLoggedUserController');
 
 /**
  * @swagger
  * /api/users/me:
  *   get:
  *     summary: Get logged in user's profile
- *     description: Retrieves the profile of the currently authenticated user
+ *     description: Retrieves the profile of the currently authenticated user from req.loggedUser
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -22,7 +22,31 @@ const { getCurrentUser } = require('../../controllers/users/getCurrentUserContro
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: User ID
+ *                   example: 60d21b4667d0d8992e610c85
+ *                 username:
+ *                   type: string
+ *                   description: Username
+ *                   example: johndoe
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                   description: Email address
+ *                   example: john.doe@example.com
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Creation timestamp
+ *                   example: 2025-05-16T10:23:20.335Z
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Last update timestamp
+ *                   example: 2025-05-16T10:23:20.335Z
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *         content:
@@ -30,11 +54,15 @@ const { getCurrentUser } = require('../../controllers/users/getCurrentUserContro
  *             schema:
  *               $ref: '#/components/schemas/UnauthorizedError'
  *       404:
- *         description: User not found
+ *         description: User not found or invalid user data
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/NotFoundResponse'
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: User not found
  *       500:
  *         description: Server error
  *         content:
@@ -42,6 +70,6 @@ const { getCurrentUser } = require('../../controllers/users/getCurrentUserContro
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/me', getCurrentUser);
+router.get('/me', getLoggedUser);
 
 module.exports = router;
