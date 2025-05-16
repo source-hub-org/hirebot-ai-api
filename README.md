@@ -4,22 +4,32 @@
 
 The backend service of HireBot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js (v18+), using Express (v5.1.0) for RESTful APIs, MongoDB (v6.16.0) for data storage, and Redis for job queue management. Supports containerized deployment with Docker and Nginx.
 
-## Features
+## Overview
 
-- Generate technical interview questions using Google's Gemini AI
-- Store and retrieve questions from MongoDB (v6.16.0)
-- Asynchronous question generation with Redis-based job queue
-- Manage interview topics and positions through commands and API
-- RESTful API for quiz, topic, position, language, candidate, submission, and instrument management
-- Flexible question search API with support for multiple topics, languages, and positions
+HireBot AI API is a comprehensive solution for technical interview management, leveraging Google's Gemini AI to generate high-quality interview questions. The system supports various question formats, candidate management, and assessment instruments for a complete hiring workflow.
+
+## Key Features
+
+- AI-powered technical interview question generation
+- Comprehensive candidate and submission management
 - Assessment instruments for personality and skill evaluation
-- Logic questions with multiple-choice and open-ended formats
-- Tagging system for organizing questions by category
-- Comprehensive validation and error handling
-- Swagger API documentation with complete schema definitions
-- Extensive test coverage with Jest (v29.7.0)
-- Pagination support for listing resources
-- Docker and Docker Compose support for easy deployment
+- Flexible search and filtering capabilities
+- OAuth2 authentication and authorization
+- Containerized deployment with Docker
+- Extensive API documentation with Swagger
+
+## Documentation
+
+For detailed information about the project, please refer to the following documentation:
+
+- [Installation Guide](./docs/installation.md) - Setup and configuration instructions
+- [API Reference](./docs/api-reference.md) - Comprehensive API documentation
+- [Authentication](./docs/authentication.md) - OAuth2 authentication details
+- [Question Generation](./docs/question-generation.md) - How the AI question generation works
+- [Architecture](./docs/architecture.md) - System architecture and design
+- [Development Guide](./docs/development.md) - Guidelines for developers
+- [Deployment](./docs/deployment.md) - Deployment options and instructions
+- [Common Commands](./docs/common-command.md) - Frequently used CLI commands
 
 ## Getting Started
 
