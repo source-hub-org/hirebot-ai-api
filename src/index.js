@@ -19,7 +19,6 @@ const {
   logicQuestionRoutes,
   oauthRoutes,
 } = require('./routes');
-const exampleRoutes = require('./routes/exampleRoutes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
 const logger = require('./utils/logger');
@@ -59,9 +58,6 @@ const { verifyAccessToken } = require('./middlewares/authMiddleware');
 // Public routes (no authentication required)
 app.use('/api/health-check', healthCheckRoutes);
 app.use('/api/oauth', oauthRoutes);
-
-// Example routes - these have their own authentication middleware
-app.use('/api/examples', exampleRoutes);
 
 // Protected routes (authentication required)
 // Apply the verifyAccessToken middleware to all protected routes
