@@ -20,27 +20,29 @@ HireBot AI API supports several deployment options:
 ### Deployment Steps
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/thangtran3112/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 
 2. Create a `.env` file based on `.env.example`:
+
    ```
    APP_PORT=8000
    PORT=3000
    MONGODB_URI=mongodb://mongodb:27017
    DB_NAME=hirebot_db
    JWT_SECRET=your_secure_secret
-   
+
    SWAGGER_URL=https://your-domain.com
-   
+
    # Redis Configuration
    REDIS_HOST=redis
    REDIS_PORT=6379
    REDIS_PASSWORD=your_redis_password
    JOB_POLLING_INTERVAL=5000
-   
+
    # Gemini AI Configuration
    GEMINI_API_KEY=your_api_key_here
    GEMINI_MODEL=gemini-2.0-flash
@@ -52,15 +54,17 @@ HireBot AI API supports several deployment options:
    ```
 
 3. Start all services:
+
    ```bash
    docker-compose up -d
    ```
 
 4. Verify the deployment:
+
    ```bash
    # Check if containers are running
    docker-compose ps
-   
+
    # Check application logs
    docker-compose logs -f app
    ```
@@ -88,12 +92,14 @@ docker-compose up -d --scale app=3
 ### Deployment Steps
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/thangtran3112/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install --production
    ```
@@ -101,25 +107,28 @@ docker-compose up -d --scale app=3
 3. Create a `.env` file with your production settings.
 
 4. Build the application:
+
    ```bash
    npm run build
    ```
 
 5. Start the application:
+
    ```bash
    # Using PM2 (recommended)
    pm2 start ecosystem.config.js --env production
-   
+
    # Or using Node.js directly
    NODE_ENV=production node dist/app.js
    ```
 
 6. Configure Nginx as a reverse proxy:
+
    ```nginx
    server {
        listen 80;
        server_name your-domain.com;
-       
+
        location / {
            proxy_pass http://localhost:3000;
            proxy_http_version 1.1;
@@ -141,11 +150,13 @@ docker-compose up -d --scale app=3
 ### AWS Deployment
 
 1. **EC2 Instance**:
+
    - Launch an EC2 instance with Amazon Linux 2
    - Install Docker and Docker Compose
    - Follow the Docker Compose deployment steps
 
 2. **ECS (Elastic Container Service)**:
+
    - Create a task definition using the Docker images
    - Create an ECS cluster
    - Deploy the task as a service
@@ -159,11 +170,13 @@ docker-compose up -d --scale app=3
 ### Google Cloud Platform
 
 1. **Compute Engine**:
+
    - Create a VM instance
    - Install Docker and Docker Compose
    - Follow the Docker Compose deployment steps
 
 2. **Google Kubernetes Engine (GKE)**:
+
    - Create Kubernetes deployment files
    - Deploy to GKE cluster
    - Set up Cloud Load Balancing
@@ -176,11 +189,13 @@ docker-compose up -d --scale app=3
 ### Azure
 
 1. **Virtual Machine**:
+
    - Create an Azure VM
    - Install Docker and Docker Compose
    - Follow the Docker Compose deployment steps
 
 2. **Azure Kubernetes Service (AKS)**:
+
    - Create Kubernetes deployment files
    - Deploy to AKS cluster
    - Set up Azure Load Balancer
@@ -201,34 +216,34 @@ name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '18'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Run tests
         run: npm test
-        
+
       - name: Build Docker image
         run: docker build -t hirebot-api .
-        
+
       - name: Push to Docker Registry
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: your-registry/hirebot-api:latest
-          
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
@@ -246,11 +261,13 @@ jobs:
 ### Monitoring
 
 1. **Application Monitoring**:
+
    - Use PM2 for process monitoring
    - Implement health check endpoints
    - Set up logging with Winston or similar
 
 2. **Server Monitoring**:
+
    - Use Prometheus for metrics collection
    - Set up Grafana for visualization
    - Configure alerts for critical metrics
@@ -263,6 +280,7 @@ jobs:
 ### Backup Strategy
 
 1. **Database Backups**:
+
    - Schedule regular MongoDB backups
    - Store backups in a secure location
    - Test restoration procedures
@@ -275,22 +293,24 @@ jobs:
 ### Updating the Application
 
 1. **Rolling Updates**:
+
    ```bash
    # Pull latest changes
    git pull
-   
+
    # Update dependencies
    npm install
-   
+
    # Restart the application
    pm2 restart all
    ```
 
 2. **Docker Updates**:
+
    ```bash
    # Pull latest images
    docker-compose pull
-   
+
    # Update containers
    docker-compose up -d
    ```
@@ -298,11 +318,13 @@ jobs:
 ## Security Considerations
 
 1. **Network Security**:
+
    - Use a firewall to restrict access
    - Implement rate limiting
    - Use HTTPS for all connections
 
 2. **Application Security**:
+
    - Keep dependencies up to date
    - Implement proper authentication and authorization
    - Validate all user inputs

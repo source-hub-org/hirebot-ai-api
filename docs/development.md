@@ -16,32 +16,35 @@ This guide provides information for developers working on the HireBot AI API pro
 ### Setting Up Local Development
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/thangtran3112/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Create a `.env.development` file based on `.env.example`:
+
    ```
    APP_PORT=8000
    PORT=3000
    MONGODB_URI=mongodb://localhost:27017
    DB_NAME=hirebot_db_dev
    JWT_SECRET=dev_secret
-   
+
    SWAGGER_URL=http://localhost:8000
-   
+
    # Redis Configuration
    REDIS_HOST=localhost
    REDIS_PORT=6379
    REDIS_PASSWORD=
    JOB_POLLING_INTERVAL=5000
-   
+
    # Gemini AI Configuration
    GEMINI_API_KEY=your_api_key_here
    GEMINI_MODEL=gemini-2.0-flash
@@ -53,11 +56,12 @@ This guide provides information for developers working on the HireBot AI API pro
    ```
 
 4. Start MongoDB and Redis:
+
    ```bash
    # Using Docker
    cd docker/mongodb
    docker-compose up -d
-   
+
    cd ../redis
    docker-compose up -d
    ```
@@ -154,6 +158,7 @@ Follow the conventional commits format:
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes

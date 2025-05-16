@@ -117,10 +117,12 @@ Once the application is running, you can verify the installation by:
 ### Common Issues
 
 1. **MongoDB Connection Error**
+
    - Ensure MongoDB is running and accessible
    - Check the MongoDB connection string in your `.env` file
 
 2. **Redis Connection Error**
+
    - Verify Redis is running
    - Check Redis host, port, and password in your `.env` file
 

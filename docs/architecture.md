@@ -65,6 +65,7 @@ HireBot AI API follows a modular, layered architecture:
 - Manages transactions
 
 Key services:
+
 - **User Service**: User management and authentication
 - **Question Service**: Question generation and management
 - **Candidate Service**: Candidate profile management
