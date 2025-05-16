@@ -50,7 +50,7 @@ const verifyAccessToken = async (req, res, next) => {
       });
     }
 
-    // Check if token is expired
+    // Check if the token is expired
     if (token.accessTokenExpiresAt < new Date()) {
       logger.debug('Access token expired');
       return res.status(401).json({
