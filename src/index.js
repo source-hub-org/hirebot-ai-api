@@ -53,24 +53,37 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Import auth middleware
-const { verifyAccessToken } = require('./middlewares/authMiddleware');
+let authMiddleware;
+if (process.env.NODE_ENV === 'testing') {
+  // Use mock middleware for tests
+  authMiddleware = require('../test/mocks/oauthMiddleware');
+} else {
+  // Use compatibility middleware for production
+  // This allows both old and new authentication methods to work
+  authMiddleware = require('./middlewares/compatAuthMiddleware');
+}
 
 // Public routes (no authentication required)
 app.use('/api/health-check', healthCheckRoutes);
 app.use('/api/oauth', oauthRoutes);
 
 // Protected routes (authentication required)
-// Apply the verifyAccessToken middleware to all protected routes
-app.use('/api/questions', verifyAccessToken, questionRoutes);
-app.use('/api/topics', verifyAccessToken, topicRoutes);
-app.use('/api/candidates', verifyAccessToken, candidateRoutes);
-app.use('/api/submissions', verifyAccessToken, submissionRoutes);
-app.use('/api/positions', verifyAccessToken, positionRoutes);
-app.use('/api/languages', verifyAccessToken, languageRoutes);
-app.use('/api/instrument-tags', verifyAccessToken, instrumentTagRoutes);
-app.use('/api/instruments', verifyAccessToken, instrumentRoutes);
-app.use('/api/logic-tags', verifyAccessToken, logicTagRoutes);
-app.use('/api/logic-questions', verifyAccessToken, logicQuestionRoutes);
+// Apply the authentication middleware to all protected routes
+const authMethod =
+  process.env.NODE_ENV === 'testing'
+    ? authMiddleware.authenticate
+    : authMiddleware.compatAuthenticate;
+
+app.use('/api/questions', authMethod(), questionRoutes);
+app.use('/api/topics', authMethod(), topicRoutes);
+app.use('/api/candidates', authMethod(), candidateRoutes);
+app.use('/api/submissions', authMethod(), submissionRoutes);
+app.use('/api/positions', authMethod(), positionRoutes);
+app.use('/api/languages', authMethod(), languageRoutes);
+app.use('/api/instrument-tags', authMethod(), instrumentTagRoutes);
+app.use('/api/instruments', authMethod(), instrumentRoutes);
+app.use('/api/logic-tags', authMethod(), logicTagRoutes);
+app.use('/api/logic-questions', authMethod(), logicQuestionRoutes);
 
 // Initialize application
 async function initializeApp() {
@@ -79,7 +92,7 @@ async function initializeApp() {
     await ensureDirectoriesExist();
     logger.info('Required directories have been verified');
 
-    // Connect to MongoDB using both native driver and mongoose
+    // Connect to MongoDB using both the native driver and mongoose
     await initializeDb(MONGODB_URI, DB_NAME);
     await mongoose.connect(MONGODB_URI, { dbName: DB_NAME });
     logger.info('Mongoose connected to MongoDB');
@@ -111,7 +124,7 @@ async function initializeApp() {
       logger.info(`Server running on port ${PORT}`);
     });
 
-    // Handle graceful shutdown
+    // Handle a graceful shutdown
     process.on('SIGTERM', async () => {
       logger.info('SIGTERM received, shutting down gracefully');
       await mongoose.disconnect();
