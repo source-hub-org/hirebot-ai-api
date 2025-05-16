@@ -178,14 +178,15 @@ const deleteUser = async id => {
 };
 
 /**
- * List users with pagination and filtering
+ * List users with pagination, filtering and sorting
  * @param {Object} filters - The filters to apply
  * @param {Object} pagination - The pagination options
+ * @param {Object} sort - The sort options (field and direction)
  * @returns {Promise<Object>} - The paginated users
  */
-const listUsers = async (filters = {}, pagination = {}) => {
+const listUsers = async (filters = {}, pagination = {}, sort = {}) => {
   try {
-    return await userRepository.list(filters, pagination);
+    return await userRepository.list(filters, pagination, sort);
   } catch (error) {
     logger.error('Error in listUsers service:', error);
     throw error;

@@ -14,7 +14,14 @@ const logger = require('../../utils/logger');
  */
 const getUsers = async (req, res) => {
   try {
-    const { page = 1, limit = 10, username, email } = req.query;
+    const {
+      page = 1,
+      page_size = 20,
+      username,
+      email,
+      sort_by = 'createdAt',
+      sort_direction = 'desc',
+    } = req.query;
 
     const filters = {};
     if (username) filters.username = username;
@@ -22,10 +29,25 @@ const getUsers = async (req, res) => {
 
     const pagination = {
       page: parseInt(page, 10),
-      limit: parseInt(limit, 10),
+      limit: parseInt(page_size, 10),
     };
 
-    const result = await userService.listUsers(filters, pagination);
+    const sort = {
+      field: ['createdAt', 'email', 'username'].includes(sort_by) ? sort_by : 'createdAt',
+      direction: sort_direction === 'asc' ? 'asc' : 'desc',
+    };
+
+    const result = await userService.listUsers(filters, pagination, sort);
+
+    // Transform the pagination format in the response
+    if (result.pagination) {
+      result.pagination = {
+        total: result.pagination.total,
+        page: result.pagination.page,
+        page_size: result.pagination.limit,
+        total_pages: result.pagination.pages,
+      };
+    }
 
     return res.status(200).json(result);
   } catch (error) {

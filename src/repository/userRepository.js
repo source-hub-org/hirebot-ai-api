@@ -108,29 +108,42 @@ const remove = async id => {
 };
 
 /**
- * List users with pagination and filtering
+ * List users with pagination, filtering and sorting
  * @param {Object} filters - The filters to apply
  * @param {Object} pagination - The pagination options
  * @param {number} pagination.page - The page number (1-based)
  * @param {number} pagination.limit - The number of items per page
+ * @param {Object} sort - The sort options
+ * @param {string} sort.field - The field to sort by (createdAt, email, username)
+ * @param {string} sort.direction - The sort direction (asc, desc)
  * @returns {Promise<Object>} - The paginated users
  */
-const list = async (filters = {}, pagination = { page: 1, limit: 10 }) => {
+const list = async (
+  filters = {},
+  pagination = { page: 1, limit: 20 },
+  sort = { field: 'createdAt', direction: 'desc' }
+) => {
   try {
-    const { page = 1, limit = 10 } = pagination;
+    const { page = 1, limit = 20 } = pagination;
+    const { field = 'createdAt', direction = 'desc' } = sort;
     const skip = (page - 1) * limit;
 
     const query = {};
     if (filters.username) query.username = { $regex: filters.username, $options: 'i' };
     if (filters.email) query.email = { $regex: filters.email, $options: 'i' };
 
+    // Create sort object for MongoDB
+    const sortDirection = direction === 'asc' ? 1 : -1;
+    const sortObj = {};
+    sortObj[field] = sortDirection;
+
     const [users, total] = await Promise.all([
-      User.find(query, { password: 0 }).skip(skip).limit(limit).sort({ createdAt: -1 }).exec(),
+      User.find(query, { password: 0 }).skip(skip).limit(limit).sort(sortObj).exec(),
       User.countDocuments(query),
     ]);
 
     return {
-      users,
+      data: users,
       pagination: {
         total,
         page,
