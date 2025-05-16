@@ -44,9 +44,6 @@ const logicTagSchema = new mongoose.Schema(
   }
 );
 
-// Create index for faster lookups
-logicTagSchema.index({ slug: 1 });
-
 /**
  * Logic Tag model
  * @type {mongoose.Model}

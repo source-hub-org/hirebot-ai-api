@@ -27,6 +27,6 @@ const OAuthClientSchema = new Schema(
 );
 
 // Create model
-const OAuthClient = mongoose.model('oauth_client', OAuthClientSchema);
+const OAuthClient = mongoose.model('OAuthClient', OAuthClientSchema);
 
 module.exports = OAuthClient;
