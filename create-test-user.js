@@ -3,6 +3,7 @@
  */
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 // Connect to MongoDB
@@ -22,13 +23,58 @@ async function connectToMongoDB() {
 // Create a test user
 async function createTestUser() {
   try {
-    // Since we're using a simple in-memory user store in oauthUserService.js,
-    // we don't need to create an actual user in the database.
-    // The service is configured to accept username 'test' with password 'password'
+    // Create a User model
+    const User = mongoose.model(
+      'User',
+      new mongoose.Schema(
+        {
+          email: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+            lowercase: true,
+          },
+          username: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+          },
+          password: {
+            type: String,
+            required: true,
+          },
+        },
+        {
+          timestamps: true,
+        }
+      )
+    );
 
-    console.log('Test user is already configured in the oauthUserService.js');
-    console.log('Username: test');
-    console.log('Password: password');
+    // Check if test user already exists
+    const existingUser = await User.findOne({ username: 'test' });
+
+    if (existingUser) {
+      console.log('Test user already exists:');
+      console.log(`Username: ${existingUser.username}`);
+      console.log(`Email: ${existingUser.email}`);
+    } else {
+      // Create a new test user
+      const hashedPassword = await bcrypt.hash('password', 10);
+      const newUser = new User({
+        email: 'test@example.com',
+        username: 'test',
+        password: hashedPassword,
+      });
+
+      await newUser.save();
+
+      console.log('Created new test user:');
+      console.log('Username: test');
+      console.log('Email: test@example.com');
+      console.log('Password: password');
+    }
 
     // Create a test OAuth client if it doesn't exist
     const OAuthClient = mongoose.model(

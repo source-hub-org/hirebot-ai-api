@@ -18,6 +18,7 @@ const {
   logicTagRoutes,
   logicQuestionRoutes,
   oauthRoutes,
+  userRoutes,
 } = require('./routes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
@@ -67,6 +68,10 @@ if (process.env.NODE_ENV === 'testing') {
 app.use('/api/health-check', healthCheckRoutes);
 app.use('/api/oauth', oauthRoutes);
 
+// Public user registration route
+const publicUserRoutes = require('./routes/users/publicUserRoutes');
+app.use('/api/register', publicUserRoutes);
+
 // Protected routes (authentication required)
 // Apply the authentication middleware to all protected routes
 const authMethod =
@@ -84,6 +89,7 @@ app.use('/api/instrument-tags', authMethod(), instrumentTagRoutes);
 app.use('/api/instruments', authMethod(), instrumentRoutes);
 app.use('/api/logic-tags', authMethod(), logicTagRoutes);
 app.use('/api/logic-questions', authMethod(), logicQuestionRoutes);
+app.use('/api/users', authMethod(), userRoutes);
 
 // Initialize application
 async function initializeApp() {

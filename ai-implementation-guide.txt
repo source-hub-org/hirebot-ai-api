@@ -1,0 +1,221 @@
+AI Prompt: Implementing User Management System for OAuth Authentication
+
+As a Senior Engineer and Tech Lead of the project, you need to implement a complete user management system that integrates with the existing OAuth authentication flow. Follow these detailed instructions:
+
+1. Database Schema Design
+   1.1. Create a User model in src/models/userModel.js with these minimum fields:
+       - id (auto-generated)
+       - email (unique, required, with validation)
+       - username (unique, required)
+       - password (required, must be stored hashed)
+       - createdAt (timestamp)
+       - updatedAt (timestamp)
+   1.2. Use bcrypt for password hashing with appropriate salt rounds (10-12)
+   1.3. Implement mongoose schema validation for email format
+   1.4. Add indexes for email and username fields to optimize queries
+
+2. Repository Layer Implementation
+   2.1. Create src/repository/userRepository.js with these functions:
+       - findById(id)
+       - findByEmail(email)
+       - findByUsername(username)
+       - create(userData)
+       - update(id, userData)
+       - delete(id)
+       - list(filters, pagination)
+   2.2. Implement proper error handling for database operations
+   2.3. Add validation before database operations
+   2.4. Use projection to exclude password field from query results by default
+
+3. Service Layer Implementation
+   3.1. Create src/services/userService.js with these functions:
+       - getUserById(id)
+       - getUserByEmail(email)
+       - getUserByUsername(username)
+       - createUser(userData) - with password hashing
+       - updateUser(id, userData) - with password hashing if password is updated
+       - deleteUser(id)
+       - listUsers(filters, pagination)
+       - validateUserCredentials(username/email, password) - for authentication
+   3.2. Implement business logic validation (e.g., password strength, email format)
+   3.3. Handle error cases with appropriate error messages
+   3.4. Add logging for important operations
+
+4. REST API Implementation
+   4.1. Create src/routes/users/index.js as the main router file
+   4.2. Create src/routes/users/userRoutes.js with these endpoints:
+       - GET /api/users - list users (with pagination)
+       - GET /api/users/:id - get user by ID
+       - POST /api/users - create new user
+       - PUT /api/users/:id - update user
+       - DELETE /api/users/:id - delete user
+   4.3. Create src/controllers/users/userController.js with handler functions for each route
+   4.4. Implement proper request validation using middleware
+   4.5. Add authentication middleware to protect routes
+   4.6. Follow the pattern used in src/routes/positions for consistency
+
+5. OAuth Integration
+   5.1. Modify src/services/oauthUserService.js to:
+       - Replace hardcoded user with database lookup
+       - Update getUserByCredentials to use userService.validateUserCredentials
+       - Update getUserById to use userService.getUserById
+   5.2. Ensure password comparison is done securely using bcrypt.compare
+   5.3. Return appropriate user object format expected by OAuth flow
+   5.4. Add proper error handling and logging
+
+6. Testing
+   6.1. Create unit tests for the user model
+   6.2. Create unit tests for the user repository
+   6.3. Create unit tests for the user service
+   6.4. Create integration tests for the user API endpoints
+   6.5. Create tests for the OAuth integration
+
+7. Code Organization Rules
+   7.1. Maximum 250 lines per file
+   7.2. Each function should have a single responsibility
+   7.3. Group related functions together
+   7.4. Split large files into multiple smaller files
+   7.5. Use descriptive function and variable names
+   7.6. Add JSDoc comments for all functions and classes
+   7.7. Follow existing project patterns and naming conventions
+
+8. Security Considerations
+   8.1. Never return password hashes in API responses
+   8.2. Implement rate limiting for authentication endpoints
+   8.3. Add input validation for all user-provided data
+   8.4. Use HTTPS for all API communications in production
+   8.5. Implement proper error handling that doesn't leak sensitive information
+   8.6. Add audit logging for security-sensitive operations
+
+9. Implementation Steps
+   9.1. First, create the database model
+   9.2. Then implement the repository layer
+   9.3. Next, build the service layer
+   9.4. Create the API routes and controllers
+   9.5. Integrate with the OAuth system
+   9.6. Write tests for all components
+   9.7. Update documentation
+
+10. Documentation
+    10.1. Update API documentation to include new user endpoints
+    10.2. Document the authentication flow
+    10.3. Add code comments explaining complex logic
+    10.4. Update README.md with setup instructions for user management
+    10.5. Document database schema changes
+
+11. Migration Strategy
+    11.1. Create a migration script to set up the user collection
+    11.2. Add a script to create an initial admin user
+    11.3. Ensure backward compatibility during transition
+    11.4. Implement feature flags to gradually roll out changes
+
+12. Performance Considerations
+    12.1. Add appropriate database indexes
+    12.2. Implement pagination for list endpoints
+    12.3. Use projection to limit fields returned from database
+    12.4. Consider caching for frequently accessed user data
+    12.5. Optimize database queries
+
+13. Error Handling
+    13.1. Create consistent error response format
+    13.2. Handle all possible error scenarios
+    13.3. Log errors with appropriate severity levels
+    13.4. Return user-friendly error messages
+    13.5. Include error codes for client-side handling
+
+14. Deployment Considerations
+    14.1. Update environment variables for new features
+    14.2. Consider database impact during deployment
+    14.3. Plan for zero-downtime deployment
+    14.4. Add health checks for new components
+    14.5. Monitor performance after deployment
+
+15. Code Examples
+    15.1. User Model Example:
+        ```javascript
+        const mongoose = require('mongoose');
+        const bcrypt = require('bcrypt');
+        
+        const userSchema = new mongoose.Schema({
+          email: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+            lowercase: true,
+            match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email']
+          },
+          username: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+          },
+          password: {
+            type: String,
+            required: true
+          }
+        }, { timestamps: true });
+        
+        // Hash password before saving
+        userSchema.pre('save', async function(next) {
+          if (!this.isModified('password')) return next();
+          try {
+            this.password = await bcrypt.hash(this.password, 10);
+            next();
+          } catch (error) {
+            next(error);
+          }
+        });
+        
+        module.exports = mongoose.model('User', userSchema);
+        ```
+        
+    15.2. OAuth Integration Example:
+        ```javascript
+        const userService = require('./userService');
+        const logger = require('../utils/logger');
+        
+        const getUserByCredentials = async (username, password) => {
+          try {
+            const user = await userService.validateUserCredentials(username, password);
+            if (!user) {
+              logger.debug(`Invalid credentials for user: ${username}`);
+              return null;
+            }
+            
+            return {
+              id: user._id.toString(),
+              username: user.username
+              // Don't include sensitive information like passwords
+            };
+          } catch (error) {
+            logger.error('Error getting user by credentials:', error);
+            throw error;
+          }
+        };
+        
+        const getUserById = async userId => {
+          try {
+            const user = await userService.getUserById(userId);
+            if (!user) {
+              logger.debug(`User not found: ${userId}`);
+              return null;
+            }
+            
+            return {
+              id: user._id.toString(),
+              username: user.username
+              // Don't include sensitive information like passwords
+            };
+          } catch (error) {
+            logger.error('Error getting user by ID:', error);
+            throw error;
+          }
+        };
+        
+        module.exports = {
+          getUserByCredentials,
+          getUserById
+        };
+        ```

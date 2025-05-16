@@ -3,6 +3,7 @@
  * @module services/oauthUserService
  */
 
+const userService = require('./userService');
 const logger = require('../utils/logger');
 
 /**
@@ -10,26 +11,23 @@ const logger = require('../utils/logger');
  * @param {string} username - The username to find
  * @param {string} password - The password to match
  * @returns {Promise<Object|null>} - The found user or null
- *
- * Note: This is a placeholder implementation. In a real application,
- * you would validate against your user database.
  */
 const getUserByCredentials = async (username, password) => {
   try {
-    // This is a placeholder implementation
-    // In a real application, you would validate against your user database
+    // Use the user service to validate credentials
+    const user = await userService.validateUserCredentials(username, password);
 
-    // For demonstration purposes, we'll accept a test user
-    if (username === 'test' && password === 'password') {
-      return {
-        id: '1',
-        username: 'test',
-        // Don't include sensitive information like passwords
-      };
+    if (!user) {
+      logger.debug(`Invalid credentials for user: ${username}`);
+      return null;
     }
 
-    logger.debug(`Invalid credentials for user: ${username}`);
-    return null;
+    // Return user in the format expected by OAuth
+    return {
+      id: user._id.toString(),
+      username: user.username,
+      // Don't include sensitive information like passwords
+    };
   } catch (error) {
     logger.error('Error getting user by credentials:', error);
     throw error;
@@ -40,26 +38,23 @@ const getUserByCredentials = async (username, password) => {
  * Get a user by ID
  * @param {string} userId - The user ID to find
  * @returns {Promise<Object|null>} - The found user or null
- *
- * Note: This is a placeholder implementation. In a real application,
- * you would fetch from your user database.
  */
 const getUserById = async userId => {
   try {
-    // This is a placeholder implementation
-    // In a real application, you would fetch from your user database
+    // Use the user service to get user by ID
+    const user = await userService.getUserById(userId);
 
-    // For demonstration purposes, we'll return a test user
-    if (userId === '1') {
-      return {
-        id: '1',
-        username: 'test',
-        // Don't include sensitive information like passwords
-      };
+    if (!user) {
+      logger.debug(`User not found: ${userId}`);
+      return null;
     }
 
-    logger.debug(`User not found: ${userId}`);
-    return null;
+    // Return user in the format expected by OAuth
+    return {
+      id: user._id.toString(),
+      username: user.username,
+      // Don't include sensitive information like passwords
+    };
   } catch (error) {
     logger.error('Error getting user by ID:', error);
     throw error;
