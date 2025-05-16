@@ -3,7 +3,7 @@
  * @module controllers/languages/deleteLanguageController
  */
 
-const { deleteLanguageService } = require('../../service/languageService');
+const { deleteLanguageService } = require('../../services/languageService');
 const logger = require('../../utils/logger');
 
 /**

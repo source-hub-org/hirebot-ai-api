@@ -95,11 +95,6 @@ const logicQuestionSchema = new mongoose.Schema(
   }
 );
 
-// Create indexes for faster lookups
-logicQuestionSchema.index({ level: 1 });
-logicQuestionSchema.index({ tag_ids: 1 });
-logicQuestionSchema.index({ type: 1 });
-
 /**
  * Logic Question model
  * @type {mongoose.Model}

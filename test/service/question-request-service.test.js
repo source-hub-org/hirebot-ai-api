@@ -3,7 +3,7 @@
  * @module test/questionRequestServiceTest
  */
 
-const { processQuestionRequest } = require('../../src/service/questionRequestService');
+const { processQuestionRequest } = require('../../src/services/questionRequestService');
 const { createJob } = require('../../src/repository/jobRepository');
 const { addToQueue } = require('../../src/utils/redisQueueHelper');
 const { findMany } = require('../../src/repository/baseRepository');

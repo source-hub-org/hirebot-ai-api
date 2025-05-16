@@ -37,7 +37,45 @@ const swaggerOptions = {
         description: 'Development server',
       },
     ],
+    security: [
+      {
+        bearerAuth: [],
+      },
+      {
+        oauth2: ['read', 'write', 'admin'],
+      },
+    ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'Enter your Bearer token in the format "Bearer {token}"',
+        },
+        oauth2: {
+          type: 'oauth2',
+          flows: {
+            password: {
+              tokenUrl: '/api/oauth/token',
+              scopes: {
+                read: 'Read access to protected resources',
+                write: 'Write access to protected resources',
+                admin: 'Admin access to protected resources',
+              },
+            },
+            authorizationCode: {
+              authorizationUrl: '/api/oauth/authorize',
+              tokenUrl: '/api/oauth/token',
+              scopes: {
+                read: 'Read access to protected resources',
+                write: 'Write access to protected resources',
+                admin: 'Admin access to protected resources',
+              },
+            },
+          },
+        },
+      },
       schemas: {
         PaginationInfo: {
           type: 'object',
@@ -596,6 +634,53 @@ const swaggerOptions = {
           },
         },
         // Common response schemas
+        UnauthorizedError: {
+          type: 'object',
+          properties: {
+            error: {
+              type: 'string',
+              example: 'unauthorized',
+            },
+            error_description: {
+              type: 'string',
+              example: 'Access token is required',
+            },
+          },
+        },
+        ForbiddenError: {
+          type: 'object',
+          properties: {
+            error: {
+              type: 'string',
+              example: 'insufficient_scope',
+            },
+            error_description: {
+              type: 'string',
+              example: "Scope 'admin' is required",
+            },
+          },
+        },
+        TokenResponse: {
+          type: 'object',
+          properties: {
+            access_token: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            },
+            token_type: {
+              type: 'string',
+              example: 'Bearer',
+            },
+            expires_in: {
+              type: 'integer',
+              example: 3600,
+            },
+            refresh_token: {
+              type: 'string',
+              example: 'def502003b1308...',
+            },
+          },
+        },
         SuccessResponse: {
           type: 'object',
           properties: {
@@ -1024,6 +1109,51 @@ const swaggerOptions = {
             },
             pagination: {
               $ref: '#/components/schemas/Pagination',
+            },
+          },
+        },
+        User: {
+          type: 'object',
+          properties: {
+            _id: {
+              type: 'string',
+              description: 'User ID',
+              example: '60d21b4667d0d8992e610c85',
+            },
+            username: {
+              type: 'string',
+              description: 'Username',
+              example: 'johndoe',
+            },
+            email: {
+              type: 'string',
+              format: 'email',
+              description: 'Email address',
+              example: 'john.doe@example.com',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Creation timestamp',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Last update timestamp',
+            },
+          },
+        },
+        UserList: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/User',
+              },
+            },
+            pagination: {
+              $ref: '#/components/schemas/PaginationInfo',
             },
           },
         },

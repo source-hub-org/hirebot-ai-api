@@ -18,8 +18,10 @@
   "license": "ISC",
   "description": "The backend service of Hirebot AI, responsible for generating, storing, and managing AI-powered technical interview quizzes for developer candidates. Built with Node.js, using Express for RESTful APIs and MongoDB for data storage.",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-oauth-server": "^2.0.0",
     "ioredis": "^5.6.1",
     "mongodb": "^6.16.0",
     "mongodb-memory-server": "^10.1.4",

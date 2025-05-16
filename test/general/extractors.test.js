@@ -9,7 +9,7 @@ const {
   extractCodeBlockWithLanguage,
   extractAnyCodeBlock,
   extractUsingSplitMethod,
-} = require('../../src/service/gemini/quiz/extractors');
+} = require('../../src/services/gemini/quiz/extractors');
 
 describe('Extractors Module Tests', () => {
   describe('extractCodeBlockWithLanguage', () => {

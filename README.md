@@ -116,6 +116,208 @@ To use the Google Gemini AI features, you'll need to obtain an API key:
 
 Note: Keep your API key secure and never commit it to version control.
 
+## OAuth2 Authentication
+
+The API supports OAuth2 authentication for secure access to protected endpoints. The implementation follows the OAuth2 specification and supports the following grant types:
+
+- Password Grant
+- Refresh Token Grant
+- Authorization Code Grant
+
+### OAuth2 Configuration
+
+Add the following OAuth2 configuration to your `.env` file:
+
+```
+# OAuth2 Configuration
+OAUTH_ACCESS_TOKEN_LIFETIME=3600
+OAUTH_REFRESH_TOKEN_LIFETIME=1209600
+OAUTH_AUTHORIZATION_CODE_LIFETIME=300
+OAUTH_ALLOW_BEARER_TOKENS_IN_QUERY=false
+OAUTH_ALLOW_EXTENDED_TOKEN_ATTRIBUTES=false
+OAUTH_REQUIRE_CLIENT_AUTH_PASSWORD=true
+OAUTH_REQUIRE_CLIENT_AUTH_REFRESH_TOKEN=true
+OAUTH_REQUIRE_CLIENT_AUTH_AUTHORIZATION_CODE=true
+
+# Default OAuth2 Client (for testing)
+OAUTH_DEFAULT_CLIENT_ID=test-client
+OAUTH_DEFAULT_CLIENT_SECRET=test-secret
+OAUTH_DEFAULT_REDIRECT_URI=http://localhost:3000/oauth/callback
+
+# Multiple OAuth2 Clients (JSON format)
+# OAUTH_CLIENTS=[{"id":"client1","secret":"secret1","grants":["password","refresh_token"],"redirectUris":["http://localhost:3000/callback"]}]
+```
+
+### How to Make Client App Work with OAuth2
+
+#### 1. Password Grant Flow
+
+For username/password authentication:
+
+```javascript
+// Client-side code
+async function getToken() {
+  const response = await fetch('http://your-api-url/api/oauth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'password',
+      client_id: 'test-client',
+      client_secret: 'test-secret',
+      username: 'user@example.com',
+      password: 'userpassword',
+    }),
+  });
+
+  const tokenData = await response.json();
+  // Store tokens securely
+  localStorage.setItem('access_token', tokenData.access_token);
+  localStorage.setItem('refresh_token', tokenData.refresh_token);
+
+  return tokenData;
+}
+```
+
+#### 2. Using Access Token for API Requests
+
+```javascript
+// Client-side code
+async function fetchProtectedResource() {
+  const accessToken = localStorage.getItem('access_token');
+
+  const response = await fetch('http://your-api-url/api/protected-resource', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return await response.json();
+}
+```
+
+#### 3. Refreshing Access Token
+
+```javascript
+// Client-side code
+async function refreshToken() {
+  const refreshToken = localStorage.getItem('refresh_token');
+
+  const response = await fetch('http://your-api-url/api/oauth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'refresh_token',
+      client_id: 'test-client',
+      client_secret: 'test-secret',
+      refresh_token: refreshToken,
+    }),
+  });
+
+  const tokenData = await response.json();
+  // Update stored tokens
+  localStorage.setItem('access_token', tokenData.access_token);
+  localStorage.setItem('refresh_token', tokenData.refresh_token);
+
+  return tokenData;
+}
+```
+
+#### 4. Authorization Code Flow (for web applications)
+
+Step 1: Redirect user to authorization page:
+
+```javascript
+// Client-side code
+function redirectToAuth() {
+  const authUrl = 'http://your-api-url/api/oauth/authorize';
+  const clientId = 'test-client';
+  const redirectUri = 'http://your-app-url/callback';
+  const responseType = 'code';
+  const state = generateRandomString(); // For CSRF protection
+
+  // Store state for validation when the user returns
+  localStorage.setItem('oauth_state', state);
+
+  // Redirect to authorization page
+  window.location.href = `${authUrl}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=${responseType}&state=${state}`;
+}
+```
+
+Step 2: Handle the callback and exchange code for token:
+
+```javascript
+// Client-side code (on callback page)
+async function handleCallback() {
+  // Get URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+  const state = urlParams.get('state');
+
+  // Verify state to prevent CSRF attacks
+  const savedState = localStorage.getItem('oauth_state');
+  if (state !== savedState) {
+    throw new Error('Invalid state parameter');
+  }
+
+  // Exchange code for token
+  const response = await fetch('http://your-api-url/api/oauth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      client_id: 'test-client',
+      client_secret: 'test-secret',
+      code: code,
+      redirect_uri: 'http://your-app-url/callback',
+    }),
+  });
+
+  const tokenData = await response.json();
+  // Store tokens securely
+  localStorage.setItem('access_token', tokenData.access_token);
+  localStorage.setItem('refresh_token', tokenData.refresh_token);
+
+  return tokenData;
+}
+```
+
+### Securing Your API Routes
+
+To protect your API routes with OAuth2 authentication, use the OAuth middleware:
+
+```javascript
+// Server-side code (in your route file)
+const { authenticate } = require('../middlewares/oauthMiddleware');
+
+// Protect a route with OAuth2
+router.get('/protected-resource', authenticate(), (req, res) => {
+  // Access is granted only if a valid access token is provided
+  res.json({ message: 'This is a protected resource', user: req.user });
+});
+
+// Optional authentication (user info is available if authenticated)
+router.get('/optional-auth', authenticate({ required: false }), (req, res) => {
+  if (req.user) {
+    res.json({ message: 'You are authenticated', user: req.user });
+  } else {
+    res.json({ message: 'You are not authenticated' });
+  }
+});
+
+// Require specific scope
+router.get('/admin-resource', authenticate({ scope: 'admin' }), (req, res) => {
+  // Access is granted only if token has 'admin' scope
+  res.json({ message: 'This is an admin resource', user: req.user });
+});
+```
+
 ## Project Structure
 
 ```

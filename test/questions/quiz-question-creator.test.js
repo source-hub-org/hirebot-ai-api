@@ -14,15 +14,15 @@ const {
   _constructPrompt,
   _validateGeneratedContent,
   _saveGeneratedQuestions,
-} = require('../../src/service/gemini/quizQuestionCreator');
+} = require('../../src/services/gemini/quizQuestionCreator');
 
 // Mock the geminiClient module
-jest.mock('../../src/service/gemini/geminiClient', () => ({
+jest.mock('../../src/services/gemini/geminiClient', () => ({
   generateContent: jest.fn(),
 }));
 
 // Import the mocked module
-const { generateContent } = require('../../src/service/gemini/geminiClient');
+const { generateContent } = require('../../src/services/gemini/geminiClient');
 
 describe('Quiz Question Creator Tests', () => {
   // Save original environment variables
@@ -273,7 +273,7 @@ describe('Quiz Question Creator Tests', () => {
     beforeEach(() => {
       // Create a spy that returns a predefined result
       loadExistingQuestionsSpy = jest
-        .spyOn(require('../../src/service/gemini/quiz/fileOperations'), 'loadExistingQuestions')
+        .spyOn(require('../../src/services/gemini/quiz/fileOperations'), 'loadExistingQuestions')
         .mockImplementation(async () => {
           return [];
         });

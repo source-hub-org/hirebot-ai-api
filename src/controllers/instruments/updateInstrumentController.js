@@ -3,7 +3,7 @@
  * @module controllers/instruments/updateInstrumentController
  */
 
-const { updateInstrumentItem } = require('../../service/instrumentService');
+const { updateInstrumentItem } = require('../../services/instrumentService');
 const logger = require('../../utils/logger');
 
 /**

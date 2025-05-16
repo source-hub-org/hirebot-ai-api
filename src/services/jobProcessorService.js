@@ -6,7 +6,7 @@
 const { getFromQueue, DEFAULT_QUEUE } = require('../utils/redisQueueHelper');
 const { updateJobStatus, getJobById } = require('../repository/jobRepository');
 const { validateGenerateRequest } = require('../utils/generateRequestValidator');
-const { generateAndStoreQuestions } = require('../service/questionGenerationService');
+const { generateAndStoreQuestions } = require('../services/questionGenerationService');
 const logger = require('../utils/logger');
 const { ObjectId } = require('mongodb');
 

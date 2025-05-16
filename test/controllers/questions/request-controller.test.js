@@ -10,11 +10,11 @@ const {
   formatErrorResponse,
   formatValidationErrorResponse,
 } = require('../../../src/controllers/questions/requestController');
-const { processQuestionRequest } = require('../../../src/service/questionRequestService');
+const { processQuestionRequest } = require('../../../src/services/questionRequestService');
 const logger = require('../../../src/utils/logger');
 
 // Mock dependencies
-jest.mock('../../../src/service/questionRequestService');
+jest.mock('../../../src/services/questionRequestService');
 jest.mock('../../../src/utils/logger', () => ({
   error: jest.fn(),
 }));

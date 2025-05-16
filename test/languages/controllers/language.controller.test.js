@@ -27,11 +27,11 @@ const {
   getLanguageByIdService,
   updateLanguageService,
   deleteLanguageService,
-} = require('../../../src/service/languageService');
+} = require('../../../src/services/languageService');
 const { validateLanguage } = require('../../../src/utils/languageValidator');
 
 // Mock the service and validator functions
-jest.mock('../../../src/service/languageService');
+jest.mock('../../../src/services/languageService');
 jest.mock('../../../src/utils/languageValidator');
 jest.mock('../../../src/utils/logger', () => ({
   info: jest.fn(),

@@ -9,7 +9,7 @@ const {
   updateTag,
   deleteTag,
   checkLogicTagsExist,
-} = require('../../src/service/logicTagService');
+} = require('../../src/services/logicTagService');
 const {
   createLogicTag,
   getAllLogicTags,

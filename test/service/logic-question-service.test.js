@@ -6,7 +6,7 @@ const {
   createQuestion,
   updateQuestion,
   deleteQuestion,
-} = require('../../src/service/logicQuestionService');
+} = require('../../src/services/logicQuestionService');
 const {
   createLogicQuestion,
   updateLogicQuestion,
@@ -14,14 +14,14 @@ const {
 } = require('../../src/repository/logicQuestionRepository');
 const { checkLogicTagsExist } = require('../../src/repository/logicTagRepository');
 const { isValidObjectId, areValidObjectIds } = require('../../src/utils/validateObjectId');
-const { getQuestionById } = require('../../src/service/logicQuestionGetService');
+const { getQuestionById } = require('../../src/services/logicQuestionGetService');
 const logger = require('../../src/utils/logger');
 
 // Mock dependencies
 jest.mock('../../src/repository/logicQuestionRepository');
 jest.mock('../../src/repository/logicTagRepository');
 jest.mock('../../src/utils/validateObjectId');
-jest.mock('../../src/service/logicQuestionGetService');
+jest.mock('../../src/services/logicQuestionGetService');
 jest.mock('../../src/utils/logger', () => ({
   info: jest.fn(),
   warn: jest.fn(),

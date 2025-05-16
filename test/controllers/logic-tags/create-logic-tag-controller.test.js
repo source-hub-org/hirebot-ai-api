@@ -7,11 +7,11 @@ const {
   formatSuccessResponse,
   formatErrorResponse,
 } = require('../../../src/controllers/logic-tags/createLogicTagController');
-const { createTag } = require('../../../src/service/logicTagService');
+const { createTag } = require('../../../src/services/logicTagService');
 const logger = require('../../../src/utils/logger');
 
 // Mock dependencies
-jest.mock('../../../src/service/logicTagService');
+jest.mock('../../../src/services/logicTagService');
 jest.mock('../../../src/utils/logger', () => ({
   warn: jest.fn(),
   error: jest.fn(),

@@ -15,6 +15,8 @@ const instrumentTagRoutes = require('./instrument-tags');
 const instrumentRoutes = require('./instruments');
 const logicTagRoutes = require('./logic-tags');
 const logicQuestionRoutes = require('./logic-questions');
+const oauthRoutes = require('./oauth');
+const userRoutes = require('./users');
 
 /**
  * Creates a router for question routes
@@ -96,6 +98,26 @@ const createLogicQuestionRouter = () => {
   return router;
 };
 
+/**
+ * Creates a router for OAuth routes
+ * @returns {Object} Express router for OAuth routes
+ */
+const createOAuthRouter = () => {
+  const router = express.Router();
+  router.use('/', oauthRoutes);
+  return router;
+};
+
+/**
+ * Creates a router for user routes
+ * @returns {Object} Express router for user routes
+ */
+const createUserRouter = () => {
+  const router = express.Router();
+  router.use('/', userRoutes);
+  return router;
+};
+
 module.exports = {
   healthCheckRoutes,
   candidateRoutes,
@@ -108,4 +130,6 @@ module.exports = {
   instrumentRoutes: createInstrumentRouter(),
   logicTagRoutes: createLogicTagRouter(),
   logicQuestionRoutes: createLogicQuestionRouter(),
+  oauthRoutes: createOAuthRouter(),
+  userRoutes: createUserRouter(),
 };

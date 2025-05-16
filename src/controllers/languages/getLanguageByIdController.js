@@ -3,7 +3,7 @@
  * @module controllers/languages/getLanguageByIdController
  */
 
-const { getLanguageByIdService } = require('../../service/languageService');
+const { getLanguageByIdService } = require('../../services/languageService');
 const logger = require('../../utils/logger');
 
 /**

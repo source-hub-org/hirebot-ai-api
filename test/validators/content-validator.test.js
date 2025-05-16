@@ -2,7 +2,7 @@
  * @fileoverview Tests for the contentValidator module
  */
 
-const { validateGeneratedContent } = require('../../src/service/gemini/quiz/contentValidator');
+const { validateGeneratedContent } = require('../../src/services/gemini/quiz/contentValidator');
 
 // Mock dependencies
 jest.mock('@utils/logger', () => ({
@@ -11,21 +11,21 @@ jest.mock('@utils/logger', () => ({
   warn: jest.fn(),
 }));
 
-jest.mock('../../src/service/gemini/quiz/fileOperations', () => ({
+jest.mock('../../src/services/gemini/quiz/fileOperations', () => ({
   logContentToFile: jest.fn(),
 }));
 
-jest.mock('../../src/service/gemini/quiz/extractors', () => ({
+jest.mock('../../src/services/gemini/quiz/extractors', () => ({
   extractJsonFromCodeBlocks: jest.fn(),
   extractArrayContent: jest.fn(),
 }));
 
-jest.mock('../../src/service/gemini/quiz/parsers', () => ({
+jest.mock('../../src/services/gemini/quiz/parsers', () => ({
   parseJsonContent: jest.fn(),
   extractQuestionsArray: jest.fn(),
 }));
 
-jest.mock('../../src/service/gemini/quiz/validators', () => ({
+jest.mock('../../src/services/gemini/quiz/validators', () => ({
   validateQuestions: jest.fn(),
 }));
 
@@ -33,15 +33,15 @@ describe('contentValidator', () => {
   const {
     extractJsonFromCodeBlocks,
     extractArrayContent,
-  } = require('../../src/service/gemini/quiz/extractors');
+  } = require('../../src/services/gemini/quiz/extractors');
 
   const {
     parseJsonContent,
     extractQuestionsArray,
-  } = require('../../src/service/gemini/quiz/parsers');
+  } = require('../../src/services/gemini/quiz/parsers');
 
-  const { validateQuestions } = require('../../src/service/gemini/quiz/validators');
-  const { logContentToFile } = require('../../src/service/gemini/quiz/fileOperations');
+  const { validateQuestions } = require('../../src/services/gemini/quiz/validators');
+  const { logContentToFile } = require('../../src/services/gemini/quiz/fileOperations');
 
   beforeEach(() => {
     jest.clearAllMocks();

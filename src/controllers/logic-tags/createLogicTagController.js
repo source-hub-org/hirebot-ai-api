@@ -3,7 +3,7 @@
  * @module controllers/logic-tags/createLogicTagController
  */
 
-const { createTag } = require('../../service/logicTagService');
+const { createTag } = require('../../services/logicTagService');
 const logger = require('../../utils/logger');
 
 /**

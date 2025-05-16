@@ -59,7 +59,7 @@ describe('logicQuestionQueryService', () => {
     LogicQuestionModel = require('../../src/models/logicQuestionModel');
 
     // Import the module under test
-    logicQuestionQueryService = require('../../src/service/logicQuestionQueryService');
+    logicQuestionQueryService = require('../../src/services/logicQuestionQueryService');
   });
 
   describe('getQuestionsWithStandardSort', () => {

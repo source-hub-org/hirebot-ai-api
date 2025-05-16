@@ -29,10 +29,10 @@ const {
   getInstrumentItemsByTagId,
   updateInstrumentItem,
   deleteInstrumentItem,
-} = require('../../../src/service/instrumentService');
+} = require('../../../src/services/instrumentService');
 
 // Mock the service functions
-jest.mock('../../../src/service/instrumentService');
+jest.mock('../../../src/services/instrumentService');
 jest.mock('../../../src/utils/logger', () => ({
   info: jest.fn(),
   error: jest.fn(),

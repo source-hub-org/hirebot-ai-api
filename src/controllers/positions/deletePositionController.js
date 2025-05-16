@@ -3,7 +3,7 @@
  * @module controllers/positions/deletePositionController
  */
 
-const { deletePositionService } = require('../../service/positionsService');
+const { deletePositionService } = require('../../services/positionsService');
 const logger = require('../../utils/logger');
 
 /**

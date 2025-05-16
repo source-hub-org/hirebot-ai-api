@@ -5,7 +5,7 @@
 const { ObjectId } = require('mongodb');
 
 // Mock the Gemini service
-jest.mock('../../src/service/gemini/quizQuestionCreator', () => ({
+jest.mock('../../src/services/gemini/quizQuestionCreator', () => ({
   generateQuizQuestions: jest.fn(),
 }));
 
@@ -38,13 +38,13 @@ describe('questionGenerationService', () => {
     jest.clearAllMocks();
 
     // Get the mocked modules
-    geminiService = require('../../src/service/gemini/quizQuestionCreator');
+    geminiService = require('../../src/services/gemini/quizQuestionCreator');
     baseRepository = require('../../src/repository/baseRepository');
     positionUtils = require('../../src/utils/positionUtils');
     logger = require('../../src/utils/logger');
 
     // Import the module under test
-    questionGenerationService = require('../../src/service/questionGenerationService');
+    questionGenerationService = require('../../src/services/questionGenerationService');
   });
 
   describe('generateQuestions', () => {

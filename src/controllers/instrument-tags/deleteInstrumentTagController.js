@@ -3,7 +3,7 @@
  * @module controllers/instrument-tags/deleteInstrumentTagController
  */
 
-const { deleteTag } = require('../../service/instrumentTagService');
+const { deleteTag } = require('../../services/instrumentTagService');
 const logger = require('../../utils/logger');
 
 /**

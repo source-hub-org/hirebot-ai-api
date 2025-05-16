@@ -8,7 +8,7 @@ const {
   getQuestion,
   updateQuestion,
   deleteQuestion,
-} = require('../../src/service/questionService');
+} = require('../../src/services/questionService');
 const {
   createQuestion,
   getQuestionById,

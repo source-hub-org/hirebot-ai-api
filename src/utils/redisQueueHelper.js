@@ -3,7 +3,7 @@
  * @module utils/redisQueueHelper
  */
 
-const { getRedisClient } = require('../service/redisService');
+const { getRedisClient } = require('../services/redisService');
 const logger = require('./logger');
 
 /**

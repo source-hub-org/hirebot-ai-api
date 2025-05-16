@@ -3,7 +3,7 @@
  * @module controllers/logic-tags/deleteLogicTagController
  */
 
-const { deleteTag } = require('../../service/logicTagService');
+const { deleteTag } = require('../../services/logicTagService');
 const logger = require('../../utils/logger');
 
 /**

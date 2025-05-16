@@ -2,7 +2,7 @@
  * Tests for the question search service
  */
 
-const { searchQuestions } = require('../../src/service/questionSearchService');
+const { searchQuestions } = require('../../src/services/questionSearchService');
 const { ObjectId } = require('mongodb');
 
 // Mock the repository module

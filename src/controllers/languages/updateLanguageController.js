@@ -3,7 +3,7 @@
  * @module controllers/languages/updateLanguageController
  */
 
-const { updateLanguageService } = require('../../service/languageService');
+const { updateLanguageService } = require('../../services/languageService');
 const { validateLanguage } = require('../../utils/languageValidator');
 const logger = require('../../utils/logger');
 

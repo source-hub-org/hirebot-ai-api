@@ -3,7 +3,7 @@
  * @module controllers/instruments/deleteInstrumentController
  */
 
-const { deleteInstrumentItem } = require('../../service/instrumentService');
+const { deleteInstrumentItem } = require('../../services/instrumentService');
 const logger = require('../../utils/logger');
 
 /**

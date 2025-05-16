@@ -503,7 +503,7 @@ describe('Instrument Routes', () => {
         // Mock the getInstrumentsByTagId function to return empty array
         // This is a workaround for the test
         jest
-          .spyOn(require('../../../src/service/instrumentService'), 'getInstrumentItemsByTagId')
+          .spyOn(require('../../../src/services/instrumentService'), 'getInstrumentItemsByTagId')
           .mockResolvedValueOnce({
             success: true,
             data: [],

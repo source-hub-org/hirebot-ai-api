@@ -4,7 +4,7 @@
  */
 
 const { validateGenerateRequest } = require('../../utils/generateRequestValidator');
-const { generateAndStoreQuestions } = require('../../service/questionGenerationService');
+const { generateAndStoreQuestions } = require('../../services/questionGenerationService');
 const { handleApiError } = require('../../utils/errorResponseHandler');
 
 /**

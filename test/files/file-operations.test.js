@@ -10,7 +10,7 @@ const {
   saveGeneratedQuestions,
   ensureTmpDirectoryExists,
   logContentToFile,
-} = require('../../src/service/gemini/quiz/fileOperations');
+} = require('../../src/services/gemini/quiz/fileOperations');
 
 // Mock fs and path modules
 jest.mock('fs', () => {
@@ -40,7 +40,7 @@ jest.mock('@utils/logger', () => ({
 }));
 
 // Mock questionSearchService
-jest.mock('../../src/service/questionSearchService', () => ({
+jest.mock('../../src/services/questionSearchService', () => ({
   searchQuestions: jest.fn(),
 }));
 
@@ -84,7 +84,7 @@ describe('fileOperations', () => {
 
   describe('loadExistingQuestions', () => {
     // Import the mocked searchQuestions function
-    const { searchQuestions } = require('../../src/service/questionSearchService');
+    const { searchQuestions } = require('../../src/services/questionSearchService');
 
     it('should load existing questions successfully from database', async () => {
       // Mock the searchQuestions function to return sample questions

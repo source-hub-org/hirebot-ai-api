@@ -2,8 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const { initializeDb } = require('./repository/baseRepository');
-const { initializeRedis } = require('./service/redisService');
-const { startJobProcessor } = require('./service/jobProcessorService');
+const { initializeRedis } = require('./services/redisService');
+const { startJobProcessor } = require('./services/jobProcessorService');
+const { initializeOAuthClients } = require('./services/oauthClientService');
 const {
   healthCheckRoutes,
   candidateRoutes,
@@ -16,6 +17,8 @@ const {
   instrumentRoutes,
   logicTagRoutes,
   logicQuestionRoutes,
+  oauthRoutes,
+  userRoutes,
 } = require('./routes');
 const { swaggerDocs } = require('./config/swagger');
 const { ensureDirectoriesExist } = require('./utils/ensureDirectories');
@@ -48,19 +51,45 @@ const JOB_POLLING_INTERVAL = process.env.JOB_POLLING_INTERVAL || 5000;
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Import auth middleware
+let authMiddleware;
+if (process.env.NODE_ENV === 'testing') {
+  // Use mock middleware for tests
+  authMiddleware = require('../test/mocks/oauthMiddleware');
+} else {
+  // Use compatibility middleware for production
+  // This allows both old and new authentication methods to work
+  authMiddleware = require('./middlewares/compatAuthMiddleware');
+}
+
+// Public routes (no authentication required)
 app.use('/api/health-check', healthCheckRoutes);
-app.use('/api/questions', questionRoutes);
-app.use('/api/topics', topicRoutes);
-app.use('/api/candidates', candidateRoutes);
-app.use('/api/submissions', submissionRoutes);
-app.use('/api/positions', positionRoutes);
-app.use('/api/languages', languageRoutes);
-app.use('/api/instrument-tags', instrumentTagRoutes);
-app.use('/api/instruments', instrumentRoutes);
-app.use('/api/logic-tags', logicTagRoutes);
-app.use('/api/logic-questions', logicQuestionRoutes);
+app.use('/api/oauth', oauthRoutes);
+
+// Public user registration route
+const publicUserRoutes = require('./routes/users/publicUserRoutes');
+app.use('/api/register', publicUserRoutes);
+
+// Protected routes (authentication required)
+// Apply the authentication middleware to all protected routes
+const authMethod =
+  process.env.NODE_ENV === 'testing'
+    ? authMiddleware.authenticate
+    : authMiddleware.compatAuthenticate;
+
+app.use('/api/questions', authMethod(), questionRoutes);
+app.use('/api/topics', authMethod(), topicRoutes);
+app.use('/api/candidates', authMethod(), candidateRoutes);
+app.use('/api/submissions', authMethod(), submissionRoutes);
+app.use('/api/positions', authMethod(), positionRoutes);
+app.use('/api/languages', authMethod(), languageRoutes);
+app.use('/api/instrument-tags', authMethod(), instrumentTagRoutes);
+app.use('/api/instruments', authMethod(), instrumentRoutes);
+app.use('/api/logic-tags', authMethod(), logicTagRoutes);
+app.use('/api/logic-questions', authMethod(), logicQuestionRoutes);
+app.use('/api/users', authMethod(), userRoutes);
 
 // Initialize application
 async function initializeApp() {
@@ -69,7 +98,7 @@ async function initializeApp() {
     await ensureDirectoriesExist();
     logger.info('Required directories have been verified');
 
-    // Connect to MongoDB using both native driver and mongoose
+    // Connect to MongoDB using both the native driver and mongoose
     await initializeDb(MONGODB_URI, DB_NAME);
     await mongoose.connect(MONGODB_URI, { dbName: DB_NAME });
     logger.info('Mongoose connected to MongoDB');
@@ -80,6 +109,10 @@ async function initializeApp() {
       port: REDIS_PORT,
     });
     logger.info('Redis initialized');
+
+    // Initialize OAuth clients
+    await initializeOAuthClients();
+    logger.info('OAuth clients initialized');
 
     // Start the job processor
     startJobProcessor({
@@ -97,7 +130,7 @@ async function initializeApp() {
       logger.info(`Server running on port ${PORT}`);
     });
 
-    // Handle graceful shutdown
+    // Handle a graceful shutdown
     process.on('SIGTERM', async () => {
       logger.info('SIGTERM received, shutting down gracefully');
       await mongoose.disconnect();

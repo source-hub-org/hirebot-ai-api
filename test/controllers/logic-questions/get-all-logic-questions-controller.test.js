@@ -7,11 +7,11 @@ const {
   formatSuccessResponse,
   formatErrorResponse,
 } = require('../../../src/controllers/logic-questions/getAllLogicQuestionsController');
-const { getQuestions } = require('../../../src/service/logicQuestionGetService');
+const { getQuestions } = require('../../../src/services/logicQuestionGetService');
 const logger = require('../../../src/utils/logger');
 
 // Mock dependencies
-jest.mock('../../../src/service/logicQuestionGetService');
+jest.mock('../../../src/services/logicQuestionGetService');
 jest.mock('../../../src/utils/logger', () => ({
   warn: jest.fn(),
   error: jest.fn(),

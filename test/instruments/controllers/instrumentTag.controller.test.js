@@ -25,10 +25,10 @@ const {
   getTagById,
   updateTag,
   deleteTag,
-} = require('../../../src/service/instrumentTagService');
+} = require('../../../src/services/instrumentTagService');
 
 // Mock the service functions
-jest.mock('../../../src/service/instrumentTagService');
+jest.mock('../../../src/services/instrumentTagService');
 jest.mock('../../../src/utils/logger', () => ({
   info: jest.fn(),
   error: jest.fn(),

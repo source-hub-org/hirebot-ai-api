@@ -2,7 +2,7 @@
  * @fileoverview Tests for the promptBuilder module
  */
 
-const { constructPrompt } = require('../../src/service/gemini/quiz/promptBuilder');
+const { constructPrompt } = require('../../src/services/gemini/quiz/promptBuilder');
 
 describe('promptBuilder', () => {
   const originalEnv = process.env;

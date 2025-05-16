@@ -4,7 +4,7 @@
  */
 
 const { validateSearchParams } = require('../../utils/questionSearchValidator');
-const { searchQuestions } = require('../../service/questionSearchService');
+const { searchQuestions } = require('../../services/questionSearchService');
 const logger = require('../../utils/logger');
 
 /**

@@ -10,7 +10,38 @@
     { "url": "http://localhost:8000", "description": "Nginx reverse proxy server" },
     { "url": "http://localhost:3000", "description": "Development server" }
   ],
+  "security": [{ "bearerAuth": [] }, { "oauth2": ["read", "write", "admin"] }],
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your Bearer token in the format \"Bearer {token}\""
+      },
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "/api/oauth/token",
+            "scopes": {
+              "read": "Read access to protected resources",
+              "write": "Write access to protected resources",
+              "admin": "Admin access to protected resources"
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "/api/oauth/authorize",
+            "tokenUrl": "/api/oauth/token",
+            "scopes": {
+              "read": "Read access to protected resources",
+              "write": "Write access to protected resources",
+              "admin": "Admin access to protected resources"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
       "PaginationInfo": {
         "type": "object",
@@ -421,6 +452,32 @@
           }
         }
       },
+      "UnauthorizedError": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "unauthorized" },
+          "error_description": { "type": "string", "example": "Access token is required" }
+        }
+      },
+      "ForbiddenError": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "insufficient_scope" },
+          "error_description": { "type": "string", "example": "Scope 'admin' is required" }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "token_type": { "type": "string", "example": "Bearer" },
+          "expires_in": { "type": "integer", "example": 3600 },
+          "refresh_token": { "type": "string", "example": "def502003b1308..." }
+        }
+      },
       "SuccessResponse": {
         "type": "object",
         "properties": {
@@ -725,6 +782,40 @@
           "status": { "type": "string", "example": "success" },
           "data": { "type": "array", "items": { "$ref": "#/components/schemas/Job" } },
           "pagination": { "$ref": "#/components/schemas/Pagination" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "60d21b4667d0d8992e610c85"
+          },
+          "username": { "type": "string", "description": "Username", "example": "johndoe" },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address",
+            "example": "john.doe@example.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        }
+      },
+      "UserList": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/User" } },
+          "pagination": { "$ref": "#/components/schemas/PaginationInfo" }
         }
       }
     }
@@ -3321,6 +3412,341 @@
         }
       }
     },
+    "/api/oauth/authorize": {
+      "get": {
+        "summary": "OAuth 2.0 authorization endpoint (form)",
+        "description": "Renders the authorization form for the user to approve or deny",
+        "tags": ["OAuth"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "response_type",
+            "required": true,
+            "schema": { "type": "string", "enum": ["code"] },
+            "description": "The response type (must be 'code' for authorization code flow)"
+          },
+          {
+            "in": "query",
+            "name": "client_id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          },
+          {
+            "in": "query",
+            "name": "redirect_uri",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The redirect URI"
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": { "type": "string" },
+            "description": "The requested scope"
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "schema": { "type": "string" },
+            "description": "An opaque value used for security"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Authorization form rendered successfully" },
+          "400": { "description": "Invalid request" }
+        }
+      },
+      "post": {
+        "summary": "OAuth 2.0 authorization endpoint (decision)",
+        "description": "Handles the user's decision to approve or deny the authorization",
+        "tags": ["OAuth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_id": { "type": "string", "description": "The client ID" },
+                  "redirect_uri": { "type": "string", "description": "The redirect URI" },
+                  "response_type": {
+                    "type": "string",
+                    "enum": ["code"],
+                    "description": "The response type"
+                  },
+                  "scope": { "type": "string", "description": "The requested scope" },
+                  "state": { "type": "string", "description": "An opaque value used for security" },
+                  "approved": {
+                    "type": "string",
+                    "enum": [true, false],
+                    "description": "Whether the user approved the authorization"
+                  }
+                },
+                "required": ["client_id", "redirect_uri", "response_type", "approved"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "302": {
+            "description": "Redirects to the redirect URI with authorization code or error"
+          },
+          "400": { "description": "Invalid request" }
+        }
+      }
+    },
+    "/api/oauth/clients": {
+      "get": {
+        "summary": "Get all OAuth clients",
+        "description": "Returns a list of all OAuth clients",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "List of OAuth clients" },
+          "401": { "description": "Unauthorized" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Create a new OAuth client",
+        "description": "Creates a new OAuth client",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "clientId": { "type": "string", "description": "The client ID" },
+                  "clientSecret": { "type": "string", "description": "The client secret" },
+                  "redirectUris": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "The redirect URIs"
+                  },
+                  "grants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["password", "refresh_token", "authorization_code"]
+                    },
+                    "description": "The grant types"
+                  }
+                },
+                "required": ["clientId", "clientSecret"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "OAuth client created successfully" },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" },
+          "409": { "description": "OAuth client already exists" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/oauth/clients/{clientId}": {
+      "get": {
+        "summary": "Get an OAuth client by ID",
+        "description": "Returns an OAuth client by ID",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OAuth client" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "OAuth client not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "put": {
+        "summary": "Update an OAuth client",
+        "description": "Updates an OAuth client",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "redirectUris": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "The redirect URIs"
+                  },
+                  "grants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["password", "refresh_token", "authorization_code"]
+                    },
+                    "description": "The grant types"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OAuth client updated successfully" },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "OAuth client not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete an OAuth client",
+        "description": "Deletes an OAuth client",
+        "tags": ["OAuth"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "The client ID"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OAuth client deleted successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "OAuth client not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/oauth/token": {
+      "post": {
+        "summary": "OAuth 2.0 token endpoint",
+        "description": "Obtain an access token using various grant types (password, refresh_token, authorization_code)",
+        "tags": ["OAuth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "type": "string",
+                    "enum": ["password", "refresh_token", "authorization_code"],
+                    "description": "The grant type"
+                  },
+                  "client_id": { "type": "string", "description": "The client ID" },
+                  "client_secret": { "type": "string", "description": "The client secret" },
+                  "username": {
+                    "type": "string",
+                    "description": "The username (for password grant)"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password (for password grant)"
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                    "description": "The refresh token (for refresh_token grant)"
+                  },
+                  "code": {
+                    "type": "string",
+                    "description": "The authorization code (for authorization_code grant)"
+                  },
+                  "redirect_uri": {
+                    "type": "string",
+                    "description": "The redirect URI (for authorization_code grant)"
+                  }
+                },
+                "required": ["grant_type", "client_id", "client_secret"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access token generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": { "type": "string", "description": "The access token" },
+                    "token_type": { "type": "string", "example": "Bearer" },
+                    "expires_in": {
+                      "type": "integer",
+                      "description": "Token expiration time in seconds"
+                    },
+                    "refresh_token": {
+                      "type": "string",
+                      "description": "The refresh token (if applicable)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/oauth/revoke": {
+      "post": {
+        "summary": "OAuth 2.0 token revocation endpoint",
+        "description": "Revoke an access token or refresh token",
+        "tags": ["OAuth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": { "type": "string", "description": "The token to revoke" },
+                  "token_type_hint": {
+                    "type": "string",
+                    "enum": ["access_token", "refresh_token"],
+                    "description": "The type of token to revoke"
+                  },
+                  "client_id": { "type": "string", "description": "The client ID" },
+                  "client_secret": { "type": "string", "description": "The client secret" }
+                },
+                "required": ["token", "client_id", "client_secret"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Token revoked successfully" },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
     "/api/positions": {
       "post": {
         "summary": "Create a new position",
@@ -5216,6 +5642,285 @@
           }
         }
       }
+    },
+    "/api/register": {
+      "post": {
+        "summary": "Create a new user (public endpoint)",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "username", "password"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "username": { "type": "string" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created" },
+          "400": { "description": "Invalid input" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "summary": "Get all users with pagination",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer", "default": 1 },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": { "type": "integer", "default": 20 },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "username",
+            "schema": { "type": "string" },
+            "description": "Filter by username"
+          },
+          {
+            "in": "query",
+            "name": "email",
+            "schema": { "type": "string" },
+            "description": "Filter by email"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "type": "string",
+              "enum": ["createdAt", "email", "username"],
+              "default": "createdAt"
+            },
+            "description": "Field to sort by"
+          },
+          {
+            "in": "query",
+            "name": "sort_direction",
+            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" },
+            "description": "Sort direction (ascending or descending)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UserList" } }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "username", "password"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "username": { "type": "string" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "summary": "Get a user by ID",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a user",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "User ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "username": { "type": "string" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "204": { "description": "User deleted" },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      }
     }
   },
   "tags": [
@@ -5227,6 +5932,7 @@
       "description": "API endpoints for managing instruments (assessment questions)"
     },
     { "name": "Languages", "description": "API endpoints for managing programming languages" },
+    { "name": "OAuth", "description": "OAuth 2.0 authentication endpoints" },
     { "name": "Positions", "description": "API endpoints for managing positions" },
     { "name": "Questions", "description": "API endpoints for generating and managing questions" },
     { "name": "Submissions", "description": "Submission management endpoints" },
