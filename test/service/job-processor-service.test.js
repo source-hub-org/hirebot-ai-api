@@ -3,11 +3,11 @@
  * @module test/jobProcessorServiceTest
  */
 
-const { processJob } = require('../../src/service/jobProcessorService');
+const { processJob } = require('../../src/services/jobProcessorService');
 const { updateJobStatus, getJobById } = require('../../src/repository/jobRepository');
 const logger = require('../../src/utils/logger');
 const { validateGenerateRequest } = require('../../src/utils/generateRequestValidator');
-const { generateAndStoreQuestions } = require('../../src/service/questionGenerationService');
+const { generateAndStoreQuestions } = require('../../src/services/questionGenerationService');
 const baseRepository = require('../../src/repository/baseRepository');
 const { ObjectId } = require('mongodb');
 
@@ -15,7 +15,7 @@ const { ObjectId } = require('mongodb');
 jest.mock('../../src/utils/redisQueueHelper');
 jest.mock('../../src/repository/jobRepository');
 jest.mock('../../src/utils/generateRequestValidator');
-jest.mock('../../src/service/questionGenerationService');
+jest.mock('../../src/services/questionGenerationService');
 jest.mock('../../src/repository/baseRepository');
 jest.mock('../../src/utils/logger', () => ({
   info: jest.fn(),

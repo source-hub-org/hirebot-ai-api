@@ -11,7 +11,7 @@ const {
   getTagById,
   updateTag,
   deleteTag,
-} = require('../../../src/service/instrumentTagService');
+} = require('../../../src/services/instrumentTagService');
 
 // Mock the repository functions
 jest.mock('../../../src/repository/instrumentTagRepository', () => ({

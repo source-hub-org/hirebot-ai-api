@@ -3,7 +3,7 @@
  * @module controllers/positions/getAllPositionsController
  */
 
-const { getAllPositionsService } = require('../../service/positionsService');
+const { getAllPositionsService } = require('../../services/positionsService');
 const logger = require('../../utils/logger');
 
 /**

@@ -11,7 +11,7 @@ const {
   getLanguageByIdService,
   updateLanguageService,
   deleteLanguageService,
-} = require('../../../src/service/languageService');
+} = require('../../../src/services/languageService');
 
 // Mock the repository functions
 jest.mock('../../../src/repository/languageRepository', () => ({

@@ -3,7 +3,7 @@
  * @module controllers/instrument-tags/getAllInstrumentTagsController
  */
 
-const { getAllTags } = require('../../service/instrumentTagService');
+const { getAllTags } = require('../../services/instrumentTagService');
 const logger = require('../../utils/logger');
 
 /**

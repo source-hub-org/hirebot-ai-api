@@ -11,7 +11,7 @@ const {
   ensureExplanation,
   validateDifficulty,
   ensureCategory,
-} = require('../../src/service/gemini/quiz/validators');
+} = require('../../src/services/gemini/quiz/validators');
 
 describe('Validators Module Tests', () => {
   describe('validateQuestionField', () => {

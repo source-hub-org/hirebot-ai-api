@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const mongoose = require('mongoose');
 const { closeConnection } = require('./src/repository/baseRepository');
-const { closeRedisConnection } = require('./src/service/redisService');
+const { closeRedisConnection } = require('./src/services/redisService');
 
 // Load environment variables from .env.testing file
 beforeAll(() => {

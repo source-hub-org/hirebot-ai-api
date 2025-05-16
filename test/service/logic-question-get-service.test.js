@@ -22,7 +22,7 @@ jest.mock('../../src/utils/logicQuestionQueryBuilder', () => ({
 }));
 
 // Mock the query service
-jest.mock('../../src/service/logicQuestionQueryService', () => ({
+jest.mock('../../src/services/logicQuestionQueryService', () => ({
   getQuestionsWithStandardSort: jest.fn(),
   getQuestionsWithRandomSort: jest.fn(),
   calculatePagination: jest.fn(),
@@ -51,11 +51,11 @@ describe('logicQuestionGetService', () => {
     logicQuestionRepository = require('../../src/repository/logicQuestionRepository');
     validateObjectId = require('../../src/utils/validateObjectId');
     logicQuestionQueryBuilder = require('../../src/utils/logicQuestionQueryBuilder');
-    logicQuestionQueryService = require('../../src/service/logicQuestionQueryService');
+    logicQuestionQueryService = require('../../src/services/logicQuestionQueryService');
     logger = require('../../src/utils/logger');
 
     // Import the module under test
-    logicQuestionGetService = require('../../src/service/logicQuestionGetService');
+    logicQuestionGetService = require('../../src/services/logicQuestionGetService');
   });
 
   describe('getQuestions', () => {

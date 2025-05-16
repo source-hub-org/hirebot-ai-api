@@ -14,7 +14,7 @@ const {
 } = require('../../src/utils/redisQueueHelper');
 
 // Mock the Redis client
-jest.mock('../../src/service/redisService', () => ({
+jest.mock('../../src/services/redisService', () => ({
   getRedisClient: jest.fn(() => {
     const RedisMock = require('ioredis-mock');
     return new RedisMock();

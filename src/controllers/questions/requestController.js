@@ -3,7 +3,7 @@
  * @module controllers/questions/requestController
  */
 
-const { processQuestionRequest } = require('../../service/questionRequestService');
+const { processQuestionRequest } = require('../../services/questionRequestService');
 const logger = require('../../utils/logger');
 
 /**

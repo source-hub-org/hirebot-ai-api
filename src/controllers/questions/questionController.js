@@ -8,7 +8,7 @@ const {
   getQuestion,
   updateQuestion,
   deleteQuestion,
-} = require('../../service/questionService');
+} = require('../../services/questionService');
 const {
   validateQuestionData,
   formatValidationErrorResponse,

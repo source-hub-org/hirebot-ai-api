@@ -7,14 +7,14 @@ const { app, initializeApp } = require('../../src/index');
 const { ObjectId } = require('mongodb');
 
 // Mock the question search service
-jest.mock('../../src/service/questionSearchService', () => {
+jest.mock('../../src/services/questionSearchService', () => {
   return {
     searchQuestions: jest.fn(),
   };
 });
 
 // Import the mocked modules
-const { searchQuestions } = require('../../src/service/questionSearchService');
+const { searchQuestions } = require('../../src/services/questionSearchService');
 
 describe('Question Search Routes', () => {
   let server;

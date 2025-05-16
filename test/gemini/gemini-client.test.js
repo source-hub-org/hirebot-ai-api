@@ -5,7 +5,7 @@
 
 const https = require('https');
 // Only import what we're using directly in the tests
-const { generateContent } = require('../../src/service/gemini/geminiClient');
+const { generateContent } = require('../../src/services/gemini/geminiClient');
 
 // Mock the https module
 jest.mock('https');
@@ -41,7 +41,7 @@ describe('Gemini Client Tests', () => {
 
       // Re-import the module to test environment variable loading
       jest.resetModules();
-      const geminiClient = require('../../src/service/gemini/geminiClient');
+      const geminiClient = require('../../src/services/gemini/geminiClient');
 
       // Check that the module uses the environment variables
       expect(geminiClient.DEFAULT_MODEL).toBe('test-model');
@@ -57,7 +57,7 @@ describe('Gemini Client Tests', () => {
 
       // Re-import the module to test default values
       jest.resetModules();
-      const geminiClient = require('../../src/service/gemini/geminiClient');
+      const geminiClient = require('../../src/services/gemini/geminiClient');
 
       // Check that the module uses the default values
       expect(geminiClient.DEFAULT_MODEL).toBe('gemini-2.0-flash');
@@ -77,7 +77,7 @@ describe('Gemini Client Tests', () => {
 
         // Re-import the module to pick up the environment change
         jest.resetModules();
-        const { validateApiKey } = require('../../src/service/gemini/geminiClient');
+        const { validateApiKey } = require('../../src/services/gemini/geminiClient');
 
         // Expect the function to throw when called
         expect(() => {

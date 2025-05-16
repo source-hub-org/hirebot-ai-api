@@ -3,7 +3,7 @@
  * @module controllers/logic-questions/getAllLogicQuestionsController
  */
 
-const { getQuestions } = require('../../service/logicQuestionGetService');
+const { getQuestions } = require('../../services/logicQuestionGetService');
 const logger = require('../../utils/logger');
 
 /**

@@ -3,7 +3,7 @@
  * @module controllers/logic-questions/deleteLogicQuestionController
  */
 
-const { deleteQuestion } = require('../../service/logicQuestionService');
+const { deleteQuestion } = require('../../services/logicQuestionService');
 const logger = require('../../utils/logger');
 
 /**

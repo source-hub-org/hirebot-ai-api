@@ -9,8 +9,8 @@ const fs = require('fs').promises;
 const os = require('os');
 
 // Mock the Gemini AI service
-jest.mock('../../src/service/gemini/quizQuestionCreator', () => {
-  const originalModule = jest.requireActual('../../src/service/gemini/quizQuestionCreator');
+jest.mock('../../src/services/gemini/quizQuestionCreator', () => {
+  const originalModule = jest.requireActual('../../src/services/gemini/quizQuestionCreator');
 
   return {
     ...originalModule,
@@ -19,7 +19,7 @@ jest.mock('../../src/service/gemini/quizQuestionCreator', () => {
 });
 
 // Mock the question generation service
-jest.mock('../../src/service/questionGenerationService', () => {
+jest.mock('../../src/services/questionGenerationService', () => {
   return {
     generateAndStoreQuestions: jest.fn(),
     generateQuestions: jest.fn(),
@@ -101,8 +101,8 @@ jest.mock('fs', () => {
 });
 
 // Import the mocked modules
-const { generateQuizQuestions } = require('../../src/service/gemini/quizQuestionCreator');
-const { generateAndStoreQuestions } = require('../../src/service/questionGenerationService');
+const { generateQuizQuestions } = require('../../src/services/gemini/quizQuestionCreator');
+const { generateAndStoreQuestions } = require('../../src/services/questionGenerationService');
 const { insertMany } = require('../../src/repository/baseRepository');
 
 describe('Question Routes', () => {

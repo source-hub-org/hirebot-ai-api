@@ -12,7 +12,7 @@ const {
   getInstrumentItemsByTagId,
   updateInstrumentItem,
   deleteInstrumentItem,
-} = require('../../../src/service/instrumentService');
+} = require('../../../src/services/instrumentService');
 
 // Mock the repository functions
 jest.mock('../../../src/repository/instrumentRepository', () => ({

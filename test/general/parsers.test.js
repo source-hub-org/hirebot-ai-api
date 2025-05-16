@@ -10,7 +10,7 @@ const {
   extractSingleQuestion,
   extractQuestionsFromItems,
   extractQuestionsFromSchema,
-} = require('../../src/service/gemini/quiz/parsers');
+} = require('../../src/services/gemini/quiz/parsers');
 
 describe('Parsers Module Tests', () => {
   describe('tryParseJson', () => {

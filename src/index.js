@@ -2,8 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const { initializeDb } = require('./repository/baseRepository');
-const { initializeRedis } = require('./service/redisService');
-const { startJobProcessor } = require('./service/jobProcessorService');
+const { initializeRedis } = require('./services/redisService');
+const { startJobProcessor } = require('./services/jobProcessorService');
 const { initializeOAuthClients } = require('./services/oauthClientService');
 const {
   healthCheckRoutes,

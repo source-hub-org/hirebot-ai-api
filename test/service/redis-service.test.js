@@ -7,7 +7,7 @@ const {
   initializeRedis,
   getRedisClient,
   closeRedisConnection,
-} = require('../../src/service/redisService');
+} = require('../../src/services/redisService');
 
 // Mock ioredis
 jest.mock('ioredis', () => require('ioredis-mock'));

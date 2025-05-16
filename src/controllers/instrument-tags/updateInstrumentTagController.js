@@ -3,7 +3,7 @@
  * @module controllers/instrument-tags/updateInstrumentTagController
  */
 
-const { updateTag } = require('../../service/instrumentTagService');
+const { updateTag } = require('../../services/instrumentTagService');
 const logger = require('../../utils/logger');
 
 /**

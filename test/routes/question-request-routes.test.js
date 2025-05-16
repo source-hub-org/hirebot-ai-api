@@ -9,11 +9,11 @@
 
 const request = require('supertest');
 const express = require('express');
-const { processQuestionRequest } = require('../../src/service/questionRequestService');
+const { processQuestionRequest } = require('../../src/services/questionRequestService');
 const { questionRoutes } = require('../../src/routes');
 
 // Mock dependencies
-jest.mock('../../src/service/questionRequestService');
+jest.mock('../../src/services/questionRequestService');
 jest.mock('../../src/utils/logger', () => ({
   info: jest.fn(),
   warn: jest.fn(),
@@ -23,10 +23,10 @@ jest.mock('../../src/utils/logger', () => ({
 }));
 
 // Mock other dependencies used by questionRoutes
-jest.mock('../../src/service/gemini/quizQuestionCreator');
+jest.mock('../../src/services/gemini/quizQuestionCreator');
 jest.mock('../../src/repository/baseRepository');
 jest.mock('../../src/utils/questionSearchValidator');
-jest.mock('../../src/service/questionSearchService');
+jest.mock('../../src/services/questionSearchService');
 
 // Mock the routes module
 jest.mock('../../src/routes/questions', () => {
@@ -35,7 +35,7 @@ jest.mock('../../src/routes/questions', () => {
 
   // Mock the request route
   router.post('/request', async (req, res) => {
-    const { processQuestionRequest } = require('../../src/service/questionRequestService');
+    const { processQuestionRequest } = require('../../src/services/questionRequestService');
 
     try {
       // Validate request parameters
