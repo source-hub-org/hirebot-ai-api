@@ -5643,10 +5643,11 @@
         }
       }
     },
-    "/api/register": {
+    "/api/users": {
       "post": {
-        "summary": "Create a new user (public endpoint)",
+        "summary": "Create a new user",
         "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -5664,13 +5665,32 @@
           }
         },
         "responses": {
-          "201": { "description": "User created" },
-          "400": { "description": "Invalid input" },
-          "500": { "description": "Server error" }
+          "201": {
+            "description": "User created",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
         }
-      }
-    },
-    "/api/users": {
+      },
       "get": {
         "summary": "Get all users with pagination",
         "tags": ["Users"],
@@ -5737,44 +5757,70 @@
             }
           }
         }
-      },
-      "post": {
-        "summary": "Create a new user",
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "summary": "Get logged in user's profile",
+        "description": "Retrieves the profile of the currently authenticated user from req.loggedUser",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["email", "username", "password"],
-                "properties": {
-                  "email": { "type": "string", "format": "email" },
-                  "username": { "type": "string" },
-                  "password": { "type": "string", "format": "password" }
-                }
-              }
-            }
-          }
-        },
         "responses": {
-          "201": {
-            "description": "User created",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
-          },
-          "400": {
-            "description": "Invalid input",
+          "200": {
+            "description": "User profile retrieved successfully",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ValidationErrorResponse" }
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "User ID",
+                      "example": "60d21b4667d0d8992e610c85"
+                    },
+                    "username": {
+                      "type": "string",
+                      "description": "Username",
+                      "example": "johndoe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email address",
+                      "example": "john.doe@example.com"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Creation timestamp",
+                      "example": "2025-05-16T10:23:20.335Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Last update timestamp",
+                      "example": "2025-05-16T10:23:20.335Z"
+                    }
+                  }
+                }
               }
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Unauthorized - Invalid or missing token",
             "content": {
               "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "404": {
+            "description": "User not found or invalid user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "error": { "type": "string", "example": "User not found" } }
+                }
+              }
             }
           },
           "500": {
@@ -5787,6 +5833,41 @@
       }
     },
     "/api/users/{id}": {
+      "delete": {
+        "summary": "Delete a user",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "204": { "description": "User deleted" },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundResponse" } }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
+            }
+          }
+        }
+      },
       "get": {
         "summary": "Get a user by ID",
         "tags": ["Users"],
@@ -5885,40 +5966,32 @@
             }
           }
         }
-      },
-      "delete": {
-        "summary": "Delete a user",
+      }
+    },
+    "/api/register": {
+      "post": {
+        "summary": "Create a new user (public endpoint)",
         "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "User ID"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "username", "password"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "username": { "type": "string" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
           }
-        ],
+        },
         "responses": {
-          "204": { "description": "User deleted" },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/UnauthorizedError" } }
-            }
-          },
-          "404": {
-            "description": "User not found",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/NotFoundResponse" } }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
-            }
-          }
+          "201": { "description": "User created" },
+          "400": { "description": "Invalid input" },
+          "500": { "description": "Server error" }
         }
       }
     }
@@ -5936,6 +6009,7 @@
     { "name": "Positions", "description": "API endpoints for managing positions" },
     { "name": "Questions", "description": "API endpoints for generating and managing questions" },
     { "name": "Submissions", "description": "Submission management endpoints" },
-    { "name": "Topics", "description": "API endpoints for managing topics" }
+    { "name": "Topics", "description": "API endpoints for managing topics" },
+    { "name": "Users", "description": "API endpoints for managing users" }
   ]
 }
