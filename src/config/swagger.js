@@ -37,7 +37,45 @@ const swaggerOptions = {
         description: 'Development server',
       },
     ],
+    security: [
+      {
+        bearerAuth: []
+      },
+      {
+        oauth2: ['read', 'write', 'admin']
+      }
+    ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'Enter your Bearer token in the format "Bearer {token}"'
+        },
+        oauth2: {
+          type: 'oauth2',
+          flows: {
+            password: {
+              tokenUrl: '/api/oauth/token',
+              scopes: {
+                'read': 'Read access to protected resources',
+                'write': 'Write access to protected resources',
+                'admin': 'Admin access to protected resources'
+              }
+            },
+            authorizationCode: {
+              authorizationUrl: '/api/oauth/authorize',
+              tokenUrl: '/api/oauth/token',
+              scopes: {
+                'read': 'Read access to protected resources',
+                'write': 'Write access to protected resources',
+                'admin': 'Admin access to protected resources'
+              }
+            }
+          }
+        }
+      },
       schemas: {
         PaginationInfo: {
           type: 'object',
@@ -596,6 +634,53 @@ const swaggerOptions = {
           },
         },
         // Common response schemas
+        UnauthorizedError: {
+          type: 'object',
+          properties: {
+            error: {
+              type: 'string',
+              example: 'unauthorized'
+            },
+            error_description: {
+              type: 'string',
+              example: 'Access token is required'
+            }
+          }
+        },
+        ForbiddenError: {
+          type: 'object',
+          properties: {
+            error: {
+              type: 'string',
+              example: 'insufficient_scope'
+            },
+            error_description: {
+              type: 'string',
+              example: 'Scope \'admin\' is required'
+            }
+          }
+        },
+        TokenResponse: {
+          type: 'object',
+          properties: {
+            access_token: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+            },
+            token_type: {
+              type: 'string',
+              example: 'Bearer'
+            },
+            expires_in: {
+              type: 'integer',
+              example: 3600
+            },
+            refresh_token: {
+              type: 'string',
+              example: 'def502003b1308...'
+            }
+          }
+        },
         SuccessResponse: {
           type: 'object',
           properties: {
