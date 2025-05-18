@@ -50,7 +50,7 @@ const findByEmail = async (email, includePassword = false) => {
       .populate('candidate_id')
       .exec();
 
-    if (user) {
+    if (user && !includePassword) {
       const userObj = user.toObject();
 
       // Add candidate field with the populated candidate data
@@ -81,7 +81,7 @@ const findByUsername = async (username, includePassword = false) => {
     const projection = includePassword ? {} : { password: 0 };
     const user = await User.findOne({ username }, projection).populate('candidate_id').exec();
 
-    if (user) {
+    if (user && !includePassword) {
       const userObj = user.toObject();
 
       // Add candidate field with the populated candidate data
