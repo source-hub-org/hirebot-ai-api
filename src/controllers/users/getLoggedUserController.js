@@ -83,7 +83,11 @@ const getLoggedUser = async (req, res) => {
     });
   } catch (error) {
     logger.error('Error in getLoggedUser controller:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      data: {}
+    });
   }
 };
 

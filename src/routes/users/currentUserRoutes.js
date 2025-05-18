@@ -24,29 +24,38 @@ const { getLoggedUser } = require('../../controllers/users/getLoggedUserControll
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
+ *                 status:
  *                   type: string
- *                   description: User ID
- *                   example: 60d21b4667d0d8992e610c85
- *                 username:
+ *                   example: success
+ *                 message:
  *                   type: string
- *                   description: Username
- *                   example: johndoe
- *                 email:
- *                   type: string
- *                   format: email
- *                   description: Email address
- *                   example: john.doe@example.com
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                   description: Creation timestamp
- *                   example: 2025-05-16T10:23:20.335Z
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *                   description: Last update timestamp
- *                   example: 2025-05-16T10:23:20.335Z
+ *                   example: User profile retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       description: User ID
+ *                       example: 60d21b4667d0d8992e610c85
+ *                     username:
+ *                       type: string
+ *                       description: Username
+ *                       example: johndoe
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       description: Email address
+ *                       example: john.doe@example.com
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Creation timestamp
+ *                       example: 2025-05-16T10:23:20.335Z
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Last update timestamp
+ *                       example: 2025-05-16T10:23:20.335Z
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *         content:
@@ -60,9 +69,15 @@ const { getLoggedUser } = require('../../controllers/users/getLoggedUserControll
  *             schema:
  *               type: object
  *               properties:
- *                 error:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
  *                   type: string
  *                   example: User not found
+ *                 data:
+ *                   type: object
+ *                   example: {}
  *       500:
  *         description: Server error
  *         content:

@@ -24,8 +24,22 @@ const router = express.Router();
  *           type: string
  *         description: User ID
  *     responses:
- *       204:
+ *       200:
  *         description: User deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User deleted successfully
+ *                 data:
+ *                   type: object
+ *                   example: {}
  *       401:
  *         description: Unauthorized
  *         content:
