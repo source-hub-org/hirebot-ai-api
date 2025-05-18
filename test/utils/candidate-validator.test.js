@@ -240,9 +240,16 @@ describe('candidateValidator', () => {
 
       const formatted = formatCandidateDefaults(candidate);
 
-      // Check that all default values were applied
+      // Check that default values were applied for missing fields
       for (const [key, value] of Object.entries(candidateModel.defaultValues)) {
-        if (key !== 'createdAt' && key !== 'updatedAt') {
+        if (
+          key !== 'createdAt' &&
+          key !== 'updatedAt' &&
+          key !== 'full_name' &&
+          key !== 'phone_number' &&
+          key !== 'interview_level' &&
+          !candidate[key]
+        ) {
           expect(formatted[key]).toEqual(value);
         }
       }

@@ -132,4 +132,4 @@ dist
 
 data/*.txt
 coverage/
-mocks/
+./mocks/
