@@ -637,26 +637,52 @@ const swaggerOptions = {
         UnauthorizedError: {
           type: 'object',
           properties: {
-            error: {
+            status: {
               type: 'string',
-              example: 'unauthorized',
+              example: 'error',
             },
-            error_description: {
+            message: {
               type: 'string',
-              example: 'Access token is required',
+              example: 'Unauthorized',
+            },
+            data: {
+              type: 'object',
+              properties: {
+                error: {
+                  type: 'string',
+                  example: 'unauthorized',
+                },
+                error_description: {
+                  type: 'string',
+                  example: 'Access token is required',
+                },
+              },
             },
           },
         },
         ForbiddenError: {
           type: 'object',
           properties: {
-            error: {
+            status: {
               type: 'string',
-              example: 'insufficient_scope',
+              example: 'error',
             },
-            error_description: {
+            message: {
               type: 'string',
-              example: "Scope 'admin' is required",
+              example: 'Forbidden',
+            },
+            data: {
+              type: 'object',
+              properties: {
+                error: {
+                  type: 'string',
+                  example: 'insufficient_scope',
+                },
+                error_description: {
+                  type: 'string',
+                  example: "Scope 'admin' is required",
+                },
+              },
             },
           },
         },
@@ -705,21 +731,10 @@ const swaggerOptions = {
               type: 'string',
               example: 'An error occurred',
             },
-            error: {
+            data: {
               type: 'object',
-              properties: {
-                code: {
-                  type: 'string',
-                  example: 'VALIDATION_ERROR',
-                },
-                details: {
-                  type: 'array',
-                  items: {
-                    type: 'string',
-                  },
-                  example: ['Field is required', 'Invalid format'],
-                },
-              },
+              example: {},
+              description: 'Empty object for simple errors',
             },
           },
         },
@@ -734,7 +749,7 @@ const swaggerOptions = {
               type: 'string',
               example: 'Validation failed',
             },
-            errors: {
+            data: {
               type: 'array',
               items: {
                 type: 'object',
@@ -749,6 +764,7 @@ const swaggerOptions = {
                   },
                 },
               },
+              description: 'Array of validation errors',
             },
           },
         },
@@ -762,6 +778,11 @@ const swaggerOptions = {
             message: {
               type: 'string',
               example: 'Resource not found',
+            },
+            data: {
+              type: 'object',
+              example: {},
+              description: 'Empty object for not found errors',
             },
           },
         },
@@ -1146,6 +1167,14 @@ const swaggerOptions = {
         UserList: {
           type: 'object',
           properties: {
+            status: {
+              type: 'string',
+              example: 'success',
+            },
+            message: {
+              type: 'string',
+              example: 'Users retrieved successfully',
+            },
             data: {
               type: 'array',
               items: {

@@ -57,18 +57,30 @@ const getLoggedUser = async (req, res) => {
     // Check if loggedUser exists in the request
     if (!req.loggedUser) {
       logger.error('No logged user found in request');
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+        data: {}
+      });
     }
 
     // Validate the user object has required fields
     if (!isValidUserObject(req.loggedUser)) {
       logger.error('Invalid user object in req.loggedUser');
-      return res.status(404).json({ error: 'Invalid user data' });
+      return res.status(404).json({
+        status: 'error',
+        message: 'Invalid user data',
+        data: {}
+      });
     }
 
     // Format and return the user data
     const formattedUser = formatUserResponse(req.loggedUser);
-    return res.status(200).json(formattedUser);
+    return res.status(200).json({
+      status: 'success',
+      message: 'User profile retrieved successfully',
+      data: formattedUser
+    });
   } catch (error) {
     logger.error('Error in getLoggedUser controller:', error);
     return res.status(500).json({ error: 'Internal server error' });
