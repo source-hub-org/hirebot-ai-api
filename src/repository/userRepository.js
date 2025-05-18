@@ -15,7 +15,7 @@ const logger = require('../utils/logger');
 const findById = async (id, includePassword = false) => {
   try {
     const projection = includePassword ? {} : { password: 0 };
-    return await User.findById(id, projection).exec();
+    return await User.findById(id, projection).populate('candidate_id').exec();
   } catch (error) {
     logger.error(`Error finding user by ID ${id}:`, error);
     throw error;
@@ -31,7 +31,9 @@ const findById = async (id, includePassword = false) => {
 const findByEmail = async (email, includePassword = false) => {
   try {
     const projection = includePassword ? {} : { password: 0 };
-    return await User.findOne({ email: email.toLowerCase() }, projection).exec();
+    return await User.findOne({ email: email.toLowerCase() }, projection)
+      .populate('candidate_id')
+      .exec();
   } catch (error) {
     logger.error(`Error finding user by email ${email}:`, error);
     throw error;
@@ -47,7 +49,7 @@ const findByEmail = async (email, includePassword = false) => {
 const findByUsername = async (username, includePassword = false) => {
   try {
     const projection = includePassword ? {} : { password: 0 };
-    return await User.findOne({ username }, projection).exec();
+    return await User.findOne({ username }, projection).populate('candidate_id').exec();
   } catch (error) {
     logger.error(`Error finding user by username ${username}:`, error);
     throw error;
@@ -138,7 +140,12 @@ const list = async (
     sortObj[field] = sortDirection;
 
     const [users, total] = await Promise.all([
-      User.find(query, { password: 0 }).skip(skip).limit(limit).sort(sortObj).exec(),
+      User.find(query, { password: 0 })
+        .populate('candidate_id')
+        .skip(skip)
+        .limit(limit)
+        .sort(sortObj)
+        .exec(),
       User.countDocuments(query),
     ]);
 

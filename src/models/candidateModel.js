@@ -6,9 +6,9 @@
 /**
  * Candidate schema definition
  * @typedef {Object} CandidateSchema
- * @property {string} full_name - Full name of the candidate (required)
+ * @property {string} [full_name=''] - Full name of the candidate
  * @property {string} email - Email address of the candidate (required)
- * @property {string} phone_number - Phone number of the candidate (required)
+ * @property {string} [phone_number=''] - Phone number of the candidate
  * @property {string} [gender=''] - Gender of the candidate
  * @property {string} [birthday=''] - Birthday of the candidate
  * @property {string} [location=''] - Location of the candidate
@@ -19,7 +19,7 @@
  * @property {Array<string>} [skills=[]] - Skills of the candidate
  * @property {Array<string>} [programming_languages=[]] - Programming languages known by the candidate
  * @property {string} [preferred_stack=''] - Preferred technology stack
- * @property {string} interview_level - Interview level (required)
+ * @property {string} [interview_level=''] - Interview level
  * @property {Array<string>} [assigned_topics=[]] - Topics assigned for the interview
  * @property {number} [interview_score=0] - Score from the interview
  * @property {string} [interview_feedback=''] - Feedback from the interview
@@ -38,6 +38,9 @@
  * @type {Object}
  */
 const defaultValues = {
+  full_name: '',
+  phone_number: '',
+  interview_level: '',
   gender: '',
   birthday: '',
   location: '',
@@ -65,7 +68,7 @@ const defaultValues = {
  * Required fields for a candidate
  * @type {Array<string>}
  */
-const requiredFields = ['full_name', 'email', 'phone_number', 'interview_level'];
+const requiredFields = ['email'];
 
 /**
  * Candidate model definition

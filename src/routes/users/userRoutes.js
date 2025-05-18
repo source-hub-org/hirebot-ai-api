@@ -12,6 +12,7 @@ const userController = require('../../controllers/users/userController');
  * /api/users:
  *   get:
  *     summary: Get all users with pagination
+ *     description: Retrieves a list of users with populated candidate information if available
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -54,7 +55,7 @@ const userController = require('../../controllers/users/userController');
  *         description: Sort direction (ascending or descending)
  *     responses:
  *       200:
- *         description: List of users
+ *         description: List of users with candidate information
  *         content:
  *           application/json:
  *             schema:
@@ -79,6 +80,7 @@ router.get('/', userController.getUsers);
  * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID
+ *     description: Retrieves a user by ID with populated candidate information if available
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -91,11 +93,20 @@ router.get('/', userController.getUsers);
  *         description: User ID
  *     responses:
  *       200:
- *         description: User found
+ *         description: User found with candidate information
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User retrieved successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
  *       401:
  *         description: Unauthorized
  *         content:
@@ -122,6 +133,7 @@ router.get('/:id', userController.getUserById);
  * /api/users:
  *   post:
  *     summary: Create a new user
+ *     description: Creates a new user and automatically links them to a candidate with the same email. If no candidate exists, a new one is created.
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -146,11 +158,20 @@ router.get('/:id', userController.getUserById);
  *                 format: password
  *     responses:
  *       201:
- *         description: User created
+ *         description: User created and linked to candidate
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User created successfully and linked to candidate
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
  *       400:
  *         description: Invalid input
  *         content:

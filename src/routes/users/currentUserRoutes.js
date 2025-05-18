@@ -12,7 +12,7 @@ const { getLoggedUser } = require('../../controllers/users/getLoggedUserControll
  * /api/users/me:
  *   get:
  *     summary: Get logged in user's profile
- *     description: Retrieves the profile of the currently authenticated user from req.loggedUser
+ *     description: Retrieves the profile of the currently authenticated user from req.loggedUser, including linked candidate information
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -46,6 +46,13 @@ const { getLoggedUser } = require('../../controllers/users/getLoggedUserControll
  *                       format: email
  *                       description: Email address
  *                       example: john.doe@example.com
+ *                     candidate_id:
+ *                       oneOf:
+ *                         - type: string
+ *                           description: Candidate ID reference
+ *                           example: 60d21b4667d0d8992e610c86
+ *                         - $ref: '#/components/schemas/Candidate'
+ *                           description: Populated candidate information
  *                     createdAt:
  *                       type: string
  *                       format: date-time

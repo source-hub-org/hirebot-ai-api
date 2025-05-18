@@ -33,7 +33,23 @@ const saveAccessToken = async token => {
  */
 const getAccessToken = async accessToken => {
   try {
-    return await OAuthAccessToken.findOne({ accessToken });
+    const token = await OAuthAccessToken.findOne({ accessToken });
+
+    // If token exists and has a user with an _id, try to populate the candidate_id
+    if (token && token.user && token.user._id) {
+      // Get the User model
+      const User = require('../models/userModel');
+
+      // Find the user with populated candidate_id
+      const user = await User.findById(token.user._id).populate('candidate_id').exec();
+
+      // If user is found, update the token's user object with the populated user
+      if (user) {
+        token.user = user.toObject();
+      }
+    }
+
+    return token;
   } catch (error) {
     logger.error('Error getting access token from database:', error);
     throw error;

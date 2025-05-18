@@ -13,8 +13,11 @@ const candidateModel = require('../../src/models/candidateModel');
 
 // Mock the candidate model
 jest.mock('../../src/models/candidateModel', () => ({
-  requiredFields: ['full_name', 'email', 'phone_number', 'interview_level'],
+  requiredFields: ['email'],
   defaultValues: {
+    full_name: '',
+    phone_number: '',
+    interview_level: '',
     gender: '',
     birthday: '',
     location: '',
@@ -115,10 +118,10 @@ describe('candidateValidator', () => {
 
       const result = validateCandidateInput(candidate);
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Missing required field: full_name');
       expect(result.errors).toContain('Missing required field: email');
-      expect(result.errors).toContain('Missing required field: phone_number');
-      expect(result.errors).toContain('Missing required field: interview_level');
+      expect(result.errors).not.toContain('Missing required field: full_name');
+      expect(result.errors).not.toContain('Missing required field: phone_number');
+      expect(result.errors).not.toContain('Missing required field: interview_level');
     });
 
     test('should validate email format', () => {
@@ -178,6 +181,52 @@ describe('candidateValidator', () => {
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
+
+    test('should validate candidate with missing full_name', () => {
+      const candidate = {
+        email: 'john@example.com',
+        phone_number: '1234567890',
+        interview_level: 'junior',
+      };
+
+      const result = validateCandidateInput(candidate);
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should validate candidate with missing phone_number', () => {
+      const candidate = {
+        full_name: 'John Doe',
+        email: 'john@example.com',
+        interview_level: 'junior',
+      };
+
+      const result = validateCandidateInput(candidate);
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should validate candidate with missing interview_level', () => {
+      const candidate = {
+        full_name: 'John Doe',
+        email: 'john@example.com',
+        phone_number: '1234567890',
+      };
+
+      const result = validateCandidateInput(candidate);
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should validate candidate with only email provided', () => {
+      const candidate = {
+        email: 'john@example.com',
+      };
+
+      const result = validateCandidateInput(candidate);
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
   });
 
   describe('formatCandidateDefaults', () => {
@@ -191,9 +240,16 @@ describe('candidateValidator', () => {
 
       const formatted = formatCandidateDefaults(candidate);
 
-      // Check that all default values were applied
+      // Check that default values were applied for missing fields
       for (const [key, value] of Object.entries(candidateModel.defaultValues)) {
-        if (key !== 'createdAt' && key !== 'updatedAt') {
+        if (
+          key !== 'createdAt' &&
+          key !== 'updatedAt' &&
+          key !== 'full_name' &&
+          key !== 'phone_number' &&
+          key !== 'interview_level' &&
+          !candidate[key]
+        ) {
           expect(formatted[key]).toEqual(value);
         }
       }

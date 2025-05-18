@@ -112,8 +112,8 @@ describe('Candidate Validator', () => {
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
       expect(result.errors).toContain('Missing required field: email');
-      expect(result.errors).toContain('Missing required field: phone_number');
-      expect(result.errors).toContain('Missing required field: interview_level');
+      expect(result.errors).not.toContain('Missing required field: phone_number');
+      expect(result.errors).not.toContain('Missing required field: interview_level');
     });
 
     test('should reject a candidate with invalid email', () => {

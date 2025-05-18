@@ -20,10 +20,7 @@ const { createCandidate } = require('../../controllers/candidates/createCandidat
  *           schema:
  *             type: object
  *             required:
- *               - full_name
  *               - email
- *               - phone_number
- *               - interview_level
  *             properties:
  *               full_name:
  *                 type: string
@@ -90,8 +87,8 @@ const { createCandidate } = require('../../controllers/candidates/createCandidat
  *                 type: string
  *                 example: "pending"
  *           example:
- *             full_name: "Nguyễn Văn A"
  *             email: "nguyenvana@example.com"
+ *             full_name: "Nguyễn Văn A"
  *             phone_number: "+84901234567"
  *             interview_level: "junior"
  *             gender: "male"

@@ -29,13 +29,14 @@ const isValidUserObject = user => {
 /**
  * Formats the user object to return only necessary fields
  * @param {Object} user - User object to format
- * @returns {Object} - Formatted user object with _id, username, email, createdAt, and updatedAt
+ * @returns {Object} - Formatted user object with _id, username, email, candidate_id, createdAt, and updatedAt
  */
 const formatUserResponse = user => {
   return {
     _id: user._id,
     username: user.username,
     email: user.email,
+    candidate_id: user.candidate_id || null,
     createdAt: user.createdAt || new Date().toISOString(),
     updatedAt: user.updatedAt || new Date().toISOString(),
   };
@@ -60,7 +61,7 @@ const getLoggedUser = async (req, res) => {
       return res.status(404).json({
         status: 'error',
         message: 'User not found',
-        data: {}
+        data: {},
       });
     }
 
@@ -70,7 +71,7 @@ const getLoggedUser = async (req, res) => {
       return res.status(404).json({
         status: 'error',
         message: 'Invalid user data',
-        data: {}
+        data: {},
       });
     }
 
@@ -79,14 +80,14 @@ const getLoggedUser = async (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'User profile retrieved successfully',
-      data: formattedUser
+      data: formattedUser,
     });
   } catch (error) {
     logger.error('Error in getLoggedUser controller:', error);
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error',
-      data: {}
+      data: {},
     });
   }
 };
