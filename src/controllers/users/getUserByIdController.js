@@ -18,13 +18,25 @@ const getUserByIdController = async (req, res) => {
 
     const user = await userService.getUserById(id);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+        data: {},
+      });
     }
 
-    return res.status(200).json(user);
+    return res.status(200).json({
+      status: 'success',
+      message: 'User retrieved successfully',
+      data: user,
+    });
   } catch (error) {
     logger.error(`Error in getUserByIdController for ID ${req.params.id}:`, error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      data: {},
+    });
   }
 };
 

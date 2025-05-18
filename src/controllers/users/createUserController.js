@@ -37,12 +37,20 @@ const createUserController = async (req, res) => {
     // Validate required fields
     const validation = validateUserInput({ email, username, password });
     if (!validation.isValid) {
-      return res.status(400).json({ error: validation.error });
+      return res.status(400).json({
+        status: 'error',
+        message: validation.error,
+        data: {},
+      });
     }
 
     const user = await userService.createUser({ email, username, password });
 
-    return res.status(201).json(user);
+    return res.status(201).json({
+      status: 'success',
+      message: 'User created successfully',
+      data: user,
+    });
   } catch (error) {
     logger.error('Error in createUserController:', error);
 
@@ -52,10 +60,18 @@ const createUserController = async (req, res) => {
       error.message.includes('Invalid email') ||
       error.message.includes('Password must be')
     ) {
-      return res.status(400).json({ error: error.message });
+      return res.status(400).json({
+        status: 'error',
+        message: error.message,
+        data: {},
+      });
     }
 
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      data: {},
+    });
   }
 };
 

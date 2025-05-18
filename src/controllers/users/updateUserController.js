@@ -46,15 +46,27 @@ const updateUserController = async (req, res) => {
     // Prepare and validate user data
     const { isValid, error, userData } = prepareUserData(req.body);
     if (!isValid) {
-      return res.status(400).json({ error });
+      return res.status(400).json({
+        status: 'error',
+        message: error,
+        data: {},
+      });
     }
 
     const user = await userService.updateUser(id, userData);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+        data: {},
+      });
     }
 
-    return res.status(200).json(user);
+    return res.status(200).json({
+      status: 'success',
+      message: 'User updated successfully',
+      data: user,
+    });
   } catch (error) {
     logger.error(`Error in updateUserController for ID ${req.params.id}:`, error);
 
@@ -64,10 +76,18 @@ const updateUserController = async (req, res) => {
       error.message.includes('Invalid email') ||
       error.message.includes('Password must be')
     ) {
-      return res.status(400).json({ error: error.message });
+      return res.status(400).json({
+        status: 'error',
+        message: error.message,
+        data: {},
+      });
     }
 
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      data: {},
+    });
   }
 };
 

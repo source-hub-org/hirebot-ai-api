@@ -60,10 +60,19 @@ const getUsersController = async (req, res) => {
       result.pagination = formatPagination(result.pagination);
     }
 
-    return res.status(200).json(result);
+    return res.status(200).json({
+      status: 'success',
+      message: 'Users retrieved successfully',
+      data: result.data,
+      pagination: result.pagination,
+    });
   } catch (error) {
     logger.error('Error in getUsersController:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      data: {},
+    });
   }
 };
 
