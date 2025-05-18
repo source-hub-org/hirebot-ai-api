@@ -5,6 +5,9 @@ const { initializeDb } = require('./repository/baseRepository');
 const { initializeRedis } = require('./services/redisService');
 const { startJobProcessor } = require('./services/jobProcessorService');
 const { initializeOAuthClients } = require('./services/oauthClientService');
+// Import models to ensure they are registered with Mongoose
+require('./models/userModel');
+require('./models/candidateSchema');
 const {
   healthCheckRoutes,
   candidateRoutes,
