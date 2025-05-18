@@ -26,7 +26,30 @@ const validCandidate = {
 // Sample invalid candidate data (missing required fields)
 const invalidCandidate = {
   full_name: 'Invalid Candidate',
-  // Missing email, phone_number, and interview_level
+  // Missing email (the only required field)
+};
+
+// Sample candidates with optional fields missing
+const candidateWithoutFullName = {
+  email: `no_name_${Date.now()}@example.com`,
+  phone_number: '+1234567890',
+  interview_level: 'junior',
+};
+
+const candidateWithoutPhoneNumber = {
+  full_name: 'No Phone Candidate',
+  email: `no_phone_${Date.now()}@example.com`,
+  interview_level: 'junior',
+};
+
+const candidateWithoutInterviewLevel = {
+  full_name: 'No Interview Level Candidate',
+  email: `no_level_${Date.now()}@example.com`,
+  phone_number: '+1234567890',
+};
+
+const candidateWithOnlyEmail = {
+  email: `only_email_${Date.now()}@example.com`,
 };
 
 beforeAll(async () => {
@@ -79,6 +102,57 @@ describe('POST /api/candidates', () => {
     expect(response.body).toHaveProperty('error');
     expect(response.body).toHaveProperty('details');
     expect(response.body.details.length).toBeGreaterThan(0);
+    expect(response.body.details.some(error => error.includes('email'))).toBe(true);
+  });
+
+  test('should create a candidate without full_name', async () => {
+    const response = await request(app)
+      .post('/api/candidates')
+      .send(candidateWithoutFullName)
+      .expect(201);
+
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toHaveProperty('_id');
+    expect(response.body.data.email).toBe(candidateWithoutFullName.email);
+    expect(response.body.data.full_name).toBe('');
+  });
+
+  test('should create a candidate without phone_number', async () => {
+    const response = await request(app)
+      .post('/api/candidates')
+      .send(candidateWithoutPhoneNumber)
+      .expect(201);
+
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toHaveProperty('_id');
+    expect(response.body.data.email).toBe(candidateWithoutPhoneNumber.email);
+    expect(response.body.data.phone_number).toBe('');
+  });
+
+  test('should create a candidate without interview_level', async () => {
+    const response = await request(app)
+      .post('/api/candidates')
+      .send(candidateWithoutInterviewLevel)
+      .expect(201);
+
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toHaveProperty('_id');
+    expect(response.body.data.email).toBe(candidateWithoutInterviewLevel.email);
+    expect(response.body.data.interview_level).toBe('');
+  });
+
+  test('should create a candidate with only email', async () => {
+    const response = await request(app)
+      .post('/api/candidates')
+      .send(candidateWithOnlyEmail)
+      .expect(201);
+
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toHaveProperty('_id');
+    expect(response.body.data.email).toBe(candidateWithOnlyEmail.email);
+    expect(response.body.data.full_name).toBe('');
+    expect(response.body.data.phone_number).toBe('');
+    expect(response.body.data.interview_level).toBe('');
   });
 
   test('should reject duplicate email', async () => {

@@ -60,7 +60,7 @@ const getLoggedUser = async (req, res) => {
       return res.status(404).json({
         status: 'error',
         message: 'User not found',
-        data: {}
+        data: {},
       });
     }
 
@@ -70,7 +70,7 @@ const getLoggedUser = async (req, res) => {
       return res.status(404).json({
         status: 'error',
         message: 'Invalid user data',
-        data: {}
+        data: {},
       });
     }
 
@@ -79,14 +79,14 @@ const getLoggedUser = async (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'User profile retrieved successfully',
-      data: formattedUser
+      data: formattedUser,
     });
   } catch (error) {
     logger.error('Error in getLoggedUser controller:', error);
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error',
-      data: {}
+      data: {},
     });
   }
 };

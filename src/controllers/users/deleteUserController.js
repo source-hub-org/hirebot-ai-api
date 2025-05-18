@@ -28,14 +28,14 @@ const deleteUserController = async (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'User deleted successfully',
-      data: {}
+      data: {},
     });
   } catch (error) {
     logger.error(`Error in deleteUserController for ID ${req.params.id}:`, error);
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error',
-      data: {}
+      data: {},
     });
   }
 };
