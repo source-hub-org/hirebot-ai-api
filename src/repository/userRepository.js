@@ -15,7 +15,22 @@ const logger = require('../utils/logger');
 const findById = async (id, includePassword = false) => {
   try {
     const projection = includePassword ? {} : { password: 0 };
-    return await User.findById(id, projection).populate('candidate_id').exec();
+    const user = await User.findById(id, projection).populate('candidate_id').exec();
+
+    if (user) {
+      const userObj = user.toObject();
+
+      // Add candidate field with the populated candidate data
+      if (userObj.candidate_id) {
+        userObj.candidate = userObj.candidate_id;
+        // Keep candidate_id as just the ID
+        userObj.candidate_id = userObj.candidate_id._id;
+      }
+
+      return userObj;
+    }
+
+    return user;
   } catch (error) {
     logger.error(`Error finding user by ID ${id}:`, error);
     throw error;
@@ -31,9 +46,24 @@ const findById = async (id, includePassword = false) => {
 const findByEmail = async (email, includePassword = false) => {
   try {
     const projection = includePassword ? {} : { password: 0 };
-    return await User.findOne({ email: email.toLowerCase() }, projection)
+    const user = await User.findOne({ email: email.toLowerCase() }, projection)
       .populate('candidate_id')
       .exec();
+
+    if (user) {
+      const userObj = user.toObject();
+
+      // Add candidate field with the populated candidate data
+      if (userObj.candidate_id) {
+        userObj.candidate = userObj.candidate_id;
+        // Keep candidate_id as just the ID
+        userObj.candidate_id = userObj.candidate_id._id;
+      }
+
+      return userObj;
+    }
+
+    return user;
   } catch (error) {
     logger.error(`Error finding user by email ${email}:`, error);
     throw error;
@@ -49,7 +79,22 @@ const findByEmail = async (email, includePassword = false) => {
 const findByUsername = async (username, includePassword = false) => {
   try {
     const projection = includePassword ? {} : { password: 0 };
-    return await User.findOne({ username }, projection).populate('candidate_id').exec();
+    const user = await User.findOne({ username }, projection).populate('candidate_id').exec();
+
+    if (user) {
+      const userObj = user.toObject();
+
+      // Add candidate field with the populated candidate data
+      if (userObj.candidate_id) {
+        userObj.candidate = userObj.candidate_id;
+        // Keep candidate_id as just the ID
+        userObj.candidate_id = userObj.candidate_id._id;
+      }
+
+      return userObj;
+    }
+
+    return user;
   } catch (error) {
     logger.error(`Error finding user by username ${username}:`, error);
     throw error;
@@ -139,7 +184,7 @@ const list = async (
     const sortObj = {};
     sortObj[field] = sortDirection;
 
-    const [users, total] = await Promise.all([
+    const [usersResult, total] = await Promise.all([
       User.find(query, { password: 0 })
         .populate('candidate_id')
         .skip(skip)
@@ -148,6 +193,18 @@ const list = async (
         .exec(),
       User.countDocuments(query),
     ]);
+
+    // Process users to add candidate field and keep candidate_id as just the ID
+    const users = usersResult.map(user => {
+      const userObj = user.toObject();
+
+      if (userObj.candidate_id) {
+        userObj.candidate = userObj.candidate_id;
+        userObj.candidate_id = userObj.candidate_id._id;
+      }
+
+      return userObj;
+    });
 
     return {
       data: users,

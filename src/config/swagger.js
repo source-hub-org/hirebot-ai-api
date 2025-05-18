@@ -1153,17 +1153,13 @@ const swaggerOptions = {
               example: 'john.doe@example.com',
             },
             candidate_id: {
-              oneOf: [
-                {
-                  type: 'string',
-                  description: 'Candidate ID reference',
-                  example: '60d21b4667d0d8992e610c86',
-                },
-                {
-                  $ref: '#/components/schemas/Candidate',
-                  description: 'Populated candidate information',
-                },
-              ],
+              type: 'string',
+              description: 'Candidate ID reference',
+              example: '60d21b4667d0d8992e610c86',
+            },
+            candidate: {
+              $ref: '#/components/schemas/Candidate',
+              description: 'Populated candidate information',
             },
             createdAt: {
               type: 'string',
@@ -1191,7 +1187,44 @@ const swaggerOptions = {
             data: {
               type: 'array',
               items: {
-                $ref: '#/components/schemas/User',
+                type: 'object',
+                properties: {
+                  _id: {
+                    type: 'string',
+                    description: 'User ID',
+                    example: '60d21b4667d0d8992e610c85',
+                  },
+                  username: {
+                    type: 'string',
+                    description: 'Username',
+                    example: 'johndoe',
+                  },
+                  email: {
+                    type: 'string',
+                    format: 'email',
+                    description: 'Email address',
+                    example: 'john.doe@example.com',
+                  },
+                  candidate_id: {
+                    type: 'string',
+                    description: 'Candidate ID reference',
+                    example: '60d21b4667d0d8992e610c86',
+                  },
+                  candidate: {
+                    $ref: '#/components/schemas/Candidate',
+                    description: 'Populated candidate information',
+                  },
+                  createdAt: {
+                    type: 'string',
+                    format: 'date-time',
+                    description: 'Creation timestamp',
+                  },
+                  updatedAt: {
+                    type: 'string',
+                    format: 'date-time',
+                    description: 'Last update timestamp',
+                  },
+                },
               },
             },
             pagination: {

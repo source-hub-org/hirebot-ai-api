@@ -29,10 +29,10 @@ const isValidUserObject = user => {
 /**
  * Formats the user object to return only necessary fields
  * @param {Object} user - User object to format
- * @returns {Object} - Formatted user object with _id, username, email, candidate_id, createdAt, and updatedAt
+ * @returns {Object} - Formatted user object with _id, username, email, candidate_id, candidate, createdAt, and updatedAt
  */
 const formatUserResponse = user => {
-  return {
+  const response = {
     _id: user._id,
     username: user.username,
     email: user.email,
@@ -40,6 +40,13 @@ const formatUserResponse = user => {
     createdAt: user.createdAt || new Date().toISOString(),
     updatedAt: user.updatedAt || new Date().toISOString(),
   };
+
+  // Include candidate object if it exists
+  if (user.candidate) {
+    response.candidate = user.candidate;
+  }
+
+  return response;
 };
 
 /**

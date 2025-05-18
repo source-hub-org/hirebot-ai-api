@@ -45,7 +45,16 @@ const getAccessToken = async accessToken => {
 
       // If user is found, update the token's user object with the populated user
       if (user) {
-        token.user = user.toObject();
+        const userObj = user.toObject();
+
+        // Add candidate field with the populated candidate data
+        if (userObj.candidate_id) {
+          userObj.candidate = userObj.candidate_id;
+          // Keep candidate_id as just the ID
+          userObj.candidate_id = userObj.candidate_id._id;
+        }
+
+        token.user = userObj;
       }
     }
 

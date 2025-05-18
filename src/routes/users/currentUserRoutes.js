@@ -47,12 +47,12 @@ const { getLoggedUser } = require('../../controllers/users/getLoggedUserControll
  *                       description: Email address
  *                       example: john.doe@example.com
  *                     candidate_id:
- *                       oneOf:
- *                         - type: string
- *                           description: Candidate ID reference
- *                           example: 60d21b4667d0d8992e610c86
- *                         - $ref: '#/components/schemas/Candidate'
- *                           description: Populated candidate information
+ *                       type: string
+ *                       description: Candidate ID reference
+ *                       example: 60d21b4667d0d8992e610c86
+ *                     candidate:
+ *                       $ref: '#/components/schemas/Candidate'
+ *                       description: Populated candidate information
  *                     createdAt:
  *                       type: string
  *                       format: date-time

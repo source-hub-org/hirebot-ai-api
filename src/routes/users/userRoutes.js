@@ -106,7 +106,38 @@ router.get('/', userController.getUsers);
  *                   type: string
  *                   example: User retrieved successfully
  *                 data:
- *                   $ref: '#/components/schemas/User'
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       description: User ID
+ *                       example: 60d21b4667d0d8992e610c85
+ *                     username:
+ *                       type: string
+ *                       description: Username
+ *                       example: johndoe
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       description: Email address
+ *                       example: john.doe@example.com
+ *                     candidate_id:
+ *                       type: string
+ *                       description: Candidate ID reference
+ *                       example: 60d21b4667d0d8992e610c86
+ *                     candidate:
+ *                       $ref: '#/components/schemas/Candidate'
+ *                       description: Populated candidate information
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Creation timestamp
+ *                       example: 2025-05-16T10:23:20.335Z
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Last update timestamp
+ *                       example: 2025-05-16T10:23:20.335Z
  *       401:
  *         description: Unauthorized
  *         content:
@@ -171,7 +202,38 @@ router.get('/:id', userController.getUserById);
  *                   type: string
  *                   example: User created successfully and linked to candidate
  *                 data:
- *                   $ref: '#/components/schemas/User'
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       description: User ID
+ *                       example: 60d21b4667d0d8992e610c85
+ *                     username:
+ *                       type: string
+ *                       description: Username
+ *                       example: johndoe
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       description: Email address
+ *                       example: john.doe@example.com
+ *                     candidate_id:
+ *                       type: string
+ *                       description: Candidate ID reference
+ *                       example: 60d21b4667d0d8992e610c86
+ *                     candidate:
+ *                       $ref: '#/components/schemas/Candidate'
+ *                       description: Populated candidate information
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Creation timestamp
+ *                       example: 2025-05-16T10:23:20.335Z
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Last update timestamp
+ *                       example: 2025-05-16T10:23:20.335Z
  *       400:
  *         description: Invalid input
  *         content:
