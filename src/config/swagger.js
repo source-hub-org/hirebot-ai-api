@@ -79,119 +79,113 @@ const swaggerOptions = {
       schemas: {
         PaginationInfo: {
           type: 'object',
+          description: 'Pagination metadata for list endpoints',
           properties: {
             total: {
               type: 'integer',
               example: 50,
-              description: 'Total number of records',
+              description: 'Total number of records available across all pages',
             },
             page: {
               type: 'integer',
               example: 1,
-              description: 'Current page number',
+              description: 'Current page number (1-based indexing)',
             },
             page_size: {
               type: 'integer',
               example: 20,
-              description: 'Number of items per page',
+              description: 'Number of items returned per page',
             },
             total_pages: {
               type: 'integer',
               example: 3,
-              description: 'Total number of pages',
+              description: 'Total number of pages available with current page_size',
             },
           },
         },
         Position: {
           type: 'object',
+          description: 'Represents a job position or seniority level for technical roles',
           required: ['slug', 'title', 'description', 'instruction', 'level'],
           properties: {
             _id: {
               type: 'string',
-              description: 'Position ID',
+              description: 'Unique MongoDB identifier for the position',
               example: '60d21b4667d0d8992e610c85',
             },
             slug: {
               type: 'string',
-              description: 'Unique identifier for the position',
-              example: 'senior',
+              description: 'URL-friendly unique identifier for the position',
+              example: 'senior-developer',
             },
             title: {
               type: 'string',
-              description: 'Position title',
+              description: 'Human-readable position title',
               example: 'Senior Developer',
             },
             description: {
               type: 'string',
-              description: 'Position description',
+              description: 'Detailed description of the position requirements and responsibilities',
               example:
-                'Has deep knowledge of system scalability, performance, security, and maintainability.',
+                'Has deep knowledge of system scalability, performance, security, and maintainability. Capable of designing and implementing complex systems.',
             },
             instruction: {
               type: 'string',
-              description: 'Position instruction',
-              example: 'Focus on technical leadership, problem-solving in complex environments.',
+              description: 'Specific instructions for generating questions for this position level',
+              example:
+                'Focus on technical leadership, problem-solving in complex environments, and system design principles.',
             },
             level: {
               type: 'integer',
-              description: 'Position level',
+              description: 'Numeric representation of seniority level (1-6, where 6 is highest)',
+              minimum: 1,
+              maximum: 6,
               example: 5,
             },
             is_active: {
               type: 'boolean',
-              description: 'Position active status',
+              description: 'Whether this position is currently active in the system',
               example: true,
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Creation timestamp',
+              description: 'Timestamp when the position was created',
+              example: '2023-01-15T08:30:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Last update timestamp',
+              description: 'Timestamp when the position was last updated',
+              example: '2023-02-20T14:15:30.000Z',
             },
           },
         },
         PositionList: {
           type: 'object',
+          description: 'Response containing a paginated list of positions',
           properties: {
             status: {
               type: 'string',
+              description: 'Response status indicator',
               example: 'success',
             },
             data: {
               type: 'array',
+              description: 'Array of position objects',
               items: {
                 $ref: '#/components/schemas/Position',
               },
             },
             pagination: {
-              type: 'object',
-              properties: {
-                total: {
-                  type: 'integer',
-                  example: 10,
-                },
-                page: {
-                  type: 'integer',
-                  example: 1,
-                },
-                pageSize: {
-                  type: 'integer',
-                  example: 10,
-                },
-                totalPages: {
-                  type: 'integer',
-                  example: 1,
-                },
-              },
+              $ref: '#/components/schemas/PaginationInfo',
+              description: 'Pagination metadata for the position list',
             },
           },
         },
         Language: {
           type: 'object',
+          description: 'Programming language information used for generating technical questions',
           required: [
             'name',
             'designed_by',
@@ -204,363 +198,374 @@ const swaggerOptions = {
           properties: {
             _id: {
               type: 'string',
-              description: 'Language ID',
+              description: 'Unique MongoDB identifier for the language',
               example: '60d21b4667d0d8992e610c85',
             },
             name: {
               type: 'string',
-              description: 'Language name',
+              description: 'Official name of the programming language',
               example: 'JavaScript',
             },
             slug: {
               type: 'string',
-              description: 'URL-friendly identifier',
+              description: 'URL-friendly lowercase identifier for the language',
               example: 'javascript',
             },
             designed_by: {
               type: 'string',
-              description: 'Language designer',
+              description: 'Original creator or designer of the language',
               example: 'Brendan Eich',
             },
             first_appeared: {
               type: 'integer',
-              description: 'Year of first appearance',
+              description: 'Year when the language was first released or published',
               example: 1995,
+              minimum: 1940,
             },
             paradigm: {
               type: 'array',
               items: {
                 type: 'string',
               },
-              description: 'Programming paradigms',
-              example: ['event-driven', 'functional', 'imperative'],
+              description: 'Programming paradigms supported by the language',
+              example: ['event-driven', 'functional', 'imperative', 'prototype-based'],
             },
             usage: {
               type: 'string',
-              description: 'Common usage areas',
-              example: 'Front-end web, back-end (Node.js), mobile apps',
+              description: 'Common application domains and platforms where the language is used',
+              example:
+                'Front-end web development, back-end (Node.js), mobile apps, serverless functions',
             },
             popularity_rank: {
               type: 'integer',
-              description: 'Popularity ranking',
+              description:
+                'Relative popularity ranking compared to other languages (lower is more popular)',
               example: 2,
+              minimum: 1,
             },
             type_system: {
               type: 'string',
-              description: 'Type system characteristics',
-              example: 'dynamic, weak',
+              description: "Description of the language's type system characteristics",
+              example: 'dynamic, weak, gradually typed (with TypeScript)',
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Creation timestamp',
+              description: 'Timestamp when this language record was created in the system',
+              example: '2023-01-15T08:30:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Last update timestamp',
+              description: 'Timestamp when this language record was last updated',
+              example: '2023-02-20T14:15:30.000Z',
             },
           },
         },
         LanguageList: {
           type: 'object',
+          description: 'Response containing a paginated list of programming languages',
           properties: {
             status: {
               type: 'string',
+              description: 'Response status indicator',
               example: 'success',
             },
             data: {
               type: 'array',
+              description: 'Array of language objects',
               items: {
                 $ref: '#/components/schemas/Language',
               },
             },
             pagination: {
-              type: 'object',
-              properties: {
-                total: {
-                  type: 'integer',
-                  example: 10,
-                },
-                page: {
-                  type: 'integer',
-                  example: 1,
-                },
-                pageSize: {
-                  type: 'integer',
-                  example: 10,
-                },
-                totalPages: {
-                  type: 'integer',
-                  example: 1,
-                },
-              },
+              $ref: '#/components/schemas/PaginationInfo',
+              description: 'Pagination metadata for the language list',
             },
           },
         },
         Topic: {
           type: 'object',
+          description: 'Technical topic for which interview questions can be generated',
           required: ['title', 'difficulty', 'popularity', 'suitable_level', 'description'],
           properties: {
             _id: {
               type: 'string',
-              description: 'Topic ID',
+              description: 'Unique MongoDB identifier for the topic',
               example: '60d21b4667d0d8992e610c85',
             },
             title: {
               type: 'string',
-              description: 'Topic title',
-              example: 'JavaScript',
+              description: 'Name of the technical topic',
+              example: 'JavaScript Closures',
             },
             difficulty: {
               type: 'integer',
-              description: 'Topic difficulty level (1-5)',
+              description: 'Topic difficulty level on a scale of 1-5 (1: easiest, 5: hardest)',
+              minimum: 1,
+              maximum: 5,
               example: 3,
             },
             popularity: {
               type: 'string',
-              description: 'Topic popularity',
+              description: 'Relative popularity/importance of the topic in industry',
               example: 'high',
               enum: ['low', 'medium', 'high'],
             },
             suitable_level: {
               type: 'string',
-              description: 'Suitable experience level',
+              description: 'Most appropriate experience level for questions on this topic',
               example: 'junior',
               enum: ['intern', 'fresher', 'junior', 'middle', 'senior', 'lead'],
             },
             description: {
               type: 'string',
-              description: 'Topic description',
+              description: 'Comprehensive description of the topic and its relevance',
               example:
-                'JavaScript is a programming language that is one of the core technologies of the World Wide Web.',
+                'JavaScript closures are a fundamental concept that allows functions to retain access to variables from their lexical scope even after the parent function has closed. This topic is essential for understanding advanced JavaScript patterns and functional programming concepts.',
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Creation timestamp',
+              description: 'Timestamp when this topic was created in the system',
+              example: '2023-01-15T08:30:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Last update timestamp',
+              description: 'Timestamp when this topic was last updated',
+              example: '2023-02-20T14:15:30.000Z',
             },
           },
         },
         TopicList: {
           type: 'object',
+          description: 'Response containing a list of technical topics',
           properties: {
             status: {
               type: 'string',
+              description: 'Response status indicator',
               example: 'success',
             },
             data: {
               type: 'array',
+              description: 'Array of topic objects',
               items: {
                 $ref: '#/components/schemas/Topic',
               },
+            },
+            pagination: {
+              $ref: '#/components/schemas/PaginationInfo',
+              description: 'Pagination metadata for the topic list',
             },
           },
         },
         Candidate: {
           type: 'object',
+          description: 'Job candidate information for technical interviews',
           required: ['full_name', 'email', 'phone_number', 'interview_level'],
           properties: {
             _id: {
               type: 'string',
-              description: 'Candidate ID',
+              description: 'Unique MongoDB identifier for the candidate',
               example: '60d21b4667d0d8992e610c85',
             },
             full_name: {
               type: 'string',
-              description: 'Full name of the candidate',
+              description: 'Complete name of the candidate',
               example: 'John Doe',
+              minLength: 2,
+              maxLength: 100,
             },
             email: {
               type: 'string',
               format: 'email',
-              description: 'Email address',
+              description: 'Valid email address for contacting the candidate',
               example: 'john.doe@example.com',
             },
             phone_number: {
               type: 'string',
-              description: 'Phone number',
+              description: 'Contact phone number with international format',
               example: '+1234567890',
+              pattern: '^\\+[0-9]{1,15}$',
             },
             interview_level: {
               type: 'string',
-              description: 'Interview level',
+              description: 'Target experience level for the interview',
               example: 'junior',
               enum: ['intern', 'fresher', 'junior', 'middle', 'senior', 'lead'],
+            },
+            resume_url: {
+              type: 'string',
+              description: "URL to the candidate's uploaded resume (optional)",
+              example: 'https://storage.example.com/resumes/john-doe-resume.pdf',
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Creation timestamp',
+              description: 'Timestamp when this candidate was created in the system',
+              example: '2023-01-15T08:30:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Last update timestamp',
+              description: 'Timestamp when this candidate was last updated',
+              example: '2023-02-20T14:15:30.000Z',
             },
           },
         },
         CandidateList: {
           type: 'object',
+          description: 'Response containing a paginated list of candidates',
           properties: {
             status: {
               type: 'string',
+              description: 'Response status indicator',
               example: 'success',
             },
             data: {
               type: 'array',
+              description: 'Array of candidate objects',
               items: {
                 $ref: '#/components/schemas/Candidate',
               },
             },
             pagination: {
-              type: 'object',
-              properties: {
-                total: {
-                  type: 'integer',
-                  example: 10,
-                },
-                page: {
-                  type: 'integer',
-                  example: 1,
-                },
-                pageSize: {
-                  type: 'integer',
-                  example: 10,
-                },
-                totalPages: {
-                  type: 'integer',
-                  example: 1,
-                },
-              },
+              $ref: '#/components/schemas/PaginationInfo',
+              description: 'Pagination metadata for the candidate list',
             },
           },
         },
         Question: {
           type: 'object',
+          description: 'Technical interview question with multiple-choice answers',
+          required: ['question', 'options', 'correct_answer', 'explanation', 'topic', 'difficulty'],
           properties: {
             _id: {
               type: 'string',
-              description: 'Question ID',
+              description: 'Unique MongoDB identifier for the question',
               example: '60d21b4667d0d8992e610c85',
             },
             question: {
               type: 'string',
-              description: 'Question text',
+              description: 'The full text of the interview question',
               example: 'What is the difference between let and var in JavaScript?',
+              minLength: 10,
             },
             options: {
               type: 'array',
               items: {
                 type: 'string',
               },
-              description: 'Answer options',
+              description: 'Array of possible answer choices',
               example: [
                 'let is block-scoped, var is function-scoped',
                 'let cannot be redeclared, var can be redeclared',
                 'let is hoisted, var is not hoisted',
                 'There is no difference',
               ],
+              minItems: 2,
+              maxItems: 6,
             },
             correct_answer: {
               type: 'array',
               items: {
                 type: 'number',
               },
-              description: 'Indices of correct answers (0-based)',
+              description: 'Zero-based indices of the correct answer(s) from the options array',
               example: [0, 1],
+              minItems: 1,
             },
             explanation: {
               type: 'string',
-              description: 'Explanation of the correct answer',
+              description: 'Detailed explanation of why the correct answer(s) are correct',
               example:
-                'let is block-scoped while var is function-scoped. Also, let cannot be redeclared in the same scope.',
+                'let is block-scoped while var is function-scoped, meaning let is only accessible within the block it was declared. Additionally, let cannot be redeclared in the same scope, while var can be redeclared without error. The third option is incorrect because both let and var are hoisted, but let variables cannot be accessed before declaration (temporal dead zone).',
+              minLength: 20,
             },
             topic: {
               type: 'string',
-              description: 'Topic of the question',
+              description: 'The technical topic this question belongs to',
               example: 'JavaScript',
             },
             difficulty: {
               type: 'integer',
-              description: 'Difficulty level (1-5)',
+              description: 'Difficulty level on a scale of 1-5 (1: easiest, 5: hardest)',
+              minimum: 1,
+              maximum: 5,
               example: 3,
+            },
+            language: {
+              type: 'string',
+              description: 'Programming language this question relates to (if applicable)',
+              example: 'JavaScript',
+            },
+            position: {
+              type: 'string',
+              description: 'Target job position this question is suitable for',
+              example: 'Frontend Developer',
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Creation timestamp',
+              description: 'Timestamp when this question was created in the system',
+              example: '2023-01-15T08:30:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Last update timestamp',
+              description: 'Timestamp when this question was last updated',
+              example: '2023-02-20T14:15:30.000Z',
             },
           },
         },
         QuestionList: {
           type: 'object',
+          description: 'Response containing a paginated list of interview questions',
           properties: {
             status: {
               type: 'string',
+              description: 'Response status indicator',
               example: 'success',
             },
             data: {
               type: 'array',
+              description: 'Array of question objects',
               items: {
                 $ref: '#/components/schemas/Question',
               },
             },
             pagination: {
-              type: 'object',
-              properties: {
-                total: {
-                  type: 'integer',
-                  example: 10,
-                },
-                page: {
-                  type: 'integer',
-                  example: 1,
-                },
-                pageSize: {
-                  type: 'integer',
-                  example: 10,
-                },
-                totalPages: {
-                  type: 'integer',
-                  example: 1,
-                },
-              },
+              $ref: '#/components/schemas/PaginationInfo',
+              description: 'Pagination metadata for the question list',
             },
           },
         },
         Submission: {
           type: 'object',
+          description: "Candidate's submission of answers to interview questions",
           required: ['candidate_id'],
           properties: {
             _id: {
               type: 'string',
-              description: 'Submission ID',
+              description: 'Unique MongoDB identifier for the submission',
               example: '60d21b4667d0d8992e610c85',
             },
             candidate_id: {
               type: 'string',
-              description: 'Candidate ID',
+              description: 'Reference to the candidate who submitted the answers',
               example: '60d21b4667d0d8992e610c85',
             },
             answers: {
               type: 'array',
+              description: 'Collection of answers to individual questions',
               items: {
                 type: 'object',
+                required: ['question_id'],
                 properties: {
                   question_id: {
                     type: 'string',
-                    description: 'Question ID',
+                    description: 'Reference to the question being answered',
                     example: '60d21b4667d0d8992e610c85',
                   },
                   selected_options: {
@@ -568,92 +573,105 @@ const swaggerOptions = {
                     items: {
                       type: 'number',
                     },
-                    description: 'Indices of selected options',
+                    description: 'Zero-based indices of the options selected by the candidate',
                     example: [1, 3],
                   },
                   skipped: {
                     type: 'boolean',
-                    description: 'Whether the question was skipped',
+                    description: 'Indicates if the candidate skipped this question',
                     example: false,
+                  },
+                  time_spent: {
+                    type: 'number',
+                    description: 'Time spent on this question in seconds (optional)',
+                    example: 45.2,
+                    minimum: 0,
                   },
                 },
               },
-              description: 'Answers to questions',
             },
             score: {
               type: 'number',
-              description: 'Overall score',
+              description: 'Overall percentage score for the submission (0-100)',
               example: 85.5,
+              minimum: 0,
+              maximum: 100,
+            },
+            completed_at: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Timestamp when the submission was completed',
+              example: '2023-03-15T10:30:00.000Z',
+            },
+            duration: {
+              type: 'number',
+              description: 'Total time taken to complete the submission in seconds',
+              example: 1200,
+              minimum: 0,
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Creation timestamp',
+              description: 'Timestamp when this submission was created in the system',
+              example: '2023-03-15T10:00:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'Last update timestamp',
+              description: 'Timestamp when this submission was last updated',
+              example: '2023-03-15T10:30:00.000Z',
             },
           },
         },
         SubmissionList: {
           type: 'object',
+          description: 'Response containing a paginated list of candidate submissions',
           properties: {
             status: {
               type: 'string',
+              description: 'Response status indicator',
               example: 'success',
             },
             data: {
               type: 'array',
+              description: 'Array of submission objects',
               items: {
                 $ref: '#/components/schemas/Submission',
               },
             },
             pagination: {
-              type: 'object',
-              properties: {
-                total: {
-                  type: 'integer',
-                  example: 10,
-                },
-                page: {
-                  type: 'integer',
-                  example: 1,
-                },
-                pageSize: {
-                  type: 'integer',
-                  example: 10,
-                },
-                totalPages: {
-                  type: 'integer',
-                  example: 1,
-                },
-              },
+              $ref: '#/components/schemas/PaginationInfo',
+              description: 'Pagination metadata for the submission list',
             },
           },
         },
         // Common response schemas
         UnauthorizedError: {
           type: 'object',
+          description: 'Error response when authentication is required but not provided or invalid',
           properties: {
             status: {
               type: 'string',
+              description: 'Error status indicator',
               example: 'error',
             },
             message: {
               type: 'string',
+              description: 'Human-readable error message',
               example: 'Unauthorized',
             },
             data: {
               type: 'object',
+              description: 'Additional error details',
               properties: {
                 error: {
                   type: 'string',
+                  description: 'Error code',
                   example: 'unauthorized',
                 },
                 error_description: {
                   type: 'string',
+                  description: 'Detailed error explanation',
                   example: 'Access token is required',
                 },
               },
@@ -662,24 +680,31 @@ const swaggerOptions = {
         },
         ForbiddenError: {
           type: 'object',
+          description:
+            'Error response when the user is authenticated but lacks sufficient permissions',
           properties: {
             status: {
               type: 'string',
+              description: 'Error status indicator',
               example: 'error',
             },
             message: {
               type: 'string',
+              description: 'Human-readable error message',
               example: 'Forbidden',
             },
             data: {
               type: 'object',
+              description: 'Additional error details',
               properties: {
                 error: {
                   type: 'string',
+                  description: 'Error code',
                   example: 'insufficient_scope',
                 },
                 error_description: {
                   type: 'string',
+                  description: 'Detailed error explanation',
                   example: "Scope 'admin' is required",
                 },
               },
@@ -688,22 +713,36 @@ const swaggerOptions = {
         },
         TokenResponse: {
           type: 'object',
+          description: 'OAuth2/JWT authentication token response',
           properties: {
             access_token: {
               type: 'string',
-              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+              description: 'JWT token for API authentication',
+              example:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
             },
             token_type: {
               type: 'string',
+              description: 'Type of token issued',
               example: 'Bearer',
+              enum: ['Bearer'],
             },
             expires_in: {
               type: 'integer',
+              description: 'Token validity period in seconds',
               example: 3600,
+              minimum: 1,
             },
             refresh_token: {
               type: 'string',
-              example: 'def502003b1308...',
+              description: 'Token used to obtain a new access token when the current one expires',
+              example:
+                'def502003b1308e0de5b7a731e642a3deb42921e4a364d48e2a8d5adbcff9b2b9c18526b7ca9b92cc3',
+            },
+            scope: {
+              type: 'string',
+              description: 'Space-delimited list of scopes granted to this token',
+              example: 'read write admin',
             },
           },
         },
@@ -799,12 +838,12 @@ const swaggerOptions = {
               description: 'Current page number',
               example: 1,
             },
-            pageSize: {
+            page_size: {
               type: 'integer',
               description: 'Number of items per page',
               example: 10,
             },
-            totalPages: {
+            total_pages: {
               type: 'integer',
               description: 'Total number of pages',
               example: 10,

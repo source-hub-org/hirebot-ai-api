@@ -45,82 +45,109 @@
     "schemas": {
       "PaginationInfo": {
         "type": "object",
+        "description": "Pagination metadata for list endpoints",
         "properties": {
-          "total": { "type": "integer", "example": 50, "description": "Total number of records" },
-          "page": { "type": "integer", "example": 1, "description": "Current page number" },
+          "total": {
+            "type": "integer",
+            "example": 50,
+            "description": "Total number of records available across all pages"
+          },
+          "page": {
+            "type": "integer",
+            "example": 1,
+            "description": "Current page number (1-based indexing)"
+          },
           "page_size": {
             "type": "integer",
             "example": 20,
-            "description": "Number of items per page"
+            "description": "Number of items returned per page"
           },
-          "total_pages": { "type": "integer", "example": 3, "description": "Total number of pages" }
+          "total_pages": {
+            "type": "integer",
+            "example": 3,
+            "description": "Total number of pages available with current page_size"
+          }
         }
       },
       "Position": {
         "type": "object",
+        "description": "Represents a job position or seniority level for technical roles",
         "required": ["slug", "title", "description", "instruction", "level"],
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Position ID",
+            "description": "Unique MongoDB identifier for the position",
             "example": "60d21b4667d0d8992e610c85"
           },
           "slug": {
             "type": "string",
-            "description": "Unique identifier for the position",
-            "example": "senior"
+            "description": "URL-friendly unique identifier for the position",
+            "example": "senior-developer"
           },
           "title": {
             "type": "string",
-            "description": "Position title",
+            "description": "Human-readable position title",
             "example": "Senior Developer"
           },
           "description": {
             "type": "string",
-            "description": "Position description",
-            "example": "Has deep knowledge of system scalability, performance, security, and maintainability."
+            "description": "Detailed description of the position requirements and responsibilities",
+            "example": "Has deep knowledge of system scalability, performance, security, and maintainability. Capable of designing and implementing complex systems."
           },
           "instruction": {
             "type": "string",
-            "description": "Position instruction",
-            "example": "Focus on technical leadership, problem-solving in complex environments."
+            "description": "Specific instructions for generating questions for this position level",
+            "example": "Focus on technical leadership, problem-solving in complex environments, and system design principles."
           },
-          "level": { "type": "integer", "description": "Position level", "example": 5 },
+          "level": {
+            "type": "integer",
+            "description": "Numeric representation of seniority level (1-6, where 6 is highest)",
+            "minimum": 1,
+            "maximum": 6,
+            "example": 5
+          },
           "is_active": {
             "type": "boolean",
-            "description": "Position active status",
+            "description": "Whether this position is currently active in the system",
             "example": true
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Creation timestamp"
+            "description": "Timestamp when the position was created",
+            "example": "2023-01-15T08:30:00.000Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Last update timestamp"
+            "description": "Timestamp when the position was last updated",
+            "example": "2023-02-20T14:15:30.000Z"
           }
         }
       },
       "PositionList": {
         "type": "object",
+        "description": "Response containing a paginated list of positions",
         "properties": {
-          "status": { "type": "string", "example": "success" },
-          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Position" } },
+          "status": {
+            "type": "string",
+            "description": "Response status indicator",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "description": "Array of position objects",
+            "items": { "$ref": "#/components/schemas/Position" }
+          },
           "pagination": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "integer", "example": 10 },
-              "page": { "type": "integer", "example": 1 },
-              "pageSize": { "type": "integer", "example": 10 },
-              "totalPages": { "type": "integer", "example": 1 }
-            }
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "Pagination metadata for the position list"
           }
         }
       },
       "Language": {
         "type": "object",
+        "description": "Programming language information used for generating technical questions",
         "required": [
           "name",
           "designed_by",
@@ -133,349 +160,522 @@
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Language ID",
+            "description": "Unique MongoDB identifier for the language",
             "example": "60d21b4667d0d8992e610c85"
           },
-          "name": { "type": "string", "description": "Language name", "example": "JavaScript" },
+          "name": {
+            "type": "string",
+            "description": "Official name of the programming language",
+            "example": "JavaScript"
+          },
           "slug": {
             "type": "string",
-            "description": "URL-friendly identifier",
+            "description": "URL-friendly lowercase identifier for the language",
             "example": "javascript"
           },
           "designed_by": {
             "type": "string",
-            "description": "Language designer",
+            "description": "Original creator or designer of the language",
             "example": "Brendan Eich"
           },
           "first_appeared": {
             "type": "integer",
-            "description": "Year of first appearance",
-            "example": 1995
+            "description": "Year when the language was first released or published",
+            "example": 1995,
+            "minimum": 1940
           },
           "paradigm": {
             "type": "array",
             "items": { "type": "string" },
-            "description": "Programming paradigms",
-            "example": ["event-driven", "functional", "imperative"]
+            "description": "Programming paradigms supported by the language",
+            "example": ["event-driven", "functional", "imperative", "prototype-based"]
           },
           "usage": {
             "type": "string",
-            "description": "Common usage areas",
-            "example": "Front-end web, back-end (Node.js), mobile apps"
+            "description": "Common application domains and platforms where the language is used",
+            "example": "Front-end web development, back-end (Node.js), mobile apps, serverless functions"
           },
           "popularity_rank": {
             "type": "integer",
-            "description": "Popularity ranking",
-            "example": 2
+            "description": "Relative popularity ranking compared to other languages (lower is more popular)",
+            "example": 2,
+            "minimum": 1
           },
           "type_system": {
             "type": "string",
-            "description": "Type system characteristics",
-            "example": "dynamic, weak"
+            "description": "Description of the language's type system characteristics",
+            "example": "dynamic, weak, gradually typed (with TypeScript)"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Creation timestamp"
+            "description": "Timestamp when this language record was created in the system",
+            "example": "2023-01-15T08:30:00.000Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Last update timestamp"
+            "description": "Timestamp when this language record was last updated",
+            "example": "2023-02-20T14:15:30.000Z"
           }
         }
       },
       "LanguageList": {
         "type": "object",
+        "description": "Response containing a paginated list of programming languages",
         "properties": {
-          "status": { "type": "string", "example": "success" },
-          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Language" } },
+          "status": {
+            "type": "string",
+            "description": "Response status indicator",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "description": "Array of language objects",
+            "items": { "$ref": "#/components/schemas/Language" }
+          },
           "pagination": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "integer", "example": 10 },
-              "page": { "type": "integer", "example": 1 },
-              "pageSize": { "type": "integer", "example": 10 },
-              "totalPages": { "type": "integer", "example": 1 }
-            }
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "Pagination metadata for the language list"
           }
         }
       },
       "Topic": {
         "type": "object",
+        "description": "Technical topic for which interview questions can be generated",
         "required": ["title", "difficulty", "popularity", "suitable_level", "description"],
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Topic ID",
+            "description": "Unique MongoDB identifier for the topic",
             "example": "60d21b4667d0d8992e610c85"
           },
-          "title": { "type": "string", "description": "Topic title", "example": "JavaScript" },
+          "title": {
+            "type": "string",
+            "description": "Name of the technical topic",
+            "example": "JavaScript Closures"
+          },
           "difficulty": {
             "type": "integer",
-            "description": "Topic difficulty level (1-5)",
+            "description": "Topic difficulty level on a scale of 1-5 (1: easiest, 5: hardest)",
+            "minimum": 1,
+            "maximum": 5,
             "example": 3
           },
           "popularity": {
             "type": "string",
-            "description": "Topic popularity",
+            "description": "Relative popularity/importance of the topic in industry",
             "example": "high",
             "enum": ["low", "medium", "high"]
           },
           "suitable_level": {
             "type": "string",
-            "description": "Suitable experience level",
+            "description": "Most appropriate experience level for questions on this topic",
             "example": "junior",
             "enum": ["intern", "fresher", "junior", "middle", "senior", "lead"]
           },
           "description": {
             "type": "string",
-            "description": "Topic description",
-            "example": "JavaScript is a programming language that is one of the core technologies of the World Wide Web."
+            "description": "Comprehensive description of the topic and its relevance",
+            "example": "JavaScript closures are a fundamental concept that allows functions to retain access to variables from their lexical scope even after the parent function has closed. This topic is essential for understanding advanced JavaScript patterns and functional programming concepts."
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Creation timestamp"
+            "description": "Timestamp when this topic was created in the system",
+            "example": "2023-01-15T08:30:00.000Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Last update timestamp"
+            "description": "Timestamp when this topic was last updated",
+            "example": "2023-02-20T14:15:30.000Z"
           }
         }
       },
       "TopicList": {
         "type": "object",
+        "description": "Response containing a list of technical topics",
         "properties": {
-          "status": { "type": "string", "example": "success" },
-          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Topic" } }
+          "status": {
+            "type": "string",
+            "description": "Response status indicator",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "description": "Array of topic objects",
+            "items": { "$ref": "#/components/schemas/Topic" }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "Pagination metadata for the topic list"
+          }
         }
       },
       "Candidate": {
         "type": "object",
+        "description": "Job candidate information for technical interviews",
         "required": ["full_name", "email", "phone_number", "interview_level"],
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Candidate ID",
+            "description": "Unique MongoDB identifier for the candidate",
             "example": "60d21b4667d0d8992e610c85"
           },
           "full_name": {
             "type": "string",
-            "description": "Full name of the candidate",
-            "example": "John Doe"
+            "description": "Complete name of the candidate",
+            "example": "John Doe",
+            "minLength": 2,
+            "maxLength": 100
           },
           "email": {
             "type": "string",
             "format": "email",
-            "description": "Email address",
+            "description": "Valid email address for contacting the candidate",
             "example": "john.doe@example.com"
           },
           "phone_number": {
             "type": "string",
-            "description": "Phone number",
-            "example": "+1234567890"
+            "description": "Contact phone number with international format",
+            "example": "+1234567890",
+            "pattern": "^\\+[0-9]{1,15}$"
           },
           "interview_level": {
             "type": "string",
-            "description": "Interview level",
+            "description": "Target experience level for the interview",
             "example": "junior",
             "enum": ["intern", "fresher", "junior", "middle", "senior", "lead"]
+          },
+          "resume_url": {
+            "type": "string",
+            "description": "URL to the candidate's uploaded resume (optional)",
+            "example": "https://storage.example.com/resumes/john-doe-resume.pdf"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Creation timestamp"
+            "description": "Timestamp when this candidate was created in the system",
+            "example": "2023-01-15T08:30:00.000Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Last update timestamp"
+            "description": "Timestamp when this candidate was last updated",
+            "example": "2023-02-20T14:15:30.000Z"
           }
         }
       },
       "CandidateList": {
         "type": "object",
+        "description": "Response containing a paginated list of candidates",
         "properties": {
-          "status": { "type": "string", "example": "success" },
-          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Candidate" } },
+          "status": {
+            "type": "string",
+            "description": "Response status indicator",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "description": "Array of candidate objects",
+            "items": { "$ref": "#/components/schemas/Candidate" }
+          },
           "pagination": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "integer", "example": 10 },
-              "page": { "type": "integer", "example": 1 },
-              "pageSize": { "type": "integer", "example": 10 },
-              "totalPages": { "type": "integer", "example": 1 }
-            }
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "Pagination metadata for the candidate list"
           }
         }
       },
       "Question": {
         "type": "object",
+        "description": "Technical interview question with multiple-choice answers",
+        "required": ["question", "options", "correct_answer", "explanation", "topic", "difficulty"],
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Question ID",
+            "description": "Unique MongoDB identifier for the question",
             "example": "60d21b4667d0d8992e610c85"
           },
           "question": {
             "type": "string",
-            "description": "Question text",
-            "example": "What is the difference between let and var in JavaScript?"
+            "description": "The full text of the interview question",
+            "example": "What is the difference between let and var in JavaScript?",
+            "minLength": 10
           },
           "options": {
             "type": "array",
             "items": { "type": "string" },
-            "description": "Answer options",
+            "description": "Array of possible answer choices",
             "example": [
               "let is block-scoped, var is function-scoped",
               "let cannot be redeclared, var can be redeclared",
               "let is hoisted, var is not hoisted",
               "There is no difference"
-            ]
+            ],
+            "minItems": 2,
+            "maxItems": 6
           },
           "correct_answer": {
             "type": "array",
             "items": { "type": "number" },
-            "description": "Indices of correct answers (0-based)",
-            "example": [0, 1]
+            "description": "Zero-based indices of the correct answer(s) from the options array",
+            "example": [0, 1],
+            "minItems": 1
           },
           "explanation": {
             "type": "string",
-            "description": "Explanation of the correct answer",
-            "example": "let is block-scoped while var is function-scoped. Also, let cannot be redeclared in the same scope."
+            "description": "Detailed explanation of why the correct answer(s) are correct",
+            "example": "let is block-scoped while var is function-scoped, meaning let is only accessible within the block it was declared. Additionally, let cannot be redeclared in the same scope, while var can be redeclared without error. The third option is incorrect because both let and var are hoisted, but let variables cannot be accessed before declaration (temporal dead zone).",
+            "minLength": 20
           },
           "topic": {
             "type": "string",
-            "description": "Topic of the question",
+            "description": "The technical topic this question belongs to",
             "example": "JavaScript"
           },
           "difficulty": {
             "type": "integer",
-            "description": "Difficulty level (1-5)",
+            "description": "Difficulty level on a scale of 1-5 (1: easiest, 5: hardest)",
+            "minimum": 1,
+            "maximum": 5,
             "example": 3
+          },
+          "language": {
+            "type": "string",
+            "description": "Programming language this question relates to (if applicable)",
+            "example": "JavaScript"
+          },
+          "position": {
+            "type": "string",
+            "description": "Target job position this question is suitable for",
+            "example": "Frontend Developer"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Creation timestamp"
+            "description": "Timestamp when this question was created in the system",
+            "example": "2023-01-15T08:30:00.000Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Last update timestamp"
+            "description": "Timestamp when this question was last updated",
+            "example": "2023-02-20T14:15:30.000Z"
           }
         }
       },
       "QuestionList": {
         "type": "object",
+        "description": "Response containing a paginated list of interview questions",
         "properties": {
-          "status": { "type": "string", "example": "success" },
-          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Question" } },
+          "status": {
+            "type": "string",
+            "description": "Response status indicator",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "description": "Array of question objects",
+            "items": { "$ref": "#/components/schemas/Question" }
+          },
           "pagination": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "integer", "example": 10 },
-              "page": { "type": "integer", "example": 1 },
-              "pageSize": { "type": "integer", "example": 10 },
-              "totalPages": { "type": "integer", "example": 1 }
-            }
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "Pagination metadata for the question list"
           }
         }
       },
       "Submission": {
         "type": "object",
+        "description": "Candidate's submission of answers to interview questions",
         "required": ["candidate_id"],
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Submission ID",
+            "description": "Unique MongoDB identifier for the submission",
             "example": "60d21b4667d0d8992e610c85"
           },
           "candidate_id": {
             "type": "string",
-            "description": "Candidate ID",
+            "description": "Reference to the candidate who submitted the answers",
             "example": "60d21b4667d0d8992e610c85"
           },
           "answers": {
             "type": "array",
+            "description": "Collection of answers to individual questions",
             "items": {
               "type": "object",
+              "required": ["question_id"],
               "properties": {
                 "question_id": {
                   "type": "string",
-                  "description": "Question ID",
+                  "description": "Reference to the question being answered",
                   "example": "60d21b4667d0d8992e610c85"
                 },
                 "selected_options": {
                   "type": "array",
                   "items": { "type": "number" },
-                  "description": "Indices of selected options",
+                  "description": "Zero-based indices of the options selected by the candidate",
                   "example": [1, 3]
                 },
                 "skipped": {
                   "type": "boolean",
-                  "description": "Whether the question was skipped",
+                  "description": "Indicates if the candidate skipped this question",
                   "example": false
+                },
+                "time_spent": {
+                  "type": "number",
+                  "description": "Time spent on this question in seconds (optional)",
+                  "example": 45.2,
+                  "minimum": 0
                 }
               }
-            },
-            "description": "Answers to questions"
+            }
           },
-          "score": { "type": "number", "description": "Overall score", "example": 85.5 },
+          "score": {
+            "type": "number",
+            "description": "Overall percentage score for the submission (0-100)",
+            "example": 85.5,
+            "minimum": 0,
+            "maximum": 100
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the submission was completed",
+            "example": "2023-03-15T10:30:00.000Z"
+          },
+          "duration": {
+            "type": "number",
+            "description": "Total time taken to complete the submission in seconds",
+            "example": 1200,
+            "minimum": 0
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Creation timestamp"
+            "description": "Timestamp when this submission was created in the system",
+            "example": "2023-03-15T10:00:00.000Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Last update timestamp"
+            "description": "Timestamp when this submission was last updated",
+            "example": "2023-03-15T10:30:00.000Z"
           }
         }
       },
       "SubmissionList": {
         "type": "object",
+        "description": "Response containing a paginated list of candidate submissions",
         "properties": {
-          "status": { "type": "string", "example": "success" },
-          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Submission" } },
+          "status": {
+            "type": "string",
+            "description": "Response status indicator",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "description": "Array of submission objects",
+            "items": { "$ref": "#/components/schemas/Submission" }
+          },
           "pagination": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "integer", "example": 10 },
-              "page": { "type": "integer", "example": 1 },
-              "pageSize": { "type": "integer", "example": 10 },
-              "totalPages": { "type": "integer", "example": 1 }
-            }
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "Pagination metadata for the submission list"
           }
         }
       },
       "UnauthorizedError": {
         "type": "object",
+        "description": "Error response when authentication is required but not provided or invalid",
         "properties": {
-          "error": { "type": "string", "example": "unauthorized" },
-          "error_description": { "type": "string", "example": "Access token is required" }
+          "status": {
+            "type": "string",
+            "description": "Error status indicator",
+            "example": "error"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "Unauthorized"
+          },
+          "data": {
+            "type": "object",
+            "description": "Additional error details",
+            "properties": {
+              "error": { "type": "string", "description": "Error code", "example": "unauthorized" },
+              "error_description": {
+                "type": "string",
+                "description": "Detailed error explanation",
+                "example": "Access token is required"
+              }
+            }
+          }
         }
       },
       "ForbiddenError": {
         "type": "object",
+        "description": "Error response when the user is authenticated but lacks sufficient permissions",
         "properties": {
-          "error": { "type": "string", "example": "insufficient_scope" },
-          "error_description": { "type": "string", "example": "Scope 'admin' is required" }
+          "status": {
+            "type": "string",
+            "description": "Error status indicator",
+            "example": "error"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "Forbidden"
+          },
+          "data": {
+            "type": "object",
+            "description": "Additional error details",
+            "properties": {
+              "error": {
+                "type": "string",
+                "description": "Error code",
+                "example": "insufficient_scope"
+              },
+              "error_description": {
+                "type": "string",
+                "description": "Detailed error explanation",
+                "example": "Scope 'admin' is required"
+              }
+            }
+          }
         }
       },
       "TokenResponse": {
         "type": "object",
+        "description": "OAuth2/JWT authentication token response",
         "properties": {
           "access_token": {
             "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            "description": "JWT token for API authentication",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           },
-          "token_type": { "type": "string", "example": "Bearer" },
-          "expires_in": { "type": "integer", "example": 3600 },
-          "refresh_token": { "type": "string", "example": "def502003b1308..." }
+          "token_type": {
+            "type": "string",
+            "description": "Type of token issued",
+            "example": "Bearer",
+            "enum": ["Bearer"]
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "Token validity period in seconds",
+            "example": 3600,
+            "minimum": 1
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "Token used to obtain a new access token when the current one expires",
+            "example": "def502003b1308e0de5b7a731e642a3deb42921e4a364d48e2a8d5adbcff9b2b9c18526b7ca9b92cc3"
+          },
+          "scope": {
+            "type": "string",
+            "description": "Space-delimited list of scopes granted to this token",
+            "example": "read write admin"
+          }
         }
       },
       "SuccessResponse": {
@@ -490,16 +690,10 @@
         "properties": {
           "status": { "type": "string", "example": "error" },
           "message": { "type": "string", "example": "An error occurred" },
-          "error": {
+          "data": {
             "type": "object",
-            "properties": {
-              "code": { "type": "string", "example": "VALIDATION_ERROR" },
-              "details": {
-                "type": "array",
-                "items": { "type": "string" },
-                "example": ["Field is required", "Invalid format"]
-              }
-            }
+            "example": {},
+            "description": "Empty object for simple errors"
           }
         }
       },
@@ -508,7 +702,7 @@
         "properties": {
           "status": { "type": "string", "example": "error" },
           "message": { "type": "string", "example": "Validation failed" },
-          "errors": {
+          "data": {
             "type": "array",
             "items": {
               "type": "object",
@@ -516,7 +710,8 @@
                 "field": { "type": "string", "example": "email" },
                 "message": { "type": "string", "example": "Email is required" }
               }
-            }
+            },
+            "description": "Array of validation errors"
           }
         }
       },
@@ -524,7 +719,12 @@
         "type": "object",
         "properties": {
           "status": { "type": "string", "example": "error" },
-          "message": { "type": "string", "example": "Resource not found" }
+          "message": { "type": "string", "example": "Resource not found" },
+          "data": {
+            "type": "object",
+            "example": {},
+            "description": "Empty object for not found errors"
+          }
         }
       },
       "Pagination": {
@@ -532,12 +732,16 @@
         "properties": {
           "total": { "type": "integer", "description": "Total number of items", "example": 100 },
           "page": { "type": "integer", "description": "Current page number", "example": 1 },
-          "pageSize": {
+          "page_size": {
             "type": "integer",
             "description": "Number of items per page",
             "example": 10
           },
-          "totalPages": { "type": "integer", "description": "Total number of pages", "example": 10 }
+          "total_pages": {
+            "type": "integer",
+            "description": "Total number of pages",
+            "example": 10
+          }
         }
       },
       "Instrument": {
@@ -799,6 +1003,15 @@
             "description": "Email address",
             "example": "john.doe@example.com"
           },
+          "candidate_id": {
+            "type": "string",
+            "description": "Candidate ID reference",
+            "example": "60d21b4667d0d8992e610c86"
+          },
+          "candidate": {
+            "$ref": "#/components/schemas/Candidate",
+            "description": "Populated candidate information"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -814,7 +1027,47 @@
       "UserList": {
         "type": "object",
         "properties": {
-          "data": { "type": "array", "items": { "$ref": "#/components/schemas/User" } },
+          "status": { "type": "string", "example": "success" },
+          "message": { "type": "string", "example": "Users retrieved successfully" },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "User ID",
+                  "example": "60d21b4667d0d8992e610c85"
+                },
+                "username": { "type": "string", "description": "Username", "example": "johndoe" },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "description": "Email address",
+                  "example": "john.doe@example.com"
+                },
+                "candidate_id": {
+                  "type": "string",
+                  "description": "Candidate ID reference",
+                  "example": "60d21b4667d0d8992e610c86"
+                },
+                "candidate": {
+                  "$ref": "#/components/schemas/Candidate",
+                  "description": "Populated candidate information"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Creation timestamp"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Last update timestamp"
+                }
+              }
+            }
+          },
           "pagination": { "$ref": "#/components/schemas/PaginationInfo" }
         }
       }
@@ -831,7 +1084,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["full_name", "email", "phone_number", "interview_level"],
+                "required": ["email"],
                 "properties": {
                   "full_name": { "type": "string", "example": "Nguyễn Văn A" },
                   "email": {
@@ -877,8 +1130,8 @@
                 }
               },
               "example": {
-                "full_name": "Nguyễn Văn A",
                 "email": "nguyenvana@example.com",
+                "full_name": "Nguyễn Văn A",
                 "phone_number": "+84901234567",
                 "interview_level": "junior",
                 "gender": "male",
@@ -5666,8 +5919,64 @@
         },
         "responses": {
           "201": {
-            "description": "User created",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
+            "description": "User created and linked to candidate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": {
+                      "type": "string",
+                      "example": "User created successfully and linked to candidate"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/User",
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "User ID",
+                          "example": "60d21b4667d0d8992e610c85"
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Username",
+                          "example": "johndoe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "Email address",
+                          "example": "john.doe@example.com"
+                        },
+                        "candidate_id": {
+                          "type": "string",
+                          "description": "Candidate ID reference",
+                          "example": "60d21b4667d0d8992e610c86"
+                        },
+                        "candidate": {
+                          "$ref": "#/components/schemas/Candidate",
+                          "description": "Populated candidate information"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Creation timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Last update timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid input",
@@ -5689,7 +5998,8 @@
               "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
             }
           }
-        }
+        },
+        "description": "Creates a new user and automatically links them to a candidate with the same email. If no candidate exists, a new one is created."
       },
       "get": {
         "summary": "Get all users with pagination",
@@ -5739,7 +6049,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List of users",
+            "description": "List of users with candidate information",
             "content": {
               "application/json": { "schema": { "$ref": "#/components/schemas/UserList" } }
             }
@@ -5756,13 +6066,14 @@
               "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
             }
           }
-        }
+        },
+        "description": "Retrieves a list of users with populated candidate information if available"
       }
     },
     "/api/users/me": {
       "get": {
         "summary": "Get logged in user's profile",
-        "description": "Retrieves the profile of the currently authenticated user from req.loggedUser",
+        "description": "Retrieves the profile of the currently authenticated user from req.loggedUser, including linked candidate information",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
         "responses": {
@@ -5773,33 +6084,52 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "_id": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": {
                       "type": "string",
-                      "description": "User ID",
-                      "example": "60d21b4667d0d8992e610c85"
+                      "example": "User profile retrieved successfully"
                     },
-                    "username": {
-                      "type": "string",
-                      "description": "Username",
-                      "example": "johndoe"
-                    },
-                    "email": {
-                      "type": "string",
-                      "format": "email",
-                      "description": "Email address",
-                      "example": "john.doe@example.com"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "Creation timestamp",
-                      "example": "2025-05-16T10:23:20.335Z"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "Last update timestamp",
-                      "example": "2025-05-16T10:23:20.335Z"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "User ID",
+                          "example": "60d21b4667d0d8992e610c85"
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Username",
+                          "example": "johndoe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "Email address",
+                          "example": "john.doe@example.com"
+                        },
+                        "candidate_id": {
+                          "type": "string",
+                          "description": "Candidate ID reference",
+                          "example": "60d21b4667d0d8992e610c86"
+                        },
+                        "candidate": {
+                          "$ref": "#/components/schemas/Candidate",
+                          "description": "Populated candidate information"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Creation timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Last update timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        }
+                      }
                     }
                   }
                 }
@@ -5818,7 +6148,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": { "error": { "type": "string", "example": "User not found" } }
+                  "properties": {
+                    "status": { "type": "string", "example": "error" },
+                    "message": { "type": "string", "example": "User not found" },
+                    "data": { "type": "object", "example": {} }
+                  }
                 }
               }
             }
@@ -5847,6 +6181,21 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "User deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "User deleted successfully" },
+                    "data": { "type": "object", "example": {} }
+                  }
+                }
+              }
+            }
+          },
           "204": { "description": "User deleted" },
           "401": {
             "description": "Unauthorized",
@@ -5883,8 +6232,61 @@
         ],
         "responses": {
           "200": {
-            "description": "User found",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
+            "description": "User found with candidate information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "User retrieved successfully" },
+                    "data": {
+                      "$ref": "#/components/schemas/User",
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "User ID",
+                          "example": "60d21b4667d0d8992e610c85"
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Username",
+                          "example": "johndoe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "Email address",
+                          "example": "john.doe@example.com"
+                        },
+                        "candidate_id": {
+                          "type": "string",
+                          "description": "Candidate ID reference",
+                          "example": "60d21b4667d0d8992e610c86"
+                        },
+                        "candidate": {
+                          "$ref": "#/components/schemas/Candidate",
+                          "description": "Populated candidate information"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Creation timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Last update timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized",
@@ -5904,7 +6306,8 @@
               "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } }
             }
           }
-        }
+        },
+        "description": "Retrieves a user by ID with populated candidate information if available"
       },
       "put": {
         "summary": "Update a user",
@@ -5937,7 +6340,19 @@
         "responses": {
           "200": {
             "description": "User updated",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "User updated successfully" },
+                    "data": { "$ref": "#/components/schemas/User" }
+                  },
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid input",
@@ -5971,6 +6386,7 @@
     "/api/register": {
       "post": {
         "summary": "Create a new user (public endpoint)",
+        "description": "Creates a new user and automatically links them to a candidate with the same email. If no candidate exists, a new one is created.",
         "tags": ["Users"],
         "requestBody": {
           "required": true,
@@ -5989,9 +6405,95 @@
           }
         },
         "responses": {
-          "201": { "description": "User created" },
-          "400": { "description": "Invalid input" },
-          "500": { "description": "Server error" }
+          "201": {
+            "description": "User created and linked to candidate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": {
+                      "type": "string",
+                      "example": "User created successfully and linked to candidate"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "User ID",
+                          "example": "60d21b4667d0d8992e610c85"
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Username",
+                          "example": "johndoe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "Email address",
+                          "example": "john.doe@example.com"
+                        },
+                        "candidate_id": {
+                          "type": "string",
+                          "description": "Candidate ID reference",
+                          "example": "60d21b4667d0d8992e610c86"
+                        },
+                        "candidate": {
+                          "$ref": "#/components/schemas/Candidate",
+                          "description": "Populated candidate information"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Creation timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Last update timestamp",
+                          "example": "2025-05-16T10:23:20.335Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "error" },
+                    "message": { "type": "string", "example": "Email already in use" },
+                    "data": { "type": "object" }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "error" },
+                    "message": { "type": "string", "example": "Internal server error" },
+                    "data": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
