@@ -14,7 +14,7 @@ This guide provides detailed instructions for setting up and configuring the Hir
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/thangtran3112/hirebot-ai-api.git
+git clone https://github.com/source-hub-org/hirebot-ai-api.git
 cd hirebot-ai-api
 ```
 

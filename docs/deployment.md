@@ -22,7 +22,7 @@ HireBot AI API supports several deployment options:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/thangtran3112/hirebot-ai-api.git
+   git clone https://github.com/source-hub-org/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 
@@ -94,7 +94,7 @@ docker-compose up -d --scale app=3
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/thangtran3112/hirebot-ai-api.git
+   git clone https://github.com/source-hub-org/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 

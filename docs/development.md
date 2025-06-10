@@ -18,7 +18,7 @@ This guide provides information for developers working on the HireBot AI API pro
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/thangtran3112/hirebot-ai-api.git
+   git clone https://github.com/source-hub-org/hirebot-ai-api.git
    cd hirebot-ai-api
    ```
 
