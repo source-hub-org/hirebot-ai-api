@@ -133,3 +133,6 @@ dist
 data/*.txt
 coverage/
 local/
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
