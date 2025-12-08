@@ -8,6 +8,7 @@ services:
     restart: always
     networks:
       - hirebot_network
+      - dev_tools
     env_file:
       - .env
     environment:
@@ -29,6 +30,10 @@ services:
       - nodejs_app
     networks:
       - hirebot_network
+      - dev_tools
+
 networks:
   hirebot_network:
     driver: bridge
+  dev_tools:
+    external: true
