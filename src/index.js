@@ -58,11 +58,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS Configuration
+const corsOrigins = process.env.CORS_ORIGINS || '*';
+const isWildcard = corsOrigins === '*';
 const corsOptions = {
-  origin: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : '*',
-  credentials: true,
+  origin: isWildcard ? '*' : corsOrigins.split(',').map(origin => origin.trim()),
+  credentials: !isWildcard,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 3600,
 };
 app.use(cors(corsOptions));
 
