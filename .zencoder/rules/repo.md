@@ -52,6 +52,7 @@ hirebot-ai-api/
 ## Dependencies
 
 **Main Dependencies**:
+
 - **express** (v5.1.0) - REST API framework
 - **mongoose** (v8.14.0) - MongoDB ODM
 - **mongodb** (v6.16.0) - MongoDB driver
@@ -63,6 +64,7 @@ hirebot-ai-api/
 - **swagger-jsdoc** (v6.2.8), **swagger-ui-express** (v5.0.1) - API documentation
 
 **Development Dependencies**:
+
 - **jest** (v29.7.0) - Testing framework
 - **supertest** (v7.1.0) - HTTP assertion library
 - **chai** (v5.2.0), **chai-http** (v5.1.1) - Test assertions
@@ -75,21 +77,25 @@ hirebot-ai-api/
 ## Build & Installation
 
 **Installation**:
+
 ```bash
 npm install
 ```
 
 **Development Server**:
+
 ```bash
 npm run dev
 ```
 
 **Production Start**:
+
 ```bash
 npm start
 ```
 
 **Linting & Formatting**:
+
 ```bash
 npm run lint          # Check code style
 npm run lint:fix      # Auto-fix linting issues
@@ -97,6 +103,7 @@ npm run format        # Format code with Prettier
 ```
 
 **CLI Commands**:
+
 ```bash
 npm run command       # Run CLI utilities
 ```
@@ -109,12 +116,14 @@ npm run command       # Run CLI utilities
 **Port**: 3000 (internal), 8000 (via Nginx proxy)
 
 **Services** (docker-compose.yml):
+
 - **nodejs_app**: Main API server (built from Dockerfile)
 - **mongodb**: MongoDB database (latest image)
 - **redis**: Redis cache (latest image)
 - **nginx**: Reverse proxy and load balancer
 
 **Key Configuration**:
+
 - Environment variables loaded from `.env` file
 - Volume mounts for code and node_modules
 - Internal network communication (hirebot_network)
@@ -130,12 +139,14 @@ npm run command       # Run CLI utilities
 **Coverage**: Enabled by default (reports: json, lcov, text, clover, html)
 
 **Test Configuration** (jest.config.js):
+
 - Path aliases for imports (@repository, @routes, @utils, @service, @config)
 - Test file pattern: `**/test/**/*.test.js`
 - Coverage directory: `coverage/`
 - Setup file: `jest.setup.js`
 
 **Run Tests**:
+
 ```bash
 npm test                    # Run tests (no coverage report)
 npm run test:coverage       # Run tests with coverage report
@@ -143,6 +154,7 @@ npm run test:coverage:report # Run tests and open coverage in browser
 ```
 
 **Test Categories** (120+ tests):
+
 - Controllers (logic questions, submissions, instrument tags, etc.)
 - Routes and API endpoints
 - Services and business logic
@@ -157,11 +169,13 @@ npm run test:coverage:report # Run tests and open coverage in browser
 ## Configuration Files
 
 **Environment Configuration**:
+
 - `.env` - Main environment variables (create from `.env.example`)
 - `.env.no-docker.example` - Non-containerized setup template
 - `.env.testing` - Testing-specific configuration
 
 **Key Environment Variables**:
+
 - `PORT=3000` - Application port
 - `MONGODB_URI=mongodb://mongodb:27017` - MongoDB connection
 - `DB_NAME=hirebot_db` - Database name
@@ -177,6 +191,7 @@ npm run test:coverage:report # Run tests and open coverage in browser
 ## Project Architecture
 
 The application follows a **layered architecture**:
+
 1. **Routes** - Express route handlers
 2. **Controllers** - Request handlers and business logic orchestration
 3. **Services** - Core business logic (job processing, Redis, OAuth, etc.)
@@ -184,6 +199,7 @@ The application follows a **layered architecture**:
 5. **Models** - Mongoose schemas and data models
 
 **Key Features**:
+
 - OAuth2 authentication and user management
 - AI-powered question generation via Gemini API
 - Job processing and queue management with Redis

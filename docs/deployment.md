@@ -150,13 +150,11 @@ docker-compose up -d --scale app=3
 ### AWS Deployment
 
 1. **EC2 Instance**:
-
    - Launch an EC2 instance with Amazon Linux 2
    - Install Docker and Docker Compose
    - Follow the Docker Compose deployment steps
 
 2. **ECS (Elastic Container Service)**:
-
    - Create a task definition using the Docker images
    - Create an ECS cluster
    - Deploy the task as a service
@@ -170,13 +168,11 @@ docker-compose up -d --scale app=3
 ### Google Cloud Platform
 
 1. **Compute Engine**:
-
    - Create a VM instance
    - Install Docker and Docker Compose
    - Follow the Docker Compose deployment steps
 
 2. **Google Kubernetes Engine (GKE)**:
-
    - Create Kubernetes deployment files
    - Deploy to GKE cluster
    - Set up Cloud Load Balancing
@@ -189,13 +185,11 @@ docker-compose up -d --scale app=3
 ### Azure
 
 1. **Virtual Machine**:
-
    - Create an Azure VM
    - Install Docker and Docker Compose
    - Follow the Docker Compose deployment steps
 
 2. **Azure Kubernetes Service (AKS)**:
-
    - Create Kubernetes deployment files
    - Deploy to AKS cluster
    - Set up Azure Load Balancer
@@ -261,13 +255,11 @@ jobs:
 ### Monitoring
 
 1. **Application Monitoring**:
-
    - Use PM2 for process monitoring
    - Implement health check endpoints
    - Set up logging with Winston or similar
 
 2. **Server Monitoring**:
-
    - Use Prometheus for metrics collection
    - Set up Grafana for visualization
    - Configure alerts for critical metrics
@@ -280,7 +272,6 @@ jobs:
 ### Backup Strategy
 
 1. **Database Backups**:
-
    - Schedule regular MongoDB backups
    - Store backups in a secure location
    - Test restoration procedures
@@ -318,13 +309,11 @@ jobs:
 ## Security Considerations
 
 1. **Network Security**:
-
    - Use a firewall to restrict access
    - Implement rate limiting
    - Use HTTPS for all connections
 
 2. **Application Security**:
-
    - Keep dependencies up to date
    - Implement proper authentication and authorization
    - Validate all user inputs

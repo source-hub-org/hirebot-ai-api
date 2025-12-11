@@ -1,18 +1,13 @@
-FROM node:22
-# Install PM2 globally
-RUN npm install pm2 -g
+FROM node:22-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+RUN npm ci --only=production
 
-# Expose the application port
+COPY src ./src
+
 EXPOSE 3000
 
-# Start the application with PM2
-CMD ["pm2-runtime", "ecosystem.config.js"]
+CMD ["node", "src/server.js"]
